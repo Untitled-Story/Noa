@@ -55,3 +55,7 @@ cargo build --release --locked
   path/to/effect.prefab \
   --output out/effect.noap
 ```
+
+## 许可证
+
+本项目采用 [Apache License 2.0](LICENSE) 许可证。第三方资源保留其原有授权。

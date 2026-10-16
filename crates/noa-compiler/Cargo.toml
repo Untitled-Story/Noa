@@ -2,6 +2,7 @@
 name = "noa-compiler"
 version = "0.1.0"
 edition.workspace = true
+license.workspace = true
 description = "Unity effect resource compiler for Noa"
 publish = false
 

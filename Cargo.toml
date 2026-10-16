@@ -5,6 +5,7 @@ resolver = "3"
 
 [workspace.package]
 edition = "2024"
+license = "Apache-2.0"
 
 [workspace.dependencies]
 noa-format = { path = "crates/noa-format", version = "0.1.0" }
