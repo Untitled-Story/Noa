@@ -1,0 +1,11 @@
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.unity3d binary
+*.noir binary
+*.noap binary
+*.nomesh binary
+data/bundles/** binary

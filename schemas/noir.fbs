@@ -1,0 +1,406 @@
+// NOIR candidate wire 1.0, schema draft 0.4. Not yet a stable release.
+// Tables/unions/enums are append-only once published; structs are frozen.
+namespace Noa.IR;
+
+struct Vec2 { x:float; y:float; }
+struct Vec3 { x:float; y:float; z:float; }
+struct Vec4 { x:float; y:float; z:float; w:float; }
+struct Quaternion { x:float; y:float; z:float; w:float; }
+struct Color { r:float; g:float; b:float; a:float; }
+
+// All entity IDs are package-local uint32, nonzero and globally unique.
+// Ref 0 means absent, never a vector index. IDs are stable for fixed inputs.
+enum AssetKind:ubyte { Unknown, Image, Mesh, ShaderData }
+enum CurveDomain:ubyte { Seconds, Normalized }
+enum WrapMode:ubyte { Clamp, Loop, PingPong, UnitySerialized }
+enum Interpolation:ubyte { Step, Linear, CubicHermite, WeightedBezier }
+enum ScalarMode:ubyte { Constant, Curve, TwoConstants, TwoCurves }
+enum GradientMode:ubyte { Blend, Fixed, PerceptualBlend }
+enum ColorMode:ubyte { Constant, Gradient, TwoColors, TwoGradients, RandomColor }
+enum Space:ubyte { Local, World, Custom }
+enum ScalingMode:ubyte { Hierarchy, Local, Shape }
+enum Projection:ubyte { Perspective, Orthographic, Custom }
+enum FovAxis:ubyte { Vertical, Horizontal }
+enum AspectMode:ubyte { FromViewport, Fixed }
+enum CameraPolicy:ubyte { HostRequired, Embedded }
+enum BlendFactor:ubyte { Zero, One, SrcColor, OneMinusSrcColor, SrcAlpha, OneMinusSrcAlpha, DstColor, OneMinusDstColor, DstAlpha, OneMinusDstAlpha }
+enum BlendOp:ubyte { Add, Subtract, ReverseSubtract, Min, Max }
+enum CompareOp:ubyte { Never, Less, Equal, LessEqual, Greater, NotEqual, GreaterEqual, Always }
+enum CullMode:ubyte { None, Front, Back }
+enum ColorSpace:ubyte { Linear, SRGB, Unspecified }
+enum FilterMode:ubyte { Nearest, Linear, Trilinear }
+enum AddressMode:ubyte { Clamp, Repeat, Mirror }
+enum MaterialModel:ubyte { Unknown, ParticleUnlit, ParticleAddAlpha, ParticleMultiply }
+enum RenderMode:ubyte { Billboard, StretchedBillboard, HorizontalBillboard, VerticalBillboard, Mesh }
+enum Alignment:ubyte { View, World, Local, Facing, Velocity }
+enum ParticleSort:ubyte { None, Distance, OldestFirst, YoungestFirst, Depth }
+enum SeedMode:ubyte { Fixed, PerInstance }
+enum ActionKind:ubyte { ApplyClip, PlayClip, StopEmission, ClearParticles, SetActive }
+enum AnimationProperty:ushort {
+  Unknown, NodeActive, NodePosition, NodeRotation, NodeScale,
+  MaterialTint, MaterialFloat, ParticleParameter, CameraFov,
+  CameraOrthoSize, CameraNear, CameraFar, CameraActive, RendererEnabled,
+  RendererMaterial, RendererMesh, MaterialTexture
+}
+enum ParticleParameter:ushort {
+  Unknown, StartLifetime, StartSpeed, StartSizeX, StartSizeY, StartSizeZ,
+  StartRotationX, StartRotationY, StartRotationZ, GravityMultiplier,
+  RateOverTime, RateOverDistance, VelocityX, VelocityY, VelocityZ,
+  NoiseStrengthX, NoiseStrengthY, NoiseStrengthZ, SpeedLimit
+}
+
+// Slope units = value / key-time unit. Segment interpolation is on the left key.
+struct FloatKey {
+  time:float; value:float; in_slope:float; out_slope:float;
+  in_weight:float; out_weight:float;
+  interpolation:Interpolation; weighted_in:bool; weighted_out:bool;
+}
+struct BoolKey { time:float; value:bool; }
+struct RefKey { time:float; ref_id:uint; }
+struct RgbKey { time:float; r:float; g:float; b:float; }
+struct AlphaKey { time:float; alpha:float; }
+
+table ScalarCurve {
+  domain:CurveDomain;
+  pre_wrap:WrapMode;
+  post_wrap:WrapMode;
+  keys:[FloatKey] (required);
+  // Unity internal infinity codes are not public WrapMode values.
+  source_pre_infinity:int; source_post_infinity:int;
+}
+table ScalarParameter {
+  mode:ScalarMode;
+  constant_min:float;
+  constant_max:float;
+  curve_min:ScalarCurve;
+  curve_max:ScalarCurve;
+  multiplier:float = 1;
+}
+table VectorParameter { x:ScalarParameter; y:ScalarParameter; z:ScalarParameter; }
+table Gradient {
+  mode:GradientMode;
+  rgb:[RgbKey] (required);
+  alpha:[AlphaKey] (required);
+  // Source key metadata; Unspecified is not silently replaced with Linear.
+  // Blend/Fixed interpolate/select the original numeric values. PerceptualBlend
+  // uses Oklab and requires the source key-space semantics.
+  key_color_space:ColorSpace = Unspecified;
+}
+table ColorParameter {
+  mode:ColorMode;
+  color_min:Color;
+  color_max:Color;
+  gradient_min:Gradient;
+  gradient_max:Gradient;
+}
+
+// RGB values/gradient keys retain authored, non-premultiplied values.
+// The source project's active space is distinct from texture/key encoding and
+// from the host's output space. Unspecified requires the named host input.
+table ColorContext {
+  project_color_space:ColorSpace = Unspecified;
+  host_project_color_space_slot:string;
+}
+
+table FeatureRequirement { name:string (required); revision:uint = 1; required:bool = true; }
+table Asset { id:uint; kind:AssetKind; }
+table Sampler {
+  min_filter:FilterMode = Linear; mag_filter:FilterMode = Linear;
+  wrap_u:AddressMode = Clamp; wrap_v:AddressMode = Clamp;
+}
+table TextureBinding {
+  slot:string (required); image_id:uint;
+  uv_set:ubyte; scale:Vec2; offset:Vec2;
+  color_space:ColorSpace = SRGB;
+  sampler:Sampler;
+}
+table FloatProperty { name:string (required); value:float; }
+table VectorProperty { name:string (required); value:Vec4; }
+table RenderState {
+  src_rgb:BlendFactor = SrcAlpha; dst_rgb:BlendFactor = OneMinusSrcAlpha;
+  src_alpha:BlendFactor = One; dst_alpha:BlendFactor = OneMinusSrcAlpha;
+  rgb_op:BlendOp; alpha_op:BlendOp;
+  depth_test:CompareOp = LessEqual; depth_write:bool;
+  cull:CullMode;
+  color_write_mask:ubyte = 15;
+}
+table Material {
+  id:uint; name:string;
+  model:MaterialModel;
+  tint:Color;
+  textures:[TextureBinding];
+  floats:[FloatProperty]; vectors:[VectorProperty];
+  render_state:RenderState (required);
+  render_queue:int = 3000;
+  source_shader:string;
+  shader_data_asset_id:uint;
+}
+
+table Transform { position:Vec3; rotation:Quaternion; scale:Vec3; }
+table Node {
+  id:uint; name:string;
+  parent_id:uint;
+  active:bool = true;
+  transform:Transform (required);
+  layer_mask:uint = 1;
+}
+table RectLayout {
+  anchor_min:Vec2; anchor_max:Vec2; pivot:Vec2;
+  anchored_position:Vec3; size_delta:Vec2;
+  host_layout_slot:string;
+}
+// Column-major, column vectors; 16 elements required by semantic validation.
+table Matrix4 { values:[float] (required); }
+table Camera {
+  projection:Projection;
+  fov_radians:float = 1.0471976;
+  fov_axis:FovAxis;
+  ortho_half_height:float = 5;
+  near_plane:float = 0.1; far_plane:float = 1000;
+  aspect_mode:AspectMode; aspect:float = 1;
+  viewport:Vec4;
+  culling_mask:uint = 4294967295;
+  order:int;
+  custom_projection:Matrix4;
+}
+
+table Burst {
+  time_seconds:float;
+  count:ScalarParameter (required);
+  cycles:uint = 1; interval_seconds:float;
+  probability:float = 1;
+}
+table MainModule {
+  duration_seconds:float = 5;
+  loop:bool; prewarm:bool; play_on_enable:bool = true;
+  start_delay:ScalarParameter;
+  lifetime:ScalarParameter (required);
+  speed:ScalarParameter (required);
+  color:ColorParameter (required);
+  size:VectorParameter (required);
+  rotation:VectorParameter (required);
+  size_3d:bool; rotation_3d:bool;
+  flip_rotation_probability:float;
+  gravity_multiplier:ScalarParameter;
+  space:Space;
+  custom_space_node_id:uint;
+  scaling:ScalingMode;
+  simulation_speed:float = 1;
+  seed_mode:SeedMode;
+  seed:uint;
+  max_particles:uint = 1000;
+  gravity:Vec3;
+  host_gravity_slot:string;
+}
+table EmissionModule {
+  rate_over_time:ScalarParameter; rate_over_distance:ScalarParameter;
+  bursts:[Burst];
+}
+// Shape modes are represented by semantic tables, never Unity enum values.
+enum ShapeSweep:ubyte { Random, Loop, PingPong, BurstSpread }
+table CircleShape {
+  radius:ScalarParameter; arc_radians:float = 6.2831853;
+  radius_thickness:float = 1;
+  radius_mode:ShapeSweep; radius_speed:ScalarParameter; radius_spread:float;
+  arc_mode:ShapeSweep; arc_speed:ScalarParameter; arc_spread:float;
+}
+table BoxShape { thickness:Vec3; }
+table SphereShape { radius:ScalarParameter; radius_thickness:float = 1; hemisphere:bool; }
+table ConeShape { radius:ScalarParameter; angle_radians:float; length:float; }
+union ShapeGeometry { CircleShape, BoxShape, SphereShape, ConeShape }
+table ShapeModule {
+  geometry:ShapeGeometry;
+  transform:Transform (required);
+  align_to_direction:bool;
+  random_direction:float; spherical_direction:float; random_position:float;
+}
+table ColorModule { color:ColorParameter (required); }
+table SizeModule { size:VectorParameter (required); separate_axes:bool; }
+table RotationModule { angular_velocity:VectorParameter (required); separate_axes:bool; }
+table VelocityModule {
+  linear:VectorParameter; orbital:VectorParameter; orbital_offset:VectorParameter;
+  radial:ScalarParameter; speed_multiplier:ScalarParameter;
+  space:Space;
+}
+table LimitVelocityModule {
+  limit:VectorParameter (required); separate_axes:bool;
+  space:Space; dampen:float;
+  drag:ScalarParameter;
+  multiply_drag_by_size:bool; multiply_drag_by_velocity:bool;
+}
+enum NoiseQuality:ubyte { Low, Medium, High }
+table NoiseModule {
+  algorithm:string (required); algorithm_revision:uint = 1;
+  strength:VectorParameter (required); separate_axes:bool;
+  frequency:float = 0.5; damping:bool;
+  octaves:ubyte = 1; octave_multiplier:float = 0.5; octave_scale:float = 2;
+  quality:NoiseQuality;
+  scroll_speed:ScalarParameter;
+  remap_enabled:bool; remap:VectorParameter;
+  position_amount:ScalarParameter; rotation_amount:ScalarParameter; size_amount:ScalarParameter;
+}
+enum SheetTime:ubyte { Lifetime, Speed, FPS }
+enum SheetAnimation:ubyte { WholeSheet, SingleRow }
+enum SheetRow:ubyte { Fixed, Random, MeshIndex }
+table TextureSheetModule {
+  columns:uint = 1; rows:uint = 1;
+  time_mode:SheetTime;
+  frame_over_time:ScalarParameter; start_frame:ScalarParameter;
+  cycles:float = 1;
+  animation:SheetAnimation; row_mode:SheetRow; row:uint;
+  fps:float = 30; speed_range:Vec2;
+  uv_channel_mask:uint = 1;
+}
+enum CustomDataMode:ubyte { Disabled, Vector, Color }
+table CustomDataStream {
+  slot:ubyte; mode:CustomDataMode;
+  vector_components:ubyte;
+  vector:[ScalarParameter]; color:ColorParameter;
+}
+table CustomDataModule { streams:[CustomDataStream] (required); }
+union ParticleModuleData {
+  EmissionModule, ShapeModule, ColorModule, SizeModule, RotationModule,
+  VelocityModule, LimitVelocityModule, NoiseModule, TextureSheetModule, CustomDataModule
+}
+table ParticleModule { data:ParticleModuleData; }
+table ParticleSystem {
+  main:MainModule (required);
+  modules:[ParticleModule];
+}
+enum VertexSemantic:ubyte {
+  Position, Normal, Color, UV0, UV1, UV2, UV3, Size, Rotation,
+  Velocity, AgeNormalized, Custom1, Custom2, Center, VertexId
+}
+table VertexStream { semantic:VertexSemantic; components:ubyte; }
+table ParticleRenderer {
+  system_component_id:uint;
+  materials:[uint] (required);
+  mode:RenderMode;
+  alignment:Alignment;
+  mesh_asset_ids:[uint]; mesh_weights:[float];
+  sorting_layer_rank:int; sorting_order:int; sorting_fudge:float;
+  sort:ParticleSort;
+  pivot:Vec3; flip:Vec3;
+  min_size:float; max_size:float = 1;
+  camera_velocity_scale:float; velocity_scale:float; length_scale:float = 2;
+  allow_roll:bool = true;
+  vertex_streams:[VertexStream];
+  apply_active_color_space:bool = true;
+  normal_direction:float = 1;
+  freeform_stretching:bool;
+  rotate_with_stretch_direction:bool = true;
+  source_sorting_layer_id:int;
+}
+// Custom scripts carry serialized data only. Host factories are never embedded.
+table ScriptIdentity {
+  assembly:string (required);
+  namespace:string (required);
+  class_name:string (required);
+}
+// Preserve non-null unresolved references for diagnostics, never coerce to null.
+table SourceReference { guid:string; file_id:long; }
+enum ReferenceKind:ubyte { Unknown, Node, Component, Material, Asset, Animation }
+table TypedReference { kind:ReferenceKind; id:uint; }
+table ReferenceValue { source:SourceReference (required); target:TypedReference; }
+table NullValue {}
+table BooleanValue { value:bool; }
+table SignedValue { value:long; }
+table UnsignedValue { value:ulong; }
+table DoubleValue { value:double; }
+table StringValue { value:string (required); }
+table ArrayValue { values:[SerializedValue] (required); }
+table ObjectValue { fields:[SerializedField] (required); }
+union SerializedValueData {
+  NullValue, BooleanValue, SignedValue, UnsignedValue, DoubleValue,
+  StringValue, ArrayValue, ObjectValue, ReferenceValue
+}
+table SerializedValue { data:SerializedValueData; }
+table SerializedField {
+  name:string (required);
+  // Authoritative declared type if available; missing does not mean guessed.
+  declared_type:string;
+  value:SerializedValue (required);
+}
+table CustomComponent {
+  script:ScriptIdentity;
+  source_script:SourceReference (required);
+  fields:[SerializedField] (required);
+}
+// Initial supported controller subset: single normal-update layer, no transitions,
+// avatar or root motion. State/clip IDs are scoped to their owning Animator.
+table AnimatorState {
+  id:uint;
+  name:string (required);
+  animation_id:uint;
+  speed:float = 1;
+  cycle_offset:float;
+  write_default_values:bool;
+}
+table AnimatorLayer {
+  name:string (required);
+  default_weight:float;
+  default_state_id:uint;
+  states:[AnimatorState] (required);
+}
+table Animator {
+  keep_state_on_disable:bool;
+  write_default_values_on_disable:bool;
+  layers:[AnimatorLayer] (required);
+}
+union ComponentData { RectLayout, Camera, ParticleSystem, ParticleRenderer, CustomComponent, Animator }
+table Component { id:uint; node_id:uint; enabled:bool = true; data:ComponentData; }
+
+table FloatTrack { curve:ScalarCurve (required); }
+table Vector3Track { x:ScalarCurve; y:ScalarCurve; z:ScalarCurve; }
+enum RotationEncoding:ubyte { QuaternionComponents, EulerZXY }
+table RotationTrack { encoding:RotationEncoding; x:ScalarCurve; y:ScalarCurve; z:ScalarCurve; w:ScalarCurve; }
+table ColorTrack { r:ScalarCurve; g:ScalarCurve; b:ScalarCurve; a:ScalarCurve; }
+table BoolTrack { keys:[BoolKey] (required); }
+table ReferenceTrack { keys:[RefKey] (required); }
+union TrackData { FloatTrack, Vector3Track, RotationTrack, ColorTrack, BoolTrack, ReferenceTrack }
+table Binding {
+  target_id:uint;
+  property:AnimationProperty;
+  parameter:ParticleParameter;
+  property_name:string;
+  slot_index:uint;
+}
+table Track { binding:Binding (required); data:TrackData; }
+table AnimationEvent { time_seconds:float; name:string (required); payload:string; }
+table Animation {
+  id:uint; name:string;
+  duration_seconds:float;
+  loop:bool;
+  tracks:[Track]; events:[AnimationEvent];
+}
+table Action {
+  kind:ActionKind;
+  target_id:uint;
+  animation_id:uint;
+  active:bool;
+}
+table EntryPoint {
+  id:uint; name:string (required);
+  roots:[uint] (required);
+  actions:[Action];
+  camera_policy:CameraPolicy;
+  camera_component_id:uint;
+  host_camera_slot:string;
+}
+table SourceRecord { entity_id:uint; asset_path:string; object_identity:string; property_path:string; }
+table Metadata { name:string (required); value:string; }
+table Document {
+  format_major:ushort = 1;
+  format_minor:ushort;
+  semantics_revision:uint = 1;
+  features:[FeatureRequirement];
+  assets:[Asset]; materials:[Material];
+  nodes:[Node] (required); components:[Component];
+  animations:[Animation]; entries:[EntryPoint] (required);
+  default_entry_id:uint;
+  sources:[SourceRecord]; metadata:[Metadata];
+  color_context:ColorContext;
+}
+root_type Document;
+file_identifier "NOIR";
+file_extension "noir";

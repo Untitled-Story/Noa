@@ -1,0 +1,10 @@
+[package]
+name = "noa-format"
+version = "0.1.0"
+edition.workspace = true
+description = "Noa IR and package format definitions"
+publish = false
+
+[dependencies]
+flatbuffers = { version = "=25.12.19", features = ["serialize"] }
+serde.workspace = true

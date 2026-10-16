@@ -1,0 +1,22 @@
+// Noa mesh asset v1 draft. Uses Unity local coordinates and UV orientation.
+// Ordinary FlatBuffer, no size prefix. Indices describe clockwise triangles.
+namespace Noa.Mesh;
+
+struct Vec2 { x:float; y:float; }
+struct Vec3 { x:float; y:float; z:float; }
+table Submesh { first_index:uint; index_count:uint; }
+table Mesh {
+  format_major:ushort = 1;
+  format_minor:ushort;
+  name:string;
+  positions:[Vec3] (required);
+  // Absent/empty means unavailable; otherwise one element per vertex.
+  normals:[Vec3];
+  uv0:[Vec2];
+  indices:[uint] (required);
+  // Contiguous, non-overlapping triangle ranges covering the index buffer.
+  submeshes:[Submesh] (required);
+}
+root_type Mesh;
+file_identifier "NOMS";
+file_extension "nomesh";

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Unity MonoScript Metadata v1",
+  "description": "Tool-independent identities keyed by the exported Unity GUID and fileID. C# source and directory names are not authoritative metadata.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "scripts"],
+  "properties": {
+    "format": { "const": "unity-monoscript-metadata" },
+    "version": { "const": 1 },
+    "scripts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["guid", "file_id", "assembly", "namespace", "class_name"],
+        "properties": {
+          "guid": {
+            "type": "string", "pattern": "^[0-9a-fA-F]{32}$",
+            "not": { "pattern": "^0{32}$|^0{16}[d-fD-F]0{15}$" }
+          },
+          "file_id": { "$ref": "#/$defs/fileId" },
+          "assembly": { "type": "string", "pattern": "\\S" },
+          "namespace": { "type": "string" },
+          "class_name": { "type": "string", "pattern": "\\S" },
+          "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["asset", "file_id"],
+            "properties": {
+              "asset": { "type": "string", "pattern": "\\S" },
+              "file_id": { "$ref": "#/$defs/fileId" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "fileId": {
+      "description": "Nonzero signed int64 in canonical decimal notation. Readers additionally enforce the int64 range. Strings prevent loss above 2^53 in JavaScript.",
+      "type": "string",
+      "pattern": "^-?[1-9][0-9]*$"
+    }
+  }
+}

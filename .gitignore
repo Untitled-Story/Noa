@@ -1,0 +1,28 @@
+# Local planning documents
+/docs/
+
+# Local source assets
+/data/
+
+# Rust build artifacts and compiler outputs
+/target/
+/out/
+
+# Generated bindings (regenerated from schemas)
+/generated/
+
+# Preparation tools
+__pycache__/
+*.pyc
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Editor and operating system files
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

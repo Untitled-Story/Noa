@@ -1,0 +1,17 @@
+[package]
+name = "noa-compiler"
+version = "0.1.0"
+edition.workspace = true
+description = "Unity effect resource compiler for Noa"
+publish = false
+
+[dependencies]
+noa-format.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml_ng = "0.10.0"
+thiserror = "2.0.21"
+walkdir = "2.5.0"
+sha2 = "0.10"
+zip = { version = "9.0.3", default-features = false }
+tempfile = "3.27.0"

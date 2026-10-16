@@ -1,0 +1,13 @@
+[workspace]
+members = ["crates/noa-format", "crates/noa-compiler", "crates/noa-cli"]
+default-members = ["crates/noa-cli"]
+resolver = "3"
+
+[workspace.package]
+edition = "2024"
+
+[workspace.dependencies]
+noa-format = { path = "crates/noa-format", version = "0.1.0" }
+noa-compiler = { path = "crates/noa-compiler", version = "0.1.0" }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"

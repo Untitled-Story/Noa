@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Noa Package manifest v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["format", "version", "noir_version", "document", "files"],
+  "properties": {
+    "format": {"const": "noa-package"}, "version": {"const": 1},
+    "noir_version": {"const": [1, 0]}, "document": {"const": "scene.noir"},
+    "files": {"type": "array", "minItems": 1, "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "kind", "byte_length", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^(scene\\.noir|assets/[1-9][0-9]*\\.(png|nomesh|shader\\.json))$"},
+        "kind": {"enum": ["noir", "image", "mesh", "shader_data"]},
+        "asset_id": {"type": "integer", "minimum": 1, "maximum": 4294967295},
+        "byte_length": {"type": "integer", "minimum": 0},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "allOf": [{"if": {"properties": {"kind": {"const": "noir"}}},
+        "then": {"not": {"required": ["asset_id"]}},
+        "else": {"required": ["asset_id"]}}]
+    }}
+  }
+}
