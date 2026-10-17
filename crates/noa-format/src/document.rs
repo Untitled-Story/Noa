@@ -144,6 +144,21 @@ pub fn validate(d: &wire::DocumentT) -> Result<(), String> {
             }
             wire::ComponentDataT::ParticleSystem(p) => {
                 particles(p)?;
+                for module in p.modules.iter().flatten() {
+                    if let wire::ParticleModuleDataT::ShapeModule(s) = &module.data
+                        && !matches!(s.geometry, wire::ShapeGeometryT::CircleShape(_))
+                    {
+                        let name = shape_feature(&s.geometry).ok_or("missing shape geometry")?;
+                        if !d
+                            .features
+                            .iter()
+                            .flatten()
+                            .any(|f| f.name == name && f.required && f.revision == 1)
+                        {
+                            return Err(format!("shape needs required {name} revision 1"));
+                        }
+                    }
+                }
                 if p.main.space == wire::Space::Custom {
                     check(p.main.custom_space_node_id, "node")?;
                 }
@@ -499,32 +514,108 @@ fn particles(p: &wire::ParticleSystemT) -> Result<(), String> {
                     }
                 }
             }
-            wire::ParticleModuleDataT::ShapeModule(s) => match &s.geometry {
-                wire::ShapeGeometryT::CircleShape(c) => {
-                    for p in [&c.radius, &c.radius_speed, &c.arc_speed]
-                        .into_iter()
-                        .flatten()
-                    {
-                        scalar(p)?;
-                    }
-                    if !(0. ..=1.).contains(&c.radius_thickness) {
-                        return Err("invalid circle thickness".into());
-                    }
-                }
-                wire::ShapeGeometryT::SphereShape(s) => {
-                    if let Some(p) = &s.radius {
-                        scalar(p)?;
-                    }
-                }
-                wire::ShapeGeometryT::ConeShape(c) => {
-                    if let Some(p) = &c.radius {
-                        scalar(p)?;
-                    }
-                }
-                wire::ShapeGeometryT::NONE => return Err("missing shape geometry".into()),
-                wire::ShapeGeometryT::BoxShape(_) => {}
-            },
+            wire::ParticleModuleDataT::ShapeModule(s) => shape(s)?,
         }
+    }
+    Ok(())
+}
+
+/// Runtime capability for the actual geometry, including its emission region.
+pub fn shape_feature(geometry: &wire::ShapeGeometryT) -> Option<&'static str> {
+    Some(match geometry {
+        wire::ShapeGeometryT::CircleShape(_) => "particle.shape.circle",
+        wire::ShapeGeometryT::SphereShape(s) if s.hemisphere => "particle.shape.hemisphere",
+        wire::ShapeGeometryT::SphereShape(_) => "particle.shape.sphere",
+        wire::ShapeGeometryT::BoxShape(_) => "particle.shape.box",
+        wire::ShapeGeometryT::ConeShape(c) if c.region == wire::ConeRegion::Volume => {
+            "particle.shape.cone-volume"
+        }
+        wire::ShapeGeometryT::ConeShape(_) => "particle.shape.cone",
+        wire::ShapeGeometryT::EdgeShape(_) => "particle.shape.edge",
+        wire::ShapeGeometryT::NONE => return None,
+    })
+}
+
+fn unit(value: f32) -> Result<(), String> {
+    if !(0. ..=1.).contains(&value) {
+        return Err("shape fraction outside [0,1]".into());
+    }
+    Ok(())
+}
+fn extent(parameter: Option<&wire::ScalarParameterT>) -> Result<(), String> {
+    let p = parameter.ok_or("missing shape radius/half-length")?;
+    scalar(p)?;
+    if (p.mode == wire::ScalarMode::Constant && p.constant_max < 0.)
+        || (p.mode == wire::ScalarMode::TwoConstants
+            && (p.constant_min < 0. || p.constant_max < 0.))
+    {
+        return Err("negative shape radius/half-length".into());
+    }
+    Ok(())
+}
+fn arc(value: f32) -> Result<(), String> {
+    if !(0. ..=std::f32::consts::TAU).contains(&value) {
+        return Err("invalid shape arc".into());
+    }
+    Ok(())
+}
+fn shape(s: &wire::ShapeModuleT) -> Result<(), String> {
+    match &s.geometry {
+        wire::ShapeGeometryT::CircleShape(c) => {
+            for p in [&c.radius, &c.radius_speed, &c.arc_speed]
+                .into_iter()
+                .flatten()
+            {
+                scalar(p)?;
+            }
+            extent(c.radius.as_deref())?;
+            unit(c.radius_thickness)?;
+            unit(c.radius_spread)?;
+            unit(c.arc_spread)?;
+            arc(c.arc_radians)?;
+        }
+        wire::ShapeGeometryT::SphereShape(s) => {
+            extent(s.radius.as_deref())?;
+            unit(s.radius_thickness)?;
+        }
+        wire::ShapeGeometryT::BoxShape(b) => {
+            let t = b.thickness.as_ref().ok_or("missing box thickness")?;
+            for v in [t.x, t.y, t.z] {
+                unit(v)?;
+            }
+        }
+        wire::ShapeGeometryT::ConeShape(c) => {
+            for p in [&c.radius_speed, &c.arc_speed].into_iter().flatten() {
+                scalar(p)?;
+            }
+            extent(c.radius.as_deref())?;
+            unit(c.radius_thickness)?;
+            unit(c.radius_spread)?;
+            unit(c.arc_spread)?;
+            arc(c.arc_radians)?;
+            if !(0. ..=std::f32::consts::FRAC_PI_2).contains(&c.angle_radians) || c.length < 0. {
+                return Err("invalid cone angle/length".into());
+            }
+        }
+        wire::ShapeGeometryT::EdgeShape(e) => {
+            extent(e.half_length.as_deref())?;
+            unit(e.spread)?;
+            if let Some(p) = &e.speed {
+                scalar(p)?;
+            }
+        }
+        wire::ShapeGeometryT::NONE => return Err("missing shape geometry".into()),
+    }
+    if s.transform.position.is_none()
+        || s.transform.rotation.is_none()
+        || s.transform.scale.is_none()
+    {
+        return Err("incomplete shape transform".into());
+    }
+    unit(s.random_direction)?;
+    unit(s.spherical_direction)?;
+    if s.random_position < 0. {
+        return Err("negative shape random position".into());
     }
     Ok(())
 }

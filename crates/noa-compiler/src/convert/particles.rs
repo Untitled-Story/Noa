@@ -6,6 +6,9 @@ use crate::{
 };
 use noa_format::wire as w;
 use serde_yaml_ng::Value as Y;
+mod shapes;
+use shapes::convert as shape;
+
 const DOMAIN: w::CurveDomain = w::CurveDomain::Normalized;
 fn p(v: &Y, k: &str) -> Result<w::ScalarParameterT, Error> {
     scalar(get(v, k)?, DOMAIN)
@@ -414,64 +417,6 @@ pub fn convert_system(
             main: Box::new(main),
             modules: Some(modules)
         })))
-    }))
-}
-fn shape(m: &Y) -> Result<w::ShapeModuleT, Error> {
-    // First release deliberately supports the sample's Circle, rather than
-    // silently collapsing ConeVolume/BoxShell or Mesh emitters into other shapes.
-    if int(m, "type")? != 10 {
-        return Err(err("ShapeModule.type", "only Circle supported"));
-    }
-    if int(get(m, "m_Texture")?, "fileID")? != 0 {
-        return Err(err("ShapeModule", "shape texture unsupported"));
-    }
-    let radius = get(m, "radius")?;
-    let arc = get(m, "arc")?;
-    let sweep = |v: &Y| {
-        enum_value(
-            int(v, "mode")?,
-            &[
-                w::ShapeSweep::Random,
-                w::ShapeSweep::Loop,
-                w::ShapeSweep::PingPong,
-                w::ShapeSweep::BurstSpread,
-            ],
-            "shape sweep",
-        )
-    };
-    let g = n!(CircleShapeT {
-        radius: boxed(constant(num(radius, "value")?)),
-        arc_radians: num(arc, "value")?.to_radians(),
-        radius_thickness: num(m, "radiusThickness")?,
-        radius_mode: sweep(radius)?,
-        radius_speed: boxed(p(radius, "speed")?),
-        radius_spread: num(radius, "spread")?,
-        arc_mode: sweep(arc)?,
-        arc_speed: boxed(p(arc, "speed")?),
-        arc_spread: num(arc, "spread")?
-    });
-    let r = vec3(get(m, "m_Rotation")?)?;
-    let (sx, cx) = (r.x.to_radians() / 2.).sin_cos();
-    let (sy, cy) = (r.y.to_radians() / 2.).sin_cos();
-    let (sz, cz) = (r.z.to_radians() / 2.).sin_cos();
-    // Unity Euler ZXY: qY * qX * qZ, xyzw.
-    let rotation = n!(QuaternionT {
-        x: cy * sx * cz + sy * cx * sz,
-        y: sy * cx * cz - cy * sx * sz,
-        z: cy * cx * sz - sy * sx * cz,
-        w: cy * cx * cz + sy * sx * sz
-    });
-    Ok(n!(ShapeModuleT {
-        geometry: w::ShapeGeometryT::CircleShape(Box::new(g)),
-        transform: Box::new(n!(TransformT {
-            position: Some(vec3(get(m, "m_Position")?)?),
-            rotation: Some(rotation),
-            scale: Some(vec3(get(m, "m_Scale")?)?)
-        })),
-        align_to_direction: flag(m, "alignToDirection")?,
-        random_direction: num(m, "randomDirectionAmount")?,
-        spherical_direction: num(m, "sphericalDirectionAmount")?,
-        random_position: num(m, "randomPositionAmount")?
     }))
 }
 fn random_seed(v: &Y) -> Result<u32, Error> {

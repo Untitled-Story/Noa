@@ -3970,23 +3970,269 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MIN_SHAPE_GEOMETRY: u8 = 0;
+        pub const ENUM_MIN_BOX_REGION: u8 = 0;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MAX_SHAPE_GEOMETRY: u8 = 4;
+        pub const ENUM_MAX_BOX_REGION: u8 = 2;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
         #[allow(non_camel_case_types)]
-        pub const ENUM_VALUES_SHAPE_GEOMETRY: [ShapeGeometry; 5] = [
+        pub const ENUM_VALUES_BOX_REGION: [BoxRegion; 3] =
+            [BoxRegion::Volume, BoxRegion::Shell, BoxRegion::Edge];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct BoxRegion(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl BoxRegion {
+            pub const Volume: Self = Self(0);
+            pub const Shell: Self = Self(1);
+            pub const Edge: Self = Self(2);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 2;
+            pub const ENUM_VALUES: &'static [Self] = &[Self::Volume, Self::Shell, Self::Edge];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::Volume => Some("Volume"),
+                    Self::Shell => Some("Shell"),
+                    Self::Edge => Some("Edge"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for BoxRegion {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for BoxRegion {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "BoxRegion",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for BoxRegion {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in BoxRegion::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown BoxRegion variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for BoxRegion {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for BoxRegion {
+            type Output = BoxRegion;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for BoxRegion {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for BoxRegion {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for BoxRegion {}
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MIN_CONE_REGION: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_CONE_REGION: u8 = 1;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_CONE_REGION: [ConeRegion; 2] = [ConeRegion::Base, ConeRegion::Volume];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct ConeRegion(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl ConeRegion {
+            pub const Base: Self = Self(0);
+            pub const Volume: Self = Self(1);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 1;
+            pub const ENUM_VALUES: &'static [Self] = &[Self::Base, Self::Volume];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::Base => Some("Base"),
+                    Self::Volume => Some("Volume"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for ConeRegion {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for ConeRegion {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "ConeRegion",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for ConeRegion {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in ConeRegion::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown ConeRegion variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for ConeRegion {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for ConeRegion {
+            type Output = ConeRegion;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for ConeRegion {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for ConeRegion {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for ConeRegion {}
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MIN_SHAPE_GEOMETRY: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_SHAPE_GEOMETRY: u8 = 5;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_SHAPE_GEOMETRY: [ShapeGeometry; 6] = [
             ShapeGeometry::NONE,
             ShapeGeometry::CircleShape,
             ShapeGeometry::BoxShape,
             ShapeGeometry::SphereShape,
             ShapeGeometry::ConeShape,
+            ShapeGeometry::EdgeShape,
         ];
 
         #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -3999,15 +4245,17 @@ pub mod noa {
             pub const BoxShape: Self = Self(2);
             pub const SphereShape: Self = Self(3);
             pub const ConeShape: Self = Self(4);
+            pub const EdgeShape: Self = Self(5);
 
             pub const ENUM_MIN: u8 = 0;
-            pub const ENUM_MAX: u8 = 4;
+            pub const ENUM_MAX: u8 = 5;
             pub const ENUM_VALUES: &'static [Self] = &[
                 Self::NONE,
                 Self::CircleShape,
                 Self::BoxShape,
                 Self::SphereShape,
                 Self::ConeShape,
+                Self::EdgeShape,
             ];
             /// Returns the variant's name or "" if unknown.
             pub fn variant_name(self) -> Option<&'static str> {
@@ -4017,6 +4265,7 @@ pub mod noa {
                     Self::BoxShape => Some("BoxShape"),
                     Self::SphereShape => Some("SphereShape"),
                     Self::ConeShape => Some("ConeShape"),
+                    Self::EdgeShape => Some("EdgeShape"),
                     _ => None,
                 }
             }
@@ -4116,6 +4365,7 @@ pub mod noa {
             BoxShape(alloc::boxed::Box<BoxShapeT>),
             SphereShape(alloc::boxed::Box<SphereShapeT>),
             ConeShape(alloc::boxed::Box<ConeShapeT>),
+            EdgeShape(alloc::boxed::Box<EdgeShapeT>),
         }
         impl Default for ShapeGeometryT {
             fn default() -> Self {
@@ -4130,6 +4380,7 @@ pub mod noa {
                     Self::BoxShape(_) => ShapeGeometry::BoxShape,
                     Self::SphereShape(_) => ShapeGeometry::SphereShape,
                     Self::ConeShape(_) => ShapeGeometry::ConeShape,
+                    Self::EdgeShape(_) => ShapeGeometry::EdgeShape,
                 }
             }
             pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
@@ -4142,6 +4393,7 @@ pub mod noa {
                     Self::BoxShape(v) => Some(v.pack(fbb).as_union_value()),
                     Self::SphereShape(v) => Some(v.pack(fbb).as_union_value()),
                     Self::ConeShape(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::EdgeShape(v) => Some(v.pack(fbb).as_union_value()),
                 }
             }
             /// If the union variant matches, return the owned CircleShapeT, setting the union to NONE.
@@ -4255,6 +4507,35 @@ pub mod noa {
             /// If the union variant matches, return a mutable reference to the ConeShapeT.
             pub fn as_cone_shape_mut(&mut self) -> Option<&mut ConeShapeT> {
                 if let Self::ConeShape(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned EdgeShapeT, setting the union to NONE.
+            pub fn take_edge_shape(&mut self) -> Option<alloc::boxed::Box<EdgeShapeT>> {
+                if let Self::EdgeShape(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::EdgeShape(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the EdgeShapeT.
+            pub fn as_edge_shape(&self) -> Option<&EdgeShapeT> {
+                if let Self::EdgeShape(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the EdgeShapeT.
+            pub fn as_edge_shape_mut(&mut self) -> Option<&mut EdgeShapeT> {
+                if let Self::EdgeShape(v) = self {
                     Some(v.as_mut())
                 } else {
                     None
@@ -16932,6 +17213,7 @@ pub mod noa {
 
         impl<'a> BoxShape<'a> {
             pub const VT_THICKNESS: ::flatbuffers::VOffsetT = 4;
+            pub const VT_REGION: ::flatbuffers::VOffsetT = 6;
 
             #[inline]
             pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -16951,12 +17233,14 @@ pub mod noa {
                 if let Some(x) = args.thickness {
                     builder.add_thickness(x);
                 }
+                builder.add_region(args.region);
                 builder.finish()
             }
 
             pub fn unpack(&self) -> BoxShapeT {
                 let thickness = self.thickness().map(|x| x.unpack());
-                BoxShapeT { thickness }
+                let region = self.region();
+                BoxShapeT { thickness, region }
             }
 
             #[inline]
@@ -16965,6 +17249,17 @@ pub mod noa {
                 // Created from valid Table for this object
                 // which contains a valid value in this slot
                 unsafe { self._tab.get::<Vec3>(BoxShape::VT_THICKNESS, None) }
+            }
+            #[inline]
+            pub fn region(&self) -> BoxRegion {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<BoxRegion>(BoxShape::VT_REGION, Some(BoxRegion::Volume))
+                        .unwrap()
+                }
             }
         }
 
@@ -16976,17 +17271,22 @@ pub mod noa {
             ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
                 v.visit_table(pos)?
                     .visit_field::<Vec3>("thickness", Self::VT_THICKNESS, false)?
+                    .visit_field::<BoxRegion>("region", Self::VT_REGION, false)?
                     .finish();
                 Ok(())
             }
         }
         pub struct BoxShapeArgs<'a> {
             pub thickness: Option<&'a Vec3>,
+            pub region: BoxRegion,
         }
         impl<'a> Default for BoxShapeArgs<'a> {
             #[inline]
             fn default() -> Self {
-                BoxShapeArgs { thickness: None }
+                BoxShapeArgs {
+                    thickness: None,
+                    region: BoxRegion::Volume,
+                }
             }
         }
 
@@ -16995,12 +17295,13 @@ pub mod noa {
             where
                 S: Serializer,
             {
-                let mut s = serializer.serialize_struct("BoxShape", 1)?;
+                let mut s = serializer.serialize_struct("BoxShape", 2)?;
                 if let Some(f) = self.thickness() {
                     s.serialize_field("thickness", &f)?;
                 } else {
                     s.skip_field("thickness")?;
                 }
+                s.serialize_field("region", &self.region())?;
                 s.end()
             }
         }
@@ -17014,6 +17315,11 @@ pub mod noa {
             pub fn add_thickness(&mut self, thickness: &Vec3) {
                 self.fbb_
                     .push_slot_always::<&Vec3>(BoxShape::VT_THICKNESS, thickness);
+            }
+            #[inline]
+            pub fn add_region(&mut self, region: BoxRegion) {
+                self.fbb_
+                    .push_slot::<BoxRegion>(BoxShape::VT_REGION, region, BoxRegion::Volume);
             }
             #[inline]
             pub fn new(
@@ -17036,6 +17342,7 @@ pub mod noa {
             fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                 let mut ds = f.debug_struct("BoxShape");
                 ds.field("thickness", &self.thickness());
+                ds.field("region", &self.region());
                 ds.finish()
             }
         }
@@ -17043,10 +17350,14 @@ pub mod noa {
         #[derive(Debug, Clone, PartialEq, serde::Serialize)]
         pub struct BoxShapeT {
             pub thickness: Option<Vec3T>,
+            pub region: BoxRegion,
         }
         impl Default for BoxShapeT {
             fn default() -> Self {
-                Self { thickness: None }
+                Self {
+                    thickness: None,
+                    region: BoxRegion::Volume,
+                }
             }
         }
         impl BoxShapeT {
@@ -17056,7 +17367,8 @@ pub mod noa {
             ) -> ::flatbuffers::WIPOffset<BoxShape<'b>> {
                 let thickness_tmp = self.thickness.as_ref().map(|x| x.pack());
                 let thickness = thickness_tmp.as_ref();
-                BoxShape::create(_fbb, &BoxShapeArgs { thickness })
+                let region = self.region;
+                BoxShape::create(_fbb, &BoxShapeArgs { thickness, region })
             }
         }
         pub enum SphereShapeOffset {}
@@ -17307,6 +17619,15 @@ pub mod noa {
             pub const VT_RADIUS: ::flatbuffers::VOffsetT = 4;
             pub const VT_ANGLE_RADIANS: ::flatbuffers::VOffsetT = 6;
             pub const VT_LENGTH: ::flatbuffers::VOffsetT = 8;
+            pub const VT_REGION: ::flatbuffers::VOffsetT = 10;
+            pub const VT_RADIUS_THICKNESS: ::flatbuffers::VOffsetT = 12;
+            pub const VT_ARC_RADIANS: ::flatbuffers::VOffsetT = 14;
+            pub const VT_RADIUS_MODE: ::flatbuffers::VOffsetT = 16;
+            pub const VT_RADIUS_SPEED: ::flatbuffers::VOffsetT = 18;
+            pub const VT_RADIUS_SPREAD: ::flatbuffers::VOffsetT = 20;
+            pub const VT_ARC_MODE: ::flatbuffers::VOffsetT = 22;
+            pub const VT_ARC_SPEED: ::flatbuffers::VOffsetT = 24;
+            pub const VT_ARC_SPREAD: ::flatbuffers::VOffsetT = 26;
 
             #[inline]
             pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -17323,11 +17644,24 @@ pub mod noa {
                 args: &'args ConeShapeArgs<'args>,
             ) -> ::flatbuffers::WIPOffset<ConeShape<'bldr>> {
                 let mut builder = ConeShapeBuilder::new(_fbb);
+                builder.add_arc_spread(args.arc_spread);
+                if let Some(x) = args.arc_speed {
+                    builder.add_arc_speed(x);
+                }
+                builder.add_radius_spread(args.radius_spread);
+                if let Some(x) = args.radius_speed {
+                    builder.add_radius_speed(x);
+                }
+                builder.add_arc_radians(args.arc_radians);
+                builder.add_radius_thickness(args.radius_thickness);
                 builder.add_length(args.length);
                 builder.add_angle_radians(args.angle_radians);
                 if let Some(x) = args.radius {
                     builder.add_radius(x);
                 }
+                builder.add_arc_mode(args.arc_mode);
+                builder.add_radius_mode(args.radius_mode);
+                builder.add_region(args.region);
                 builder.finish()
             }
 
@@ -17335,10 +17669,30 @@ pub mod noa {
                 let radius = self.radius().map(|x| alloc::boxed::Box::new(x.unpack()));
                 let angle_radians = self.angle_radians();
                 let length = self.length();
+                let region = self.region();
+                let radius_thickness = self.radius_thickness();
+                let arc_radians = self.arc_radians();
+                let radius_mode = self.radius_mode();
+                let radius_speed = self
+                    .radius_speed()
+                    .map(|x| alloc::boxed::Box::new(x.unpack()));
+                let radius_spread = self.radius_spread();
+                let arc_mode = self.arc_mode();
+                let arc_speed = self.arc_speed().map(|x| alloc::boxed::Box::new(x.unpack()));
+                let arc_spread = self.arc_spread();
                 ConeShapeT {
                     radius,
                     angle_radians,
                     length,
+                    region,
+                    radius_thickness,
+                    arc_radians,
+                    radius_mode,
+                    radius_speed,
+                    radius_spread,
+                    arc_mode,
+                    arc_speed,
+                    arc_spread,
                 }
             }
 
@@ -17377,6 +17731,109 @@ pub mod noa {
                         .unwrap()
                 }
             }
+            #[inline]
+            pub fn region(&self) -> ConeRegion {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<ConeRegion>(ConeShape::VT_REGION, Some(ConeRegion::Base))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn radius_thickness(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(ConeShape::VT_RADIUS_THICKNESS, Some(1.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn arc_radians(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(ConeShape::VT_ARC_RADIANS, Some(6.2831853))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn radius_mode(&self) -> ShapeSweep {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<ShapeSweep>(ConeShape::VT_RADIUS_MODE, Some(ShapeSweep::Random))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn radius_speed(&self) -> Option<ScalarParameter<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<ScalarParameter>>(
+                            ConeShape::VT_RADIUS_SPEED,
+                            None,
+                        )
+                }
+            }
+            #[inline]
+            pub fn radius_spread(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(ConeShape::VT_RADIUS_SPREAD, Some(0.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn arc_mode(&self) -> ShapeSweep {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<ShapeSweep>(ConeShape::VT_ARC_MODE, Some(ShapeSweep::Random))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn arc_speed(&self) -> Option<ScalarParameter<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<ScalarParameter>>(
+                            ConeShape::VT_ARC_SPEED,
+                            None,
+                        )
+                }
+            }
+            #[inline]
+            pub fn arc_spread(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(ConeShape::VT_ARC_SPREAD, Some(0.0))
+                        .unwrap()
+                }
+            }
         }
 
         impl ::flatbuffers::Verifiable for ConeShape<'_> {
@@ -17393,6 +17850,23 @@ pub mod noa {
                     )?
                     .visit_field::<f32>("angle_radians", Self::VT_ANGLE_RADIANS, false)?
                     .visit_field::<f32>("length", Self::VT_LENGTH, false)?
+                    .visit_field::<ConeRegion>("region", Self::VT_REGION, false)?
+                    .visit_field::<f32>("radius_thickness", Self::VT_RADIUS_THICKNESS, false)?
+                    .visit_field::<f32>("arc_radians", Self::VT_ARC_RADIANS, false)?
+                    .visit_field::<ShapeSweep>("radius_mode", Self::VT_RADIUS_MODE, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<ScalarParameter>>(
+                        "radius_speed",
+                        Self::VT_RADIUS_SPEED,
+                        false,
+                    )?
+                    .visit_field::<f32>("radius_spread", Self::VT_RADIUS_SPREAD, false)?
+                    .visit_field::<ShapeSweep>("arc_mode", Self::VT_ARC_MODE, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<ScalarParameter>>(
+                        "arc_speed",
+                        Self::VT_ARC_SPEED,
+                        false,
+                    )?
+                    .visit_field::<f32>("arc_spread", Self::VT_ARC_SPREAD, false)?
                     .finish();
                 Ok(())
             }
@@ -17401,6 +17875,15 @@ pub mod noa {
             pub radius: Option<::flatbuffers::WIPOffset<ScalarParameter<'a>>>,
             pub angle_radians: f32,
             pub length: f32,
+            pub region: ConeRegion,
+            pub radius_thickness: f32,
+            pub arc_radians: f32,
+            pub radius_mode: ShapeSweep,
+            pub radius_speed: Option<::flatbuffers::WIPOffset<ScalarParameter<'a>>>,
+            pub radius_spread: f32,
+            pub arc_mode: ShapeSweep,
+            pub arc_speed: Option<::flatbuffers::WIPOffset<ScalarParameter<'a>>>,
+            pub arc_spread: f32,
         }
         impl<'a> Default for ConeShapeArgs<'a> {
             #[inline]
@@ -17409,6 +17892,15 @@ pub mod noa {
                     radius: None,
                     angle_radians: 0.0,
                     length: 0.0,
+                    region: ConeRegion::Base,
+                    radius_thickness: 1.0,
+                    arc_radians: 6.2831853,
+                    radius_mode: ShapeSweep::Random,
+                    radius_speed: None,
+                    radius_spread: 0.0,
+                    arc_mode: ShapeSweep::Random,
+                    arc_speed: None,
+                    arc_spread: 0.0,
                 }
             }
         }
@@ -17418,7 +17910,7 @@ pub mod noa {
             where
                 S: Serializer,
             {
-                let mut s = serializer.serialize_struct("ConeShape", 3)?;
+                let mut s = serializer.serialize_struct("ConeShape", 12)?;
                 if let Some(f) = self.radius() {
                     s.serialize_field("radius", &f)?;
                 } else {
@@ -17426,6 +17918,23 @@ pub mod noa {
                 }
                 s.serialize_field("angle_radians", &self.angle_radians())?;
                 s.serialize_field("length", &self.length())?;
+                s.serialize_field("region", &self.region())?;
+                s.serialize_field("radius_thickness", &self.radius_thickness())?;
+                s.serialize_field("arc_radians", &self.arc_radians())?;
+                s.serialize_field("radius_mode", &self.radius_mode())?;
+                if let Some(f) = self.radius_speed() {
+                    s.serialize_field("radius_speed", &f)?;
+                } else {
+                    s.skip_field("radius_speed")?;
+                }
+                s.serialize_field("radius_spread", &self.radius_spread())?;
+                s.serialize_field("arc_mode", &self.arc_mode())?;
+                if let Some(f) = self.arc_speed() {
+                    s.serialize_field("arc_speed", &f)?;
+                } else {
+                    s.skip_field("arc_speed")?;
+                }
+                s.serialize_field("arc_spread", &self.arc_spread())?;
                 s.end()
             }
         }
@@ -17454,6 +17963,69 @@ pub mod noa {
                     .push_slot::<f32>(ConeShape::VT_LENGTH, length, 0.0);
             }
             #[inline]
+            pub fn add_region(&mut self, region: ConeRegion) {
+                self.fbb_
+                    .push_slot::<ConeRegion>(ConeShape::VT_REGION, region, ConeRegion::Base);
+            }
+            #[inline]
+            pub fn add_radius_thickness(&mut self, radius_thickness: f32) {
+                self.fbb_
+                    .push_slot::<f32>(ConeShape::VT_RADIUS_THICKNESS, radius_thickness, 1.0);
+            }
+            #[inline]
+            pub fn add_arc_radians(&mut self, arc_radians: f32) {
+                self.fbb_
+                    .push_slot::<f32>(ConeShape::VT_ARC_RADIANS, arc_radians, 6.2831853);
+            }
+            #[inline]
+            pub fn add_radius_mode(&mut self, radius_mode: ShapeSweep) {
+                self.fbb_.push_slot::<ShapeSweep>(
+                    ConeShape::VT_RADIUS_MODE,
+                    radius_mode,
+                    ShapeSweep::Random,
+                );
+            }
+            #[inline]
+            pub fn add_radius_speed(
+                &mut self,
+                radius_speed: ::flatbuffers::WIPOffset<ScalarParameter<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<ScalarParameter>>(
+                        ConeShape::VT_RADIUS_SPEED,
+                        radius_speed,
+                    );
+            }
+            #[inline]
+            pub fn add_radius_spread(&mut self, radius_spread: f32) {
+                self.fbb_
+                    .push_slot::<f32>(ConeShape::VT_RADIUS_SPREAD, radius_spread, 0.0);
+            }
+            #[inline]
+            pub fn add_arc_mode(&mut self, arc_mode: ShapeSweep) {
+                self.fbb_.push_slot::<ShapeSweep>(
+                    ConeShape::VT_ARC_MODE,
+                    arc_mode,
+                    ShapeSweep::Random,
+                );
+            }
+            #[inline]
+            pub fn add_arc_speed(
+                &mut self,
+                arc_speed: ::flatbuffers::WIPOffset<ScalarParameter<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<ScalarParameter>>(
+                        ConeShape::VT_ARC_SPEED,
+                        arc_speed,
+                    );
+            }
+            #[inline]
+            pub fn add_arc_spread(&mut self, arc_spread: f32) {
+                self.fbb_
+                    .push_slot::<f32>(ConeShape::VT_ARC_SPREAD, arc_spread, 0.0);
+            }
+            #[inline]
             pub fn new(
                 _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
             ) -> ConeShapeBuilder<'a, 'b, A> {
@@ -17476,6 +18048,15 @@ pub mod noa {
                 ds.field("radius", &self.radius());
                 ds.field("angle_radians", &self.angle_radians());
                 ds.field("length", &self.length());
+                ds.field("region", &self.region());
+                ds.field("radius_thickness", &self.radius_thickness());
+                ds.field("arc_radians", &self.arc_radians());
+                ds.field("radius_mode", &self.radius_mode());
+                ds.field("radius_speed", &self.radius_speed());
+                ds.field("radius_spread", &self.radius_spread());
+                ds.field("arc_mode", &self.arc_mode());
+                ds.field("arc_speed", &self.arc_speed());
+                ds.field("arc_spread", &self.arc_spread());
                 ds.finish()
             }
         }
@@ -17485,6 +18066,15 @@ pub mod noa {
             pub radius: Option<alloc::boxed::Box<ScalarParameterT>>,
             pub angle_radians: f32,
             pub length: f32,
+            pub region: ConeRegion,
+            pub radius_thickness: f32,
+            pub arc_radians: f32,
+            pub radius_mode: ShapeSweep,
+            pub radius_speed: Option<alloc::boxed::Box<ScalarParameterT>>,
+            pub radius_spread: f32,
+            pub arc_mode: ShapeSweep,
+            pub arc_speed: Option<alloc::boxed::Box<ScalarParameterT>>,
+            pub arc_spread: f32,
         }
         impl Default for ConeShapeT {
             fn default() -> Self {
@@ -17492,6 +18082,15 @@ pub mod noa {
                     radius: None,
                     angle_radians: 0.0,
                     length: 0.0,
+                    region: ConeRegion::Base,
+                    radius_thickness: 1.0,
+                    arc_radians: 6.2831853,
+                    radius_mode: ShapeSweep::Random,
+                    radius_speed: None,
+                    radius_spread: 0.0,
+                    arc_mode: ShapeSweep::Random,
+                    arc_speed: None,
+                    arc_spread: 0.0,
                 }
             }
         }
@@ -17503,12 +18102,306 @@ pub mod noa {
                 let radius = self.radius.as_ref().map(|x| x.pack(_fbb));
                 let angle_radians = self.angle_radians;
                 let length = self.length;
+                let region = self.region;
+                let radius_thickness = self.radius_thickness;
+                let arc_radians = self.arc_radians;
+                let radius_mode = self.radius_mode;
+                let radius_speed = self.radius_speed.as_ref().map(|x| x.pack(_fbb));
+                let radius_spread = self.radius_spread;
+                let arc_mode = self.arc_mode;
+                let arc_speed = self.arc_speed.as_ref().map(|x| x.pack(_fbb));
+                let arc_spread = self.arc_spread;
                 ConeShape::create(
                     _fbb,
                     &ConeShapeArgs {
                         radius,
                         angle_radians,
                         length,
+                        region,
+                        radius_thickness,
+                        arc_radians,
+                        radius_mode,
+                        radius_speed,
+                        radius_spread,
+                        arc_mode,
+                        arc_speed,
+                        arc_spread,
+                    },
+                )
+            }
+        }
+        pub enum EdgeShapeOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct EdgeShape<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for EdgeShape<'a> {
+            type Inner = EdgeShape<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> EdgeShape<'a> {
+            pub const VT_HALF_LENGTH: ::flatbuffers::VOffsetT = 4;
+            pub const VT_MODE: ::flatbuffers::VOffsetT = 6;
+            pub const VT_SPEED: ::flatbuffers::VOffsetT = 8;
+            pub const VT_SPREAD: ::flatbuffers::VOffsetT = 10;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                EdgeShape { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args EdgeShapeArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<EdgeShape<'bldr>> {
+                let mut builder = EdgeShapeBuilder::new(_fbb);
+                builder.add_spread(args.spread);
+                if let Some(x) = args.speed {
+                    builder.add_speed(x);
+                }
+                if let Some(x) = args.half_length {
+                    builder.add_half_length(x);
+                }
+                builder.add_mode(args.mode);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> EdgeShapeT {
+                let half_length = self
+                    .half_length()
+                    .map(|x| alloc::boxed::Box::new(x.unpack()));
+                let mode = self.mode();
+                let speed = self.speed().map(|x| alloc::boxed::Box::new(x.unpack()));
+                let spread = self.spread();
+                EdgeShapeT {
+                    half_length,
+                    mode,
+                    speed,
+                    spread,
+                }
+            }
+
+            #[inline]
+            pub fn half_length(&self) -> Option<ScalarParameter<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<ScalarParameter>>(
+                            EdgeShape::VT_HALF_LENGTH,
+                            None,
+                        )
+                }
+            }
+            #[inline]
+            pub fn mode(&self) -> ShapeSweep {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<ShapeSweep>(EdgeShape::VT_MODE, Some(ShapeSweep::Random))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn speed(&self) -> Option<ScalarParameter<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<ScalarParameter>>(
+                            EdgeShape::VT_SPEED,
+                            None,
+                        )
+                }
+            }
+            #[inline]
+            pub fn spread(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(EdgeShape::VT_SPREAD, Some(0.0))
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for EdgeShape<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<ScalarParameter>>(
+                        "half_length",
+                        Self::VT_HALF_LENGTH,
+                        false,
+                    )?
+                    .visit_field::<ShapeSweep>("mode", Self::VT_MODE, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<ScalarParameter>>(
+                        "speed",
+                        Self::VT_SPEED,
+                        false,
+                    )?
+                    .visit_field::<f32>("spread", Self::VT_SPREAD, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct EdgeShapeArgs<'a> {
+            pub half_length: Option<::flatbuffers::WIPOffset<ScalarParameter<'a>>>,
+            pub mode: ShapeSweep,
+            pub speed: Option<::flatbuffers::WIPOffset<ScalarParameter<'a>>>,
+            pub spread: f32,
+        }
+        impl<'a> Default for EdgeShapeArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                EdgeShapeArgs {
+                    half_length: None,
+                    mode: ShapeSweep::Random,
+                    speed: None,
+                    spread: 0.0,
+                }
+            }
+        }
+
+        impl Serialize for EdgeShape<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("EdgeShape", 4)?;
+                if let Some(f) = self.half_length() {
+                    s.serialize_field("half_length", &f)?;
+                } else {
+                    s.skip_field("half_length")?;
+                }
+                s.serialize_field("mode", &self.mode())?;
+                if let Some(f) = self.speed() {
+                    s.serialize_field("speed", &f)?;
+                } else {
+                    s.skip_field("speed")?;
+                }
+                s.serialize_field("spread", &self.spread())?;
+                s.end()
+            }
+        }
+
+        pub struct EdgeShapeBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> EdgeShapeBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_half_length(
+                &mut self,
+                half_length: ::flatbuffers::WIPOffset<ScalarParameter<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<ScalarParameter>>(
+                        EdgeShape::VT_HALF_LENGTH,
+                        half_length,
+                    );
+            }
+            #[inline]
+            pub fn add_mode(&mut self, mode: ShapeSweep) {
+                self.fbb_
+                    .push_slot::<ShapeSweep>(EdgeShape::VT_MODE, mode, ShapeSweep::Random);
+            }
+            #[inline]
+            pub fn add_speed(&mut self, speed: ::flatbuffers::WIPOffset<ScalarParameter<'b>>) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<ScalarParameter>>(
+                        EdgeShape::VT_SPEED,
+                        speed,
+                    );
+            }
+            #[inline]
+            pub fn add_spread(&mut self, spread: f32) {
+                self.fbb_
+                    .push_slot::<f32>(EdgeShape::VT_SPREAD, spread, 0.0);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> EdgeShapeBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                EdgeShapeBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<EdgeShape<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for EdgeShape<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("EdgeShape");
+                ds.field("half_length", &self.half_length());
+                ds.field("mode", &self.mode());
+                ds.field("speed", &self.speed());
+                ds.field("spread", &self.spread());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct EdgeShapeT {
+            pub half_length: Option<alloc::boxed::Box<ScalarParameterT>>,
+            pub mode: ShapeSweep,
+            pub speed: Option<alloc::boxed::Box<ScalarParameterT>>,
+            pub spread: f32,
+        }
+        impl Default for EdgeShapeT {
+            fn default() -> Self {
+                Self {
+                    half_length: None,
+                    mode: ShapeSweep::Random,
+                    speed: None,
+                    spread: 0.0,
+                }
+            }
+        }
+        impl EdgeShapeT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<EdgeShape<'b>> {
+                let half_length = self.half_length.as_ref().map(|x| x.pack(_fbb));
+                let mode = self.mode;
+                let speed = self.speed.as_ref().map(|x| x.pack(_fbb));
+                let spread = self.spread;
+                EdgeShape::create(
+                    _fbb,
+                    &EdgeShapeArgs {
+                        half_length,
+                        mode,
+                        speed,
+                        spread,
                     },
                 )
             }
@@ -17597,6 +18490,11 @@ pub mod noa {
                     ShapeGeometry::ConeShape => ShapeGeometryT::ConeShape(alloc::boxed::Box::new(
                         self.geometry_as_cone_shape()
                             .expect("Invalid union table, expected `ShapeGeometry::ConeShape`.")
+                            .unpack(),
+                    )),
+                    ShapeGeometry::EdgeShape => ShapeGeometryT::EdgeShape(alloc::boxed::Box::new(
+                        self.geometry_as_edge_shape()
+                            .expect("Invalid union table, expected `ShapeGeometry::EdgeShape`.")
                             .unpack(),
                     )),
                     _ => ShapeGeometryT::NONE,
@@ -17763,6 +18661,21 @@ pub mod noa {
                     None
                 }
             }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn geometry_as_edge_shape(&self) -> Option<EdgeShape<'a>> {
+                if self.geometry_type() == ShapeGeometry::EdgeShape {
+                    self.geometry().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { EdgeShape::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
         }
 
         impl ::flatbuffers::Verifiable for ShapeModule<'_> {
@@ -17778,6 +18691,7 @@ pub mod noa {
           ShapeGeometry::BoxShape => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<BoxShape>>("ShapeGeometry::BoxShape", pos),
           ShapeGeometry::SphereShape => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<SphereShape>>("ShapeGeometry::SphereShape", pos),
           ShapeGeometry::ConeShape => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<ConeShape>>("ShapeGeometry::ConeShape", pos),
+          ShapeGeometry::EdgeShape => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<EdgeShape>>("ShapeGeometry::EdgeShape", pos),
           _ => Ok(()),
         }
      })?
@@ -17845,6 +18759,12 @@ pub mod noa {
                         let f = self
                             .geometry_as_cone_shape()
                             .expect("Invalid union table, expected `ShapeGeometry::ConeShape`.");
+                        s.serialize_field("geometry", &f)?;
+                    }
+                    ShapeGeometry::EdgeShape => {
+                        let f = self
+                            .geometry_as_edge_shape()
+                            .expect("Invalid union table, expected `ShapeGeometry::EdgeShape`.");
                         s.serialize_field("geometry", &f)?;
                     }
                     _ => unimplemented!(),
@@ -17971,6 +18891,16 @@ pub mod noa {
                     }
                     ShapeGeometry::ConeShape => {
                         if let Some(x) = self.geometry_as_cone_shape() {
+                            ds.field("geometry", &x)
+                        } else {
+                            ds.field(
+                                "geometry",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ShapeGeometry::EdgeShape => {
+                        if let Some(x) = self.geometry_as_edge_shape() {
                             ds.field("geometry", &x)
                         } else {
                             ds.field(

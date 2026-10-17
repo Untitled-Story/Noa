@@ -204,10 +204,26 @@ table CircleShape {
   radius_mode:ShapeSweep; radius_speed:ScalarParameter; radius_spread:float;
   arc_mode:ShapeSweep; arc_speed:ScalarParameter; arc_spread:float;
 }
-table BoxShape { thickness:Vec3; }
+enum BoxRegion:ubyte { Volume, Shell, Edge }
+// Unit box centered at origin, scaled by ShapeModule.transform.scale.
+// Thickness is Unity's per-axis normalized shell thickness, retained for all regions.
+table BoxShape { thickness:Vec3; region:BoxRegion; }
 table SphereShape { radius:ScalarParameter; radius_thickness:float = 1; hemisphere:bool; }
-table ConeShape { radius:ScalarParameter; angle_radians:float; length:float; }
-union ShapeGeometry { CircleShape, BoxShape, SphereShape, ConeShape }
+enum ConeRegion:ubyte { Base, Volume }
+table ConeShape {
+  radius:ScalarParameter; angle_radians:float; length:float;
+  region:ConeRegion;
+  radius_thickness:float = 1;
+  arc_radians:float = 6.2831853;
+  radius_mode:ShapeSweep; radius_speed:ScalarParameter; radius_spread:float;
+  arc_mode:ShapeSweep; arc_speed:ScalarParameter; arc_spread:float;
+}
+// Unity Edge is a line on local X, from -half_length to +half_length; direction +Z.
+table EdgeShape {
+  half_length:ScalarParameter;
+  mode:ShapeSweep; speed:ScalarParameter; spread:float;
+}
+union ShapeGeometry { CircleShape, BoxShape, SphereShape, ConeShape, EdgeShape }
 table ShapeModule {
   geometry:ShapeGeometry;
   transform:Transform (required);

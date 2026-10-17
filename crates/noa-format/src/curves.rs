@@ -95,7 +95,15 @@ fn particles(p: &w::ParticleSystemT, visitor: &mut impl FnMut(&w::ScalarCurveT))
                     }
                 }
                 w::ShapeGeometryT::ConeShape(c) => {
-                    if let Some(p) = &c.radius {
+                    for p in [&c.radius, &c.radius_speed, &c.arc_speed]
+                        .into_iter()
+                        .flatten()
+                    {
+                        scalar(p, visitor);
+                    }
+                }
+                w::ShapeGeometryT::EdgeShape(e) => {
+                    for p in [&e.half_length, &e.speed].into_iter().flatten() {
                         scalar(p, visitor);
                     }
                 }

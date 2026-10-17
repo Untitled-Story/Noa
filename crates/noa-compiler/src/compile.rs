@@ -224,7 +224,12 @@ fn compile_indexed(
                 for m in p.modules.iter().flatten() {
                     let name = match &m.data {
                         w::ParticleModuleDataT::EmissionModule(_) => "emission",
-                        w::ParticleModuleDataT::ShapeModule(_) => "shape.circle",
+                        w::ParticleModuleDataT::ShapeModule(s) => {
+                            let feature = noa_format::document::shape_feature(&s.geometry)
+                                .ok_or_else(|| err("ShapeModule", "missing geometry"))?;
+                            features.insert(feature.into(), 1);
+                            continue;
+                        }
                         w::ParticleModuleDataT::ColorModule(_) => "color",
                         w::ParticleModuleDataT::SizeModule(_) => "size",
                         w::ParticleModuleDataT::RotationModule(_) => "rotation",
