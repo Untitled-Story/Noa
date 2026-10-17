@@ -1,4 +1,4 @@
-//! Semantic conversion. Fragments cannot be emitted as complete NOIR packages.
+//! Semantic conversion. Fragments cannot be emitted as complete NOAP (Noa Package) files.
 
 mod animator;
 mod colors;

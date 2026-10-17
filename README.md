@@ -2,10 +2,10 @@
 
 Noa 是一个用 Rust 编写的 Unity 特效资源编译器，为 Web 运行时 Natsume 提供资源包。
 
-Noa 以 `.prefab` 为入口，自动解析其依赖，将对象层级、动画、粒子系统、材质和纹理转换为统一的中间表示 NOIR，再与资源一起打包为 `.noap` 文件。
+Noa 以 `.prefab` 为入口，自动解析其依赖，将对象层级、动画、粒子系统、材质和纹理转换为统一的中间表示 NOIR，再与资源一起打包为 NOAP (Noa Package)，文件扩展名为 `.noap`。
 
 ```text
-Unity Prefab → Noa → Noa Package → Natsume
+Unity Prefab → Noa → NOAP (Noa Package) → Natsume
 ```
 
 自定义 MonoBehaviour 的类型、序列化字段和对象引用也会保留，供宿主通过 Natsume Script Bridge 实现对应行为。Noa 负责资源编译，Natsume 负责运行和渲染。
