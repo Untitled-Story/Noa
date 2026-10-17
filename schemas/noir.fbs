@@ -222,7 +222,7 @@ table ConeShape {
   radius_mode:ShapeSweep; radius_speed:ScalarParameter; radius_spread:float;
   arc_mode:ShapeSweep; arc_speed:ScalarParameter; arc_spread:float;
 }
-// Unity Edge is a line on local X, from -half_length to +half_length; direction +Z.
+// Unity 2022.3 SingleSidedEdge: local X from -half_length to +half_length; direction +Y.
 table EdgeShape {
   half_length:ScalarParameter;
   mode:ShapeSweep; speed:ScalarParameter; spread:float;
