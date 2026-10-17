@@ -1,20 +1,289 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Noa particle-add-alpha shader recipe v1",
-  "type": "object", "additionalProperties": false,
-  "required": ["format", "version", "model", "revision", "program_sha256", "color_formula", "output_policy", "outputs", "source_outputs", "alpha_mode", "rgb_premultiply", "source_passes", "source_program_encoding", "source_program_hex"],
-  "properties": {
-    "format": {"const": "noa-shader-data"}, "version": {"const": 1},
-    "model": {"const": "particle-add-alpha"}, "revision": {"const": 1},
-    "program_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "color_formula": {"type": "string"}, "output_policy": {"const": "primary-color"},
-    "outputs": {"const": [0]}, "source_outputs": {"const": [0, 1, 2]},
-    "rgb_premultiply": {"const": true},
-    "alpha_mode": {"type": "object", "additionalProperties": false,
-      "required": ["stream", "component", "comparison", "threshold"],
-      "properties": {"stream": {"const": 0}, "component": {"const": 0}, "comparison": {"const": "less_equal"}, "threshold": {"const": 0.5}}},
-    "source_passes": {"type": "array"},
-    "source_program_encoding": {"const": "unity-metal-lz4"},
-    "source_program_hex": {"type": "string", "pattern": "^([0-9a-f]{2})+$"}
+  "title": "Noa shader data recipes v1",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/particle-add-alpha"
+    },
+    {
+      "$ref": "#/$defs/unity-legacy-particle"
+    }
+  ],
+  "$defs": {
+    "particle-add-alpha": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "version",
+        "model",
+        "revision",
+        "program_sha256",
+        "color_formula",
+        "output_policy",
+        "outputs",
+        "source_outputs",
+        "alpha_mode",
+        "rgb_premultiply",
+        "source_passes",
+        "source_program_encoding",
+        "source_program_hex"
+      ],
+      "properties": {
+        "format": {
+          "const": "noa-shader-data"
+        },
+        "version": {
+          "const": 1
+        },
+        "model": {
+          "const": "particle-add-alpha"
+        },
+        "revision": {
+          "const": 1
+        },
+        "program_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "color_formula": {
+          "type": "string"
+        },
+        "output_policy": {
+          "const": "primary-color"
+        },
+        "outputs": {
+          "const": [
+            0
+          ]
+        },
+        "source_outputs": {
+          "const": [
+            0,
+            1,
+            2
+          ]
+        },
+        "rgb_premultiply": {
+          "const": true
+        },
+        "alpha_mode": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stream",
+            "component",
+            "comparison",
+            "threshold"
+          ],
+          "properties": {
+            "stream": {
+              "const": 0
+            },
+            "component": {
+              "const": 0
+            },
+            "comparison": {
+              "const": "less_equal"
+            },
+            "threshold": {
+              "const": 0.5
+            }
+          }
+        },
+        "source_passes": {
+          "type": "array"
+        },
+        "source_program_encoding": {
+          "const": "unity-metal-lz4"
+        },
+        "source_program_hex": {
+          "type": "string",
+          "pattern": "^([0-9a-f]{2})+$"
+        }
+      }
+    },
+    "unity-legacy-particle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "version",
+        "model",
+        "revision",
+        "source_builtin",
+        "source_revision",
+        "color_formula",
+        "rgb_premultiply",
+        "output_policy",
+        "outputs",
+        "environment"
+      ],
+      "properties": {
+        "format": {
+          "const": "noa-shader-data"
+        },
+        "version": {
+          "const": 1
+        },
+        "revision": {
+          "const": 1
+        },
+        "model": {
+          "enum": [
+            "unity-legacy-particle-additive",
+            "unity-legacy-particle-alpha-blend"
+          ]
+        },
+        "source_builtin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "guid",
+            "file_id"
+          ],
+          "properties": {
+            "guid": {
+              "const": "0000000000000000f000000000000000"
+            },
+            "file_id": {
+              "enum": [
+                "10720",
+                "10721"
+              ]
+            }
+          }
+        },
+        "source_revision": {
+          "const": "unity-2022.3.21f1"
+        },
+        "color_formula": {
+          "type": "string"
+        },
+        "rgb_premultiply": {
+          "const": false
+        },
+        "output_policy": {
+          "const": "primary-color"
+        },
+        "outputs": {
+          "const": [
+            0
+          ]
+        },
+        "environment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fog",
+            "soft_particles"
+          ],
+          "properties": {
+            "fog": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "host_slot",
+                "required",
+                "target"
+              ],
+              "properties": {
+                "host_slot": {
+                  "const": "source-scene-fog"
+                },
+                "required": {
+                  "const": true
+                },
+                "target": {
+                  "enum": [
+                    "black",
+                    "scene-fog-color"
+                  ]
+                }
+              }
+            },
+            "soft_particles": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "host_slot",
+                "required",
+                "formula",
+                "depth_required_when_enabled"
+              ],
+              "properties": {
+                "host_slot": {
+                  "const": "source-soft-particles"
+                },
+                "required": {
+                  "const": true
+                },
+                "formula": {
+                  "type": "string"
+                },
+                "depth_required_when_enabled": {
+                  "const": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "model": {
+                "const": "unity-legacy-particle-additive"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "source_builtin": {
+                "properties": {
+                  "file_id": {
+                    "const": "10720"
+                  }
+                }
+              },
+              "environment": {
+                "properties": {
+                  "fog": {
+                    "properties": {
+                      "target": {
+                        "const": "black"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "source_builtin": {
+                "properties": {
+                  "file_id": {
+                    "const": "10721"
+                  }
+                }
+              },
+              "environment": {
+                "properties": {
+                  "fog": {
+                    "properties": {
+                      "target": {
+                        "const": "scene-fog-color"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
   }
 }

@@ -207,6 +207,30 @@ pub fn validate(d: &wire::DocumentT) -> Result<(), String> {
         }
     }
     for m in d.materials.iter().flatten() {
+        let legacy_feature = match m.model {
+            wire::MaterialModel::LegacyParticleAdditive => {
+                Some("material.unity-legacy-particle-additive")
+            }
+            wire::MaterialModel::LegacyParticleAlphaBlend => {
+                Some("material.unity-legacy-particle-alpha-blend")
+            }
+            _ => None,
+        };
+        if let Some(name) = legacy_feature {
+            for name in [name, "host.legacy-particle-environment"] {
+                if !d
+                    .features
+                    .iter()
+                    .flatten()
+                    .any(|f| f.name == name && f.required && f.revision == 1)
+                {
+                    return Err(format!("legacy material needs required {name} revision 1"));
+                }
+            }
+            if m.shader_data_asset_id == 0 {
+                return Err("legacy material needs shader recipe".into());
+            }
+        }
         for t in m.textures.iter().flatten() {
             check(t.image_id, "asset")?;
             if !d

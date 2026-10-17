@@ -248,10 +248,15 @@ fn compile_indexed(
     }
     for m in resources.materials.values() {
         features.insert(
-            if m.model == w::MaterialModel::ParticleAddAlpha {
-                "material.particle-add-alpha"
-            } else {
-                "material.particle-unlit"
+            match m.model {
+                w::MaterialModel::ParticleAddAlpha => "material.particle-add-alpha",
+                w::MaterialModel::LegacyParticleAdditive => {
+                    "material.unity-legacy-particle-additive"
+                }
+                w::MaterialModel::LegacyParticleAlphaBlend => {
+                    "material.unity-legacy-particle-alpha-blend"
+                }
+                _ => "material.particle-unlit",
             }
             .into(),
             1,
@@ -263,6 +268,27 @@ fn compile_indexed(
         .any(|a| a.kind == w::AssetKind::Mesh)
     {
         features.insert("mesh.nomesh".into(), 1);
+    }
+    if resources.materials.values().any(|m| {
+        matches!(
+            m.model,
+            w::MaterialModel::LegacyParticleAdditive | w::MaterialModel::LegacyParticleAlphaBlend
+        )
+    }) {
+        features.insert("host.legacy-particle-environment".into(), 1);
+        diagnostics.push(Diagnostic {
+            severity: Severity::Warning,
+            code: "HOST_PARTICLE_ENVIRONMENT_REQUIRED",
+            asset: entry.clone(),
+            file_id: None,
+            property: Some("Material.shader_environment".into()),
+            message: concat!(
+                "source fog and soft-particle settings are unavailable; Natsume must resolve ",
+                "'source-scene-fog' and 'source-soft-particles' host slots in the builtin shader ",
+                "recipe; depth is required when soft particles are enabled"
+            )
+            .into(),
+        });
     }
     let mut records = Vec::new();
     for o in file.objects.values() {

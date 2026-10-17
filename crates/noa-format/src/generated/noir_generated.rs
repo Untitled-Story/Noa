@@ -2650,17 +2650,19 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MAX_MATERIAL_MODEL: u8 = 3;
+        pub const ENUM_MAX_MATERIAL_MODEL: u8 = 5;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
         #[allow(non_camel_case_types)]
-        pub const ENUM_VALUES_MATERIAL_MODEL: [MaterialModel; 4] = [
+        pub const ENUM_VALUES_MATERIAL_MODEL: [MaterialModel; 6] = [
             MaterialModel::Unknown,
             MaterialModel::ParticleUnlit,
             MaterialModel::ParticleAddAlpha,
             MaterialModel::ParticleMultiply,
+            MaterialModel::LegacyParticleAdditive,
+            MaterialModel::LegacyParticleAlphaBlend,
         ];
 
         #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -2672,14 +2674,18 @@ pub mod noa {
             pub const ParticleUnlit: Self = Self(1);
             pub const ParticleAddAlpha: Self = Self(2);
             pub const ParticleMultiply: Self = Self(3);
+            pub const LegacyParticleAdditive: Self = Self(4);
+            pub const LegacyParticleAlphaBlend: Self = Self(5);
 
             pub const ENUM_MIN: u8 = 0;
-            pub const ENUM_MAX: u8 = 3;
+            pub const ENUM_MAX: u8 = 5;
             pub const ENUM_VALUES: &'static [Self] = &[
                 Self::Unknown,
                 Self::ParticleUnlit,
                 Self::ParticleAddAlpha,
                 Self::ParticleMultiply,
+                Self::LegacyParticleAdditive,
+                Self::LegacyParticleAlphaBlend,
             ];
             /// Returns the variant's name or "" if unknown.
             pub fn variant_name(self) -> Option<&'static str> {
@@ -2688,6 +2694,8 @@ pub mod noa {
                     Self::ParticleUnlit => Some("ParticleUnlit"),
                     Self::ParticleAddAlpha => Some("ParticleAddAlpha"),
                     Self::ParticleMultiply => Some("ParticleMultiply"),
+                    Self::LegacyParticleAdditive => Some("LegacyParticleAdditive"),
+                    Self::LegacyParticleAlphaBlend => Some("LegacyParticleAlphaBlend"),
                     _ => None,
                 }
             }

@@ -11,6 +11,8 @@ use serde_yaml_ng::Value as Y;
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeMap, fs};
 
+mod builtin_shaders;
+
 pub(crate) struct Resources<'a> {
     pub index: &'a AssetIndex,
     pub sources: &'a UnitySources,
@@ -110,6 +112,9 @@ impl<'a> Resources<'a> {
         let v = o.data.clone();
         let id = self.ids.get(&key.0, key.1)?.get();
         let shader_key = self.reference(&key.0, get(&v, "m_Shader")?)?;
+        if shader_key.0.starts_with("builtin/") {
+            return self.legacy_particle_material(key, id, &v, shader_key);
+        }
         let shader = self
             .sources
             .files

@@ -30,7 +30,11 @@ enum CullMode:ubyte { None, Front, Back }
 enum ColorSpace:ubyte { Linear, SRGB, Unspecified }
 enum FilterMode:ubyte { Nearest, Linear, Trilinear }
 enum AddressMode:ubyte { Clamp, Repeat, Mirror }
-enum MaterialModel:ubyte { Unknown, ParticleUnlit, ParticleAddAlpha, ParticleMultiply }
+enum MaterialModel:ubyte {
+  Unknown, ParticleUnlit, ParticleAddAlpha, ParticleMultiply,
+  // Unity legacy particle shaders: 2 * vertexColor * tint * texture, alpha saturated.
+  LegacyParticleAdditive, LegacyParticleAlphaBlend
+}
 enum RenderMode:ubyte { Billboard, StretchedBillboard, HorizontalBillboard, VerticalBillboard, Mesh }
 enum Alignment:ubyte { View, World, Local, Facing, Velocity }
 enum ParticleSort:ubyte { None, Distance, OldestFirst, YoungestFirst, Depth }
