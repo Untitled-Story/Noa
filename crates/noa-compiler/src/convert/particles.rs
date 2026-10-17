@@ -149,7 +149,7 @@ pub fn convert_system(
         } else {
             w::SeedMode::Fixed
         },
-        seed: uint(v, "randomSeed")?,
+        seed: random_seed(v)?,
         max_particles: uint(initial, "maxNumParticles")?,
         host_gravity_slot: gravity_active.then(|| "world-gravity".into())
     });
@@ -473,4 +473,37 @@ fn shape(m: &Y) -> Result<w::ShapeModuleT, Error> {
         spherical_direction: num(m, "sphericalDirectionAmount")?,
         random_position: num(m, "randomPositionAmount")?
     }))
+}
+fn random_seed(v: &Y) -> Result<u32, Error> {
+    let value = int(v, "randomSeed")?;
+    if value < 0 {
+        // Unity exports may serialize the same seed bits as a signed int32.
+        let signed = i32::try_from(value).map_err(|_| err("randomSeed", "expected 32-bit seed"))?;
+        Ok(u32::from_ne_bytes(signed.to_ne_bytes()))
+    } else {
+        u32::try_from(value).map_err(|_| err("randomSeed", "expected 32-bit seed"))
+    }
+}
+
+#[cfg(test)]
+mod seed_tests {
+    use super::*;
+
+    #[test]
+    fn signed_and_unsigned_seed_spellings_preserve_the_same_bits() {
+        for (source, expected) in [
+            (-1405017463_i64, 2889949833_u32),
+            (-1, u32::MAX),
+            (i32::MIN as i64, 2147483648),
+            (0, 0),
+            (u32::MAX as i64, u32::MAX),
+        ] {
+            let value = serde_yaml_ng::from_str(&format!("randomSeed: {source}")).unwrap();
+            assert_eq!(random_seed(&value).unwrap(), expected);
+        }
+        for source in [i32::MIN as i64 - 1, u32::MAX as i64 + 1] {
+            let value = serde_yaml_ng::from_str(&format!("randomSeed: {source}")).unwrap();
+            assert!(random_seed(&value).is_err());
+        }
+    }
 }
