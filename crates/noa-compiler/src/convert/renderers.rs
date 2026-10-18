@@ -74,8 +74,16 @@ pub(crate) fn renderer(
         };
         weights.push(num(v, &key)?);
     }
-    if mode == w::RenderMode::Mesh && int(v, "m_MeshDistribution")? != 0 {
-        return Err(err("Mesh distribution", "nonuniform selection unsupported"));
+    let mesh_distribution = enum_value(
+        int(v, "m_MeshDistribution")?,
+        &[
+            w::MeshDistribution::UniformRandom,
+            w::MeshDistribution::NonUniformRandom,
+        ],
+        "Mesh distribution",
+    )?;
+    if weights.iter().any(|weight| *weight < 0.0) {
+        return Err(err("Mesh weights", "negative weight"));
     }
     let stream_bytes = get(v, "m_VertexStreams")?
         .as_str()
@@ -128,6 +136,7 @@ pub(crate) fn renderer(
         )?,
         mesh_asset_ids: (!mesh_ids.is_empty()).then_some(mesh_ids),
         mesh_weights: (!weights.is_empty()).then_some(weights),
+        mesh_distribution,
         sorting_layer_rank: i32::try_from(int(v, "m_SortingLayer")?)
             .map_err(|_| err("sorting layer", "outside int32"))?,
         source_sorting_layer_id: i32::try_from(int(v, "m_SortingLayerID")?)

@@ -432,3 +432,47 @@ fn script_nesting_limit_matches_the_binary_reader() {
     *script.fields.last_mut().unwrap().value = tree(129);
     assert!(document::encode(&c.document).is_err());
 }
+
+#[test]
+fn mesh_distribution_survives_compilation_and_wire_round_trip() {
+    let dir = tempfile::tempdir().unwrap();
+    copy_sample(dir.path());
+    let mut file = source();
+    let mut text = String::new();
+    for object in file.objects.values_mut() {
+        if object.class_id == 199 {
+            object.data["m_MeshDistribution"] = 1.into();
+            object.data["m_MeshWeighting"] = 3.into();
+        }
+        let mut root = serde_yaml_ng::Mapping::new();
+        root.insert(object.type_name.clone().into(), object.data.clone());
+        text.push_str(&format!("--- !u!{} &{}\n", object.class_id, object.file_id));
+        text.push_str(&serde_yaml_ng::to_string(&root).unwrap());
+    }
+    let prefab = dir.path().join("kirakira_01.prefab");
+    std::fs::write(&prefab, text).unwrap();
+    let c = compile(&prefab, &opts()).unwrap();
+    let bytes = document::encode(&c.document).unwrap();
+    let decoded = document::decode(&bytes).unwrap();
+    let renderers: Vec<_> = decoded
+        .components
+        .iter()
+        .flatten()
+        .filter_map(|c| match &c.data {
+            w::ComponentDataT::ParticleRenderer(r) => Some(r),
+            _ => None,
+        })
+        .collect();
+    assert!(!renderers.is_empty());
+    assert!(
+        renderers
+            .iter()
+            .all(|r| r.mesh_distribution == w::MeshDistribution::NonUniformRandom)
+    );
+    assert!(
+        renderers
+            .iter()
+            .filter(|r| r.mode == w::RenderMode::Mesh)
+            .all(|r| r.mesh_weights.as_ref().unwrap()[0] == 3.0)
+    );
+}

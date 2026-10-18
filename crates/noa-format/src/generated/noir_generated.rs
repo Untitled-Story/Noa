@@ -5871,6 +5871,130 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
+        pub const ENUM_MIN_MESH_DISTRIBUTION: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_MESH_DISTRIBUTION: u8 = 1;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_MESH_DISTRIBUTION: [MeshDistribution; 2] = [
+            MeshDistribution::UniformRandom,
+            MeshDistribution::NonUniformRandom,
+        ];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct MeshDistribution(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl MeshDistribution {
+            pub const UniformRandom: Self = Self(0);
+            pub const NonUniformRandom: Self = Self(1);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 1;
+            pub const ENUM_VALUES: &'static [Self] = &[Self::UniformRandom, Self::NonUniformRandom];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::UniformRandom => Some("UniformRandom"),
+                    Self::NonUniformRandom => Some("NonUniformRandom"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for MeshDistribution {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for MeshDistribution {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "MeshDistribution",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for MeshDistribution {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in MeshDistribution::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown MeshDistribution variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for MeshDistribution {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for MeshDistribution {
+            type Output = MeshDistribution;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for MeshDistribution {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for MeshDistribution {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for MeshDistribution {}
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
         pub const ENUM_MIN_REFERENCE_KIND: u8 = 0;
         #[deprecated(
             since = "2.0.0",
@@ -23116,6 +23240,7 @@ pub mod noa {
             pub const VT_FREEFORM_STRETCHING: ::flatbuffers::VOffsetT = 46;
             pub const VT_ROTATE_WITH_STRETCH_DIRECTION: ::flatbuffers::VOffsetT = 48;
             pub const VT_SOURCE_SORTING_LAYER_ID: ::flatbuffers::VOffsetT = 50;
+            pub const VT_MESH_DISTRIBUTION: ::flatbuffers::VOffsetT = 52;
 
             #[inline]
             pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -23161,6 +23286,7 @@ pub mod noa {
                     builder.add_materials(x);
                 }
                 builder.add_system_component_id(args.system_component_id);
+                builder.add_mesh_distribution(args.mesh_distribution);
                 builder.add_rotate_with_stretch_direction(args.rotate_with_stretch_direction);
                 builder.add_freeform_stretching(args.freeform_stretching);
                 builder.add_apply_active_color_space(args.apply_active_color_space);
@@ -23201,6 +23327,7 @@ pub mod noa {
                 let freeform_stretching = self.freeform_stretching();
                 let rotate_with_stretch_direction = self.rotate_with_stretch_direction();
                 let source_sorting_layer_id = self.source_sorting_layer_id();
+                let mesh_distribution = self.mesh_distribution();
                 ParticleRendererT {
                     system_component_id,
                     materials,
@@ -23226,6 +23353,7 @@ pub mod noa {
                     freeform_stretching,
                     rotate_with_stretch_direction,
                     source_sorting_layer_id,
+                    mesh_distribution,
                 }
             }
 
@@ -23498,6 +23626,20 @@ pub mod noa {
                         .unwrap()
                 }
             }
+            #[inline]
+            pub fn mesh_distribution(&self) -> MeshDistribution {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<MeshDistribution>(
+                            ParticleRenderer::VT_MESH_DISTRIBUTION,
+                            Some(MeshDistribution::UniformRandom),
+                        )
+                        .unwrap()
+                }
+            }
         }
 
         impl ::flatbuffers::Verifiable for ParticleRenderer<'_> {
@@ -23565,6 +23707,11 @@ pub mod noa {
                         Self::VT_SOURCE_SORTING_LAYER_ID,
                         false,
                     )?
+                    .visit_field::<MeshDistribution>(
+                        "mesh_distribution",
+                        Self::VT_MESH_DISTRIBUTION,
+                        false,
+                    )?
                     .finish();
                 Ok(())
             }
@@ -23598,6 +23745,7 @@ pub mod noa {
             pub freeform_stretching: bool,
             pub rotate_with_stretch_direction: bool,
             pub source_sorting_layer_id: i32,
+            pub mesh_distribution: MeshDistribution,
         }
         impl<'a> Default for ParticleRendererArgs<'a> {
             #[inline]
@@ -23627,6 +23775,7 @@ pub mod noa {
                     freeform_stretching: false,
                     rotate_with_stretch_direction: true,
                     source_sorting_layer_id: 0,
+                    mesh_distribution: MeshDistribution::UniformRandom,
                 }
             }
         }
@@ -23636,7 +23785,7 @@ pub mod noa {
             where
                 S: Serializer,
             {
-                let mut s = serializer.serialize_struct("ParticleRenderer", 24)?;
+                let mut s = serializer.serialize_struct("ParticleRenderer", 25)?;
                 s.serialize_field("system_component_id", &self.system_component_id())?;
                 s.serialize_field("materials", &self.materials())?;
                 s.serialize_field("mode", &self.mode())?;
@@ -23684,6 +23833,7 @@ pub mod noa {
                     &self.rotate_with_stretch_direction(),
                 )?;
                 s.serialize_field("source_sorting_layer_id", &self.source_sorting_layer_id())?;
+                s.serialize_field("mesh_distribution", &self.mesh_distribution())?;
                 s.end()
             }
         }
@@ -23875,6 +24025,14 @@ pub mod noa {
                 );
             }
             #[inline]
+            pub fn add_mesh_distribution(&mut self, mesh_distribution: MeshDistribution) {
+                self.fbb_.push_slot::<MeshDistribution>(
+                    ParticleRenderer::VT_MESH_DISTRIBUTION,
+                    mesh_distribution,
+                    MeshDistribution::UniformRandom,
+                );
+            }
+            #[inline]
             pub fn new(
                 _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
             ) -> ParticleRendererBuilder<'a, 'b, A> {
@@ -23923,6 +24081,7 @@ pub mod noa {
                     &self.rotate_with_stretch_direction(),
                 );
                 ds.field("source_sorting_layer_id", &self.source_sorting_layer_id());
+                ds.field("mesh_distribution", &self.mesh_distribution());
                 ds.finish()
             }
         }
@@ -23953,6 +24112,7 @@ pub mod noa {
             pub freeform_stretching: bool,
             pub rotate_with_stretch_direction: bool,
             pub source_sorting_layer_id: i32,
+            pub mesh_distribution: MeshDistribution,
         }
         impl Default for ParticleRendererT {
             fn default() -> Self {
@@ -23981,6 +24141,7 @@ pub mod noa {
                     freeform_stretching: false,
                     rotate_with_stretch_direction: true,
                     source_sorting_layer_id: 0,
+                    mesh_distribution: MeshDistribution::UniformRandom,
                 }
             }
         }
@@ -24021,6 +24182,7 @@ pub mod noa {
                 let freeform_stretching = self.freeform_stretching;
                 let rotate_with_stretch_direction = self.rotate_with_stretch_direction;
                 let source_sorting_layer_id = self.source_sorting_layer_id;
+                let mesh_distribution = self.mesh_distribution;
                 ParticleRenderer::create(
                     _fbb,
                     &ParticleRendererArgs {
@@ -24048,6 +24210,7 @@ pub mod noa {
                         freeform_stretching,
                         rotate_with_stretch_direction,
                         source_sorting_layer_id,
+                        mesh_distribution,
                     },
                 )
             }

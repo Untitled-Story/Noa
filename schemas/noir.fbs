@@ -292,6 +292,7 @@ enum VertexSemantic:ubyte {
   Velocity, AgeNormalized, Custom1, Custom2, Center, VertexId
 }
 table VertexStream { semantic:VertexSemantic; components:ubyte; }
+enum MeshDistribution:ubyte { UniformRandom, NonUniformRandom }
 table ParticleRenderer {
   system_component_id:uint;
   materials:[uint] (required);
@@ -310,6 +311,8 @@ table ParticleRenderer {
   freeform_stretching:bool;
   rotate_with_stretch_direction:bool = true;
   source_sorting_layer_id:int;
+  // Absent in older packages: uniform selection ignores mesh_weights.
+  mesh_distribution:MeshDistribution;
 }
 // Custom scripts carry serialized data only. Host factories are never embedded.
 table ScriptIdentity {

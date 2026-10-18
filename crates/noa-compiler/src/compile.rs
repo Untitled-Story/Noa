@@ -215,8 +215,13 @@ fn compile_indexed(
             w::ComponentDataT::Animator(_) => {
                 features.insert("animator.single-layer".into(), 1);
             }
-            w::ComponentDataT::ParticleRenderer(_) => {
+            w::ComponentDataT::ParticleRenderer(r) => {
                 features.insert("particle.renderer".into(), 1);
+                if r.mode == w::RenderMode::Mesh
+                    && r.mesh_distribution == w::MeshDistribution::NonUniformRandom
+                {
+                    features.insert("particle.mesh-distribution".into(), 1);
+                }
             }
             w::ComponentDataT::ParticleSystem(p) => {
                 features.insert("particle.main".into(), 1);

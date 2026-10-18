@@ -175,6 +175,27 @@ pub fn validate(d: &wire::DocumentT) -> Result<(), String> {
                 }) {
                     return Err("renderer must reference its particle system".into());
                 }
+                if r.mesh_distribution != wire::MeshDistribution::UniformRandom
+                    && r.mesh_distribution != wire::MeshDistribution::NonUniformRandom
+                {
+                    return Err("unknown mesh distribution".into());
+                }
+                if r.mode == wire::RenderMode::Mesh
+                    && r.mesh_distribution == wire::MeshDistribution::NonUniformRandom
+                {
+                    if !d.features.iter().flatten().any(|f| {
+                        f.name == "particle.mesh-distribution" && f.revision == 1 && f.required
+                    }) {
+                        return Err("weighted meshes need particle.mesh-distribution@1".into());
+                    }
+                    let weights = r.mesh_weights.as_deref().unwrap_or(&[]);
+                    if weights.len() != r.mesh_asset_ids.as_deref().unwrap_or(&[]).len()
+                        || weights.iter().any(|w| !w.is_finite() || *w < 0.0)
+                        || !weights.iter().sum::<f32>().is_finite()
+                    {
+                        return Err("invalid mesh weights".into());
+                    }
+                }
                 for m in &r.materials {
                     if *m != 0 {
                         check(*m, "material")?;
