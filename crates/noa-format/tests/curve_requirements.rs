@@ -35,6 +35,7 @@ fn vector(p: w::ScalarParameterT) -> w::VectorParameterT {
 
 fn base() -> w::DocumentT {
     let mut d = w::DocumentT::default();
+    d.format_major = 2;
     let mut node = w::NodeT::default();
     node.id = 1;
     node.transform.position = Some(w::Vec3T::default());

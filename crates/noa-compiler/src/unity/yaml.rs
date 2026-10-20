@@ -334,9 +334,24 @@ impl<'de> Deserialize<'de> for UnityValue {
                 while let Some(key) = map.next_key::<Value>()? {
                     let value = if matches!(
                         key.as_str(),
-                        Some("guid" | "m_VertexStreams" | "m_TrailVertexStreams")
+                        Some(
+                            "guid"
+                                | "m_VertexStreams"
+                                | "m_TrailVertexStreams"
+                                | "m_IndexBuffer"
+                                | "_typelessdata"
+                                | "compressedBlob"
+                                | "m_BoneNameHashes"
+                        )
                     ) {
                         Value::String(map.next_value::<String>()?)
+                    } else if key.as_str() == Some("m_ParameterBlobIndices") {
+                        Value::Sequence(
+                            map.next_value::<Vec<String>>()?
+                                .into_iter()
+                                .map(Value::String)
+                                .collect(),
+                        )
                     } else if key.as_str() == Some("m_Events") {
                         Value::Sequence(
                             map.next_value::<Vec<UnityAnimationEvent>>()?
@@ -389,5 +404,19 @@ impl<'de> Deserialize<'de> for UnityAnimationEvent {
             }
         }
         d.deserialize_map(Visitor)
+    }
+}
+
+#[cfg(test)]
+mod t3_tests {
+    use super::*;
+    #[test]
+    fn binary_yaml_fields_preserve_lexical_hex_even_when_they_look_like_numbers() {
+        let f=UnityFile::parse("--- !u!48 &4800000\nShader:\n  compressedBlob: 001234\n  m_IndexBuffer: 001002\n  _typelessdata: 0000000000000000000000000000000000000000000000000000000000000000\n  m_ParameterBlobIndices: [00000000000000000000000000000000000000, ffffffff]\n").unwrap();
+        let d = &f.objects[&4800000].data;
+        assert_eq!(d["compressedBlob"].as_str(), Some("001234"));
+        assert_eq!(d["m_IndexBuffer"].as_str(), Some("001002"));
+        assert_eq!(d["_typelessdata"].as_str().unwrap().len(), 64);
+        assert_eq!(d["m_ParameterBlobIndices"][0].as_str().unwrap().len(), 38);
     }
 }

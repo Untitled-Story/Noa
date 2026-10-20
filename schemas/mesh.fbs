@@ -1,20 +1,20 @@
-// Noa mesh asset v1 draft. Uses Unity local coordinates and UV orientation.
-// Ordinary FlatBuffer, no size prefix. Indices describe clockwise triangles.
+// NOMESH 2.0 (beta). Unity local coordinates, original triangle winding.
 namespace Noa.Mesh;
-
-struct Vec2 { x:float; y:float; }
 struct Vec3 { x:float; y:float; z:float; }
+struct Vec4 { x:float; y:float; z:float; w:float; }
+table TexCoord {
+  channel:ubyte; dimension:ubyte = 2;
+  // Original dimensions 1..4; unused components are zero.
+  values:[Vec4] (required);
+}
 table Submesh { first_index:uint; index_count:uint; }
 table Mesh {
-  format_major:ushort = 1;
-  format_minor:ushort;
+  format_major:ushort; format_minor:ushort;
   name:string;
   positions:[Vec3] (required);
-  // Absent/empty means unavailable; otherwise one element per vertex.
   normals:[Vec3];
-  uv0:[Vec2];
+  tangents:[Vec4]; colors:[Vec4]; texcoords:[TexCoord];
   indices:[uint] (required);
-  // Contiguous, non-overlapping triangle ranges covering the index buffer.
   submeshes:[Submesh] (required);
 }
 root_type Mesh;

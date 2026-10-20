@@ -356,8 +356,8 @@ pub fn convert_system(
     }
     if active(v, "UVModule")? {
         let m = get(v, "UVModule")?;
-        if int(m, "mode")? != 0 || num(m, "flipU")? != 0. || num(m, "flipV")? != 0. {
-            return Err(err("UVModule", "sprite mode/UV flips not supported"));
+        if num(m, "flipU")? != 0. || num(m, "flipV")? != 0. {
+            return Err(err("UVModule", "UV flips not supported"));
         }
         let columns = uint(m, "tilesX")?;
         let rows = uint(m, "tilesY")?;
@@ -372,6 +372,11 @@ pub fn convert_system(
         };
         modules.push(module(w::ParticleModuleDataT::TextureSheetModule(
             Box::new(n!(TextureSheetModuleT {
+                mode: enum_value(
+                    int(m, "mode")?,
+                    &[w::SheetMode::Grid, w::SheetMode::Sprites],
+                    "sheet mode"
+                )?,
                 columns,
                 rows,
                 time_mode: enum_value(

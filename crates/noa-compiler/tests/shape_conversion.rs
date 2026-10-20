@@ -36,6 +36,7 @@ fn write_shapes(destination: &Path, kind: i64) {
             s["arc"]["speed"]["minMaxState"] = 0.into();
             s["arc"]["speed"]["scalar"] = 0.75.into();
             s["radiusThickness"] = 0.25.into();
+            s["donutRadius"] = 0.31.into();
             s["angle"] = 35.into();
             s["length"] = 4.into();
             s["boxThickness"] = serde_yaml_ng::from_str("{x: 0.1, y: 0.2, z: 0.3}").unwrap();
@@ -221,7 +222,7 @@ fn bad_shape_geometry_and_unimplemented_shapes_are_rejected() {
         first_shape(&mut d).transform.scale = None;
         assert!(document::encode(&d).is_err());
     }
-    for kind in [1, 3, 6, 7, 9, 11, 13, 14, 17, 18, 19, 20, 999] {
+    for kind in [1, 3, 6, 7, 9, 11, 13, 14, 18, 20, 999] {
         write_shapes(dir.path(), kind);
         let err = compile(
             &dir.path().join("kirakira_01.prefab"),
@@ -287,4 +288,43 @@ fn cone_and_edge_speed_curves_require_unity_infinity_and_reject_bad_keys() {
                 .contains("curve key times")
         );
     }
+}
+
+#[test]
+fn donut_preserves_torus_geometry_and_arc_sweep_without_circle_substitution() {
+    let dir = tempfile::tempdir().unwrap();
+    copy_sample(dir.path());
+    write_shapes(dir.path(), 17);
+    let c = compile(
+        &dir.path().join("kirakira_01.prefab"),
+        &InspectOptions::default(),
+    )
+    .unwrap_or_else(|e| panic!("{e}"));
+    for s in geometries(&c.document) {
+        let w::ShapeGeometryT::DonutShape(d) = &s.geometry else {
+            panic!("expected torus")
+        };
+        near(d.radius, 2.25);
+        near(d.tube_radius, 0.31);
+        near(d.radius_thickness, 0.25);
+        near(d.arc_radians, 240f32.to_radians());
+        assert_eq!(d.arc_mode, w::ShapeSweep::PingPong);
+        near(d.arc_spread, 0.1);
+    }
+    assert!(
+        c.document
+            .features
+            .iter()
+            .flatten()
+            .any(|f| f.name == "particle.shape.donut" && f.required)
+    );
+    assert_eq!(
+        document::decode(&c.files["scene.noir"]).unwrap(),
+        c.document
+    );
+    let mut d = c.document.clone();
+    if let w::ShapeGeometryT::DonutShape(s) = &mut first_shape(&mut d).geometry {
+        s.tube_radius = -1.;
+    }
+    assert!(document::encode(&d).is_err());
 }

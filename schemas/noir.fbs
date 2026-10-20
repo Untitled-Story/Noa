@@ -1,5 +1,5 @@
-// NOIR candidate wire 1.0, schema draft 0.4. Not yet a stable release.
-// Tables/unions/enums are append-only once published; structs are frozen.
+// NOIR candidate wire 2.0, schema draft 0.5. Not yet a stable release.
+// Beta schema: changes are recorded in docs/temp; regenerate consumer bindings.
 namespace Noa.IR;
 
 struct Vec2 { x:float; y:float; }
@@ -10,7 +10,7 @@ struct Color { r:float; g:float; b:float; a:float; }
 
 // All entity IDs are package-local uint32, nonzero and globally unique.
 // Ref 0 means absent, never a vector index. IDs are stable for fixed inputs.
-enum AssetKind:ubyte { Unknown, Image, Mesh, ShaderData }
+enum AssetKind:ubyte { Unknown, Image, Mesh, ShaderData, Sprite }
 enum CurveDomain:ubyte { Seconds, Normalized }
 enum WrapMode:ubyte { Clamp, Loop, PingPong, UnitySerialized }
 enum Interpolation:ubyte { Step, Linear, CubicHermite, WeightedBezier }
@@ -33,11 +33,12 @@ enum AddressMode:ubyte { Clamp, Repeat, Mirror }
 enum MaterialModel:ubyte {
   Unknown, ParticleUnlit, ParticleAddAlpha, ParticleMultiply,
   // Unity legacy particle shaders: 2 * vertexColor * tint * texture, alpha saturated.
-  LegacyParticleAdditive, LegacyParticleAlphaBlend
+  LegacyParticleAdditive, LegacyParticleAlphaBlend, SpriteDefault, UIDefault, TextureVertexColor
 }
-enum RenderMode:ubyte { Billboard, StretchedBillboard, HorizontalBillboard, VerticalBillboard, Mesh }
+enum RenderMode:ubyte { Billboard, StretchedBillboard, HorizontalBillboard, VerticalBillboard, Mesh, None }
 enum Alignment:ubyte { View, World, Local, Facing, Velocity }
 enum ParticleSort:ubyte { None, Distance, OldestFirst, YoungestFirst, Depth }
+enum MaskInteraction:ubyte { None, VisibleInside, VisibleOutside }
 enum SeedMode:ubyte { Fixed, PerInstance }
 enum ActionKind:ubyte { ApplyClip, PlayClip, StopEmission, ClearParticles, SetActive }
 enum AnimationProperty:ushort {
@@ -47,7 +48,7 @@ enum AnimationProperty:ushort {
   RendererMaterial, RendererMesh, MaterialTexture,
   RectAnchoredPosition, RectSizeDelta, RectAnchorMin, RectAnchorMax, RectPivot,
   RendererMaterialTint, RendererMaterialFloat, RendererTextureST, ComponentEnabled,
-  ParticleColor, ParticleCustomColor, ParticleLoop
+  ParticleColor, ParticleCustomColor, ParticleLoop, SpriteColor
 }
 enum ParticleParameter:ushort {
   Unknown, StartLifetime, StartSpeed, StartSizeX, StartSizeY, StartSizeZ,
@@ -110,7 +111,15 @@ table ColorContext {
 }
 
 table FeatureRequirement { name:string (required); revision:uint = 1; required:bool = true; }
-table Asset { id:uint; kind:AssetKind; }
+table SpriteAsset {
+  mesh_asset_id:uint; image_asset_id:uint;
+  rect:Vec4; texture_rect:Vec4; texture_rect_offset:Vec2; atlas_rect_offset:Vec2;
+  pivot:Vec2; border:Vec4; pixels_per_unit:float = 100;
+  // Source mapping and packing retained for provenance; NOMESH UVs are resolved.
+  uv_transform:Vec4; packing_flags:uint; downscale_multiplier:float = 1;
+  sampler:Sampler; color_space:ColorSpace = SRGB;
+}
+table Asset { id:uint; kind:AssetKind; sprite:SpriteAsset; }
 table Sampler {
   min_filter:FilterMode = Linear; mag_filter:FilterMode = Linear;
   wrap_u:AddressMode = Clamp; wrap_v:AddressMode = Clamp;
@@ -123,7 +132,12 @@ table TextureBinding {
 }
 table FloatProperty { name:string (required); value:float; }
 table VectorProperty { name:string (required); value:Vec4; }
+enum StencilOp:ubyte { Keep, Zero, Replace, IncrementSaturate, DecrementSaturate, Invert, IncrementWrap, DecrementWrap }
+table StencilFace { compare:CompareOp = Always; pass:StencilOp; fail:StencilOp; depth_fail:StencilOp; }
+table StencilState { reference:ubyte; read_mask:ubyte = 255; write_mask:ubyte = 255; front:StencilFace (required); back:StencilFace (required); }
+enum DepthTestSource:ubyte { Fixed, Canvas }
 table RenderState {
+  depth_test_source:DepthTestSource; stencil:StencilState;
   src_rgb:BlendFactor = SrcAlpha; dst_rgb:BlendFactor = OneMinusSrcAlpha;
   src_alpha:BlendFactor = One; dst_alpha:BlendFactor = OneMinusSrcAlpha;
   rgb_op:BlendOp; alpha_op:BlendOp;
@@ -230,7 +244,20 @@ table EdgeShape {
   half_length:ScalarParameter;
   mode:ShapeSweep; speed:ScalarParameter; spread:float;
 }
-union ShapeGeometry { CircleShape, BoxShape, SphereShape, ConeShape, EdgeShape }
+table DonutShape {
+  radius:float; tube_radius:float; radius_thickness:float = 1;
+  arc_radians:float = 6.2831855; arc_mode:ShapeSweep;
+  arc_speed:ScalarParameter; arc_spread:float;
+}
+enum GeometryPlacement:ubyte { Vertex, Edge, Triangle }
+table SpriteShape {
+  sprite_asset_id:uint;
+  placement:GeometryPlacement; normal_offset:float;
+  use_mesh_colors:bool;
+  spawn_mode:ShapeSweep; spawn_speed:ScalarParameter; spawn_spread:float;
+}
+// Sprite sampling uses authored geometry/placement; texture alpha is not a shape mask.
+union ShapeGeometry { CircleShape, BoxShape, SphereShape, ConeShape, EdgeShape, DonutShape, SpriteShape }
 table ShapeModule {
   geometry:ShapeGeometry;
   transform:Transform (required);
@@ -265,7 +292,9 @@ table NoiseModule {
 enum SheetTime:ubyte { Lifetime, Speed, FPS }
 enum SheetAnimation:ubyte { WholeSheet, SingleRow }
 enum SheetRow:ubyte { Fixed, Random, MeshIndex }
+enum SheetMode:ubyte { Grid, Sprites }
 table TextureSheetModule {
+  mode:SheetMode; sprite_asset_ids:[uint];
   columns:uint = 1; rows:uint = 1;
   time_mode:SheetTime;
   frame_over_time:ScalarParameter; start_frame:ScalarParameter;
@@ -307,6 +336,8 @@ enum VertexSemantic:ubyte {
 table VertexStream { semantic:VertexSemantic; components:ubyte; }
 enum MeshDistribution:ubyte { UniformRandom, NonUniformRandom }
 table ParticleRenderer {
+  mask_interaction:MaskInteraction;
+  environment:RenderEnvironment;
   system_component_id:uint;
   materials:[uint] (required);
   mode:RenderMode;
@@ -383,7 +414,52 @@ table Animator {
   write_default_values_on_disable:bool;
   layers:[AnimatorLayer] (required);
 }
-union ComponentData { RectLayout, Camera, ParticleSystem, ParticleRenderer, CustomComponent, Animator }
+table RenderEnvironment {
+  cast_shadows:ubyte; receive_shadows:bool; light_probes:ubyte; reflection_probes:ubyte;
+}
+table MeshFilter { mesh_asset_id:uint; }
+table MeshRenderer {
+  mesh_filter_component_id:uint; materials:[uint] (required);
+  sorting_layer_id:int; sorting_layer_index:int; sorting_order:int;
+  environment:RenderEnvironment;
+}
+enum SpriteDrawMode:ubyte { Simple, Sliced, Tiled }
+enum SpriteSortPoint:ubyte { Center, Pivot }
+table SpriteRenderer {
+  sprite_asset_id:uint; materials:[uint] (required); color:Color;
+  flip_x:bool; flip_y:bool; draw_mode:SpriteDrawMode; size:Vec2;
+  tile_mode:ubyte; adaptive_mode_threshold:float = 0.5;
+  mask_interaction:MaskInteraction;
+  sorting_layer_id:int; sorting_layer_index:int; sorting_order:int;
+  sort_point:SpriteSortPoint;
+}
+table SpriteMask {
+  sprite_asset_id:uint; alpha_cutoff:float = 0.5;
+  custom_range:bool; front_layer_id:int; front_layer_index:int; front_order:int;
+  back_layer_id:int; back_layer_index:int; back_order:int;
+  sort_point:SpriteSortPoint;
+}
+enum CanvasMode:ubyte { ScreenOverlay, ScreenCamera, World }
+table Canvas {
+  mode:CanvasMode; camera_component_id:uint; host_camera_slot:string;
+  plane_distance:float; pixel_perfect:bool; override_pixel_perfect:bool;
+  override_sorting:bool; sorting_layer_id:int; sorting_order:int;
+  additional_shader_channels:uint; target_display:uint; vertex_color_gamma:bool;
+}
+table CanvasRenderer { cull_transparent_mesh:bool; }
+enum ImageType:ubyte { Simple, Sliced, Tiled, Filled }
+table UIImage {
+  sprite_asset_id:uint; override_sprite_asset_id:uint; material_id:uint;
+  color:Color; type:ImageType; preserve_aspect:bool; fill_center:bool = true;
+  fill_method:ubyte; fill_amount:float = 1; fill_clockwise:bool = true;
+  fill_origin:ubyte; use_sprite_mesh:bool; pixels_per_unit_multiplier:float = 1;
+  maskable:bool = true;
+}
+table UIMask { graphic_component_id:uint; show_graphic:bool = true; }
+table RectMask2D { padding:Vec4; softness:Vec2; }
+table CanvasGroup { alpha:float = 1; ignore_parent_groups:bool; }
+
+union ComponentData { RectLayout, Camera, ParticleSystem, ParticleRenderer, CustomComponent, Animator, MeshRenderer, SpriteRenderer, SpriteMask, Canvas, CanvasRenderer, MeshFilter, UIImage, UIMask, RectMask2D, CanvasGroup }
 table Component { id:uint; node_id:uint; enabled:bool = true; data:ComponentData; }
 
 table FloatTrack { curve:ScalarCurve (required); }
@@ -435,7 +511,7 @@ table EntryPoint {
 table SourceRecord { entity_id:uint; asset_path:string; object_identity:string; property_path:string; }
 table Metadata { name:string (required); value:string; }
 table Document {
-  format_major:ushort = 1;
+  format_major:ushort;
   format_minor:ushort;
   semantics_revision:uint = 1;
   features:[FeatureRequirement];

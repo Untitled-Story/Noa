@@ -23,3 +23,5 @@ pub(crate) mod materials;
 
 pub(crate) mod document;
 pub(crate) mod renderers;
+
+pub(crate) mod scene_renderers;

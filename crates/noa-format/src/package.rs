@@ -23,7 +23,7 @@ impl Manifest {
     pub fn validate(&self) -> Result<(), String> {
         if self.format != "noa-package"
             || self.version != 1
-            || self.noir_version != [1, 0]
+            || self.noir_version != [2, 0]
             || self.document != "scene.noir"
         {
             return Err("unsupported package version or document path".into());

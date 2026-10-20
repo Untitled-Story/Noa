@@ -21,169 +21,6 @@ pub mod noa {
 
         extern crate alloc;
 
-        // struct Vec2, aligned to 4
-        #[repr(transparent)]
-        #[derive(Clone, Copy, PartialEq)]
-        pub struct Vec2(pub [u8; 8]);
-        impl Default for Vec2 {
-            fn default() -> Self {
-                Self([0; 8])
-            }
-        }
-        impl ::core::fmt::Debug for Vec2 {
-            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
-                f.debug_struct("Vec2")
-                    .field("x", &self.x())
-                    .field("y", &self.y())
-                    .finish()
-            }
-        }
-
-        impl ::flatbuffers::SimpleToVerifyInSlice for Vec2 {}
-        impl<'a> ::flatbuffers::Follow<'a> for Vec2 {
-            type Inner = &'a Vec2;
-            #[inline]
-            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-                unsafe { <&'a Vec2>::follow(buf, loc) }
-            }
-        }
-        impl<'a> ::flatbuffers::Follow<'a> for &'a Vec2 {
-            type Inner = &'a Vec2;
-            #[inline]
-            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-                unsafe { ::flatbuffers::follow_cast_ref::<Vec2>(buf, loc) }
-            }
-        }
-        impl<'b> ::flatbuffers::Push for Vec2 {
-            type Output = Vec2;
-            #[inline]
-            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
-                let src = unsafe {
-                    ::core::slice::from_raw_parts(
-                        self as *const Vec2 as *const u8,
-                        <Self as ::flatbuffers::Push>::size(),
-                    )
-                };
-                dst.copy_from_slice(src);
-            }
-            #[inline]
-            fn alignment() -> ::flatbuffers::PushAlignment {
-                ::flatbuffers::PushAlignment::new(4)
-            }
-        }
-
-        impl<'a> ::flatbuffers::Verifiable for Vec2 {
-            #[inline]
-            fn run_verifier(
-                v: &mut ::flatbuffers::Verifier,
-                pos: usize,
-            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
-                v.in_buffer::<Self>(pos)
-            }
-        }
-
-        impl Serialize for Vec2 {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: Serializer,
-            {
-                let mut s = serializer.serialize_struct("Vec2", 2)?;
-                s.serialize_field("x", &self.x())?;
-                s.serialize_field("y", &self.y())?;
-                s.end()
-            }
-        }
-
-        impl<'a> Vec2 {
-            #[allow(clippy::too_many_arguments)]
-            pub fn new(x: f32, y: f32) -> Self {
-                let mut s = Self([0; 8]);
-                s.set_x(x);
-                s.set_y(y);
-                s
-            }
-
-            pub fn x(&self) -> f32 {
-                let mut mem = ::core::mem::MaybeUninit::<
-                    <f32 as ::flatbuffers::EndianScalar>::Scalar,
-                >::uninit();
-                // Safety:
-                // Created from a valid Table for this object
-                // Which contains a valid value in this slot
-                ::flatbuffers::EndianScalar::from_little_endian(unsafe {
-                    ::core::ptr::copy_nonoverlapping(
-                        self.0[0..].as_ptr(),
-                        mem.as_mut_ptr() as *mut u8,
-                        ::core::mem::size_of::<<f32 as ::flatbuffers::EndianScalar>::Scalar>(),
-                    );
-                    mem.assume_init()
-                })
-            }
-
-            pub fn set_x(&mut self, x: f32) {
-                let x_le = ::flatbuffers::EndianScalar::to_little_endian(x);
-                // Safety:
-                // Created from a valid Table for this object
-                // Which contains a valid value in this slot
-                unsafe {
-                    ::core::ptr::copy_nonoverlapping(
-                        &x_le as *const _ as *const u8,
-                        self.0[0..].as_mut_ptr(),
-                        ::core::mem::size_of::<<f32 as ::flatbuffers::EndianScalar>::Scalar>(),
-                    );
-                }
-            }
-
-            pub fn y(&self) -> f32 {
-                let mut mem = ::core::mem::MaybeUninit::<
-                    <f32 as ::flatbuffers::EndianScalar>::Scalar,
-                >::uninit();
-                // Safety:
-                // Created from a valid Table for this object
-                // Which contains a valid value in this slot
-                ::flatbuffers::EndianScalar::from_little_endian(unsafe {
-                    ::core::ptr::copy_nonoverlapping(
-                        self.0[4..].as_ptr(),
-                        mem.as_mut_ptr() as *mut u8,
-                        ::core::mem::size_of::<<f32 as ::flatbuffers::EndianScalar>::Scalar>(),
-                    );
-                    mem.assume_init()
-                })
-            }
-
-            pub fn set_y(&mut self, x: f32) {
-                let x_le = ::flatbuffers::EndianScalar::to_little_endian(x);
-                // Safety:
-                // Created from a valid Table for this object
-                // Which contains a valid value in this slot
-                unsafe {
-                    ::core::ptr::copy_nonoverlapping(
-                        &x_le as *const _ as *const u8,
-                        self.0[4..].as_mut_ptr(),
-                        ::core::mem::size_of::<<f32 as ::flatbuffers::EndianScalar>::Scalar>(),
-                    );
-                }
-            }
-
-            pub fn unpack(&self) -> Vec2T {
-                Vec2T {
-                    x: self.x(),
-                    y: self.y(),
-                }
-            }
-        }
-
-        #[derive(Debug, Clone, PartialEq, Default, serde::Serialize)]
-        pub struct Vec2T {
-            pub x: f32,
-            pub y: f32,
-        }
-        impl Vec2T {
-            pub fn pack(&self) -> Vec2 {
-                Vec2::new(self.x, self.y)
-            }
-        }
-
         // struct Vec3, aligned to 4
         #[repr(transparent)]
         #[derive(Clone, Copy, PartialEq)]
@@ -383,6 +220,468 @@ pub mod noa {
             }
         }
 
+        // struct Vec4, aligned to 4
+        #[repr(transparent)]
+        #[derive(Clone, Copy, PartialEq)]
+        pub struct Vec4(pub [u8; 16]);
+        impl Default for Vec4 {
+            fn default() -> Self {
+                Self([0; 16])
+            }
+        }
+        impl ::core::fmt::Debug for Vec4 {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                f.debug_struct("Vec4")
+                    .field("x", &self.x())
+                    .field("y", &self.y())
+                    .field("z", &self.z())
+                    .field("w", &self.w())
+                    .finish()
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for Vec4 {}
+        impl<'a> ::flatbuffers::Follow<'a> for Vec4 {
+            type Inner = &'a Vec4;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                unsafe { <&'a Vec4>::follow(buf, loc) }
+            }
+        }
+        impl<'a> ::flatbuffers::Follow<'a> for &'a Vec4 {
+            type Inner = &'a Vec4;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                unsafe { ::flatbuffers::follow_cast_ref::<Vec4>(buf, loc) }
+            }
+        }
+        impl<'b> ::flatbuffers::Push for Vec4 {
+            type Output = Vec4;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                let src = unsafe {
+                    ::core::slice::from_raw_parts(
+                        self as *const Vec4 as *const u8,
+                        <Self as ::flatbuffers::Push>::size(),
+                    )
+                };
+                dst.copy_from_slice(src);
+            }
+            #[inline]
+            fn alignment() -> ::flatbuffers::PushAlignment {
+                ::flatbuffers::PushAlignment::new(4)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for Vec4 {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.in_buffer::<Self>(pos)
+            }
+        }
+
+        impl Serialize for Vec4 {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("Vec4", 4)?;
+                s.serialize_field("x", &self.x())?;
+                s.serialize_field("y", &self.y())?;
+                s.serialize_field("z", &self.z())?;
+                s.serialize_field("w", &self.w())?;
+                s.end()
+            }
+        }
+
+        impl<'a> Vec4 {
+            #[allow(clippy::too_many_arguments)]
+            pub fn new(x: f32, y: f32, z: f32, w: f32) -> Self {
+                let mut s = Self([0; 16]);
+                s.set_x(x);
+                s.set_y(y);
+                s.set_z(z);
+                s.set_w(w);
+                s
+            }
+
+            pub fn x(&self) -> f32 {
+                let mut mem = ::core::mem::MaybeUninit::<
+                    <f32 as ::flatbuffers::EndianScalar>::Scalar,
+                >::uninit();
+                // Safety:
+                // Created from a valid Table for this object
+                // Which contains a valid value in this slot
+                ::flatbuffers::EndianScalar::from_little_endian(unsafe {
+                    ::core::ptr::copy_nonoverlapping(
+                        self.0[0..].as_ptr(),
+                        mem.as_mut_ptr() as *mut u8,
+                        ::core::mem::size_of::<<f32 as ::flatbuffers::EndianScalar>::Scalar>(),
+                    );
+                    mem.assume_init()
+                })
+            }
+
+            pub fn set_x(&mut self, x: f32) {
+                let x_le = ::flatbuffers::EndianScalar::to_little_endian(x);
+                // Safety:
+                // Created from a valid Table for this object
+                // Which contains a valid value in this slot
+                unsafe {
+                    ::core::ptr::copy_nonoverlapping(
+                        &x_le as *const _ as *const u8,
+                        self.0[0..].as_mut_ptr(),
+                        ::core::mem::size_of::<<f32 as ::flatbuffers::EndianScalar>::Scalar>(),
+                    );
+                }
+            }
+
+            pub fn y(&self) -> f32 {
+                let mut mem = ::core::mem::MaybeUninit::<
+                    <f32 as ::flatbuffers::EndianScalar>::Scalar,
+                >::uninit();
+                // Safety:
+                // Created from a valid Table for this object
+                // Which contains a valid value in this slot
+                ::flatbuffers::EndianScalar::from_little_endian(unsafe {
+                    ::core::ptr::copy_nonoverlapping(
+                        self.0[4..].as_ptr(),
+                        mem.as_mut_ptr() as *mut u8,
+                        ::core::mem::size_of::<<f32 as ::flatbuffers::EndianScalar>::Scalar>(),
+                    );
+                    mem.assume_init()
+                })
+            }
+
+            pub fn set_y(&mut self, x: f32) {
+                let x_le = ::flatbuffers::EndianScalar::to_little_endian(x);
+                // Safety:
+                // Created from a valid Table for this object
+                // Which contains a valid value in this slot
+                unsafe {
+                    ::core::ptr::copy_nonoverlapping(
+                        &x_le as *const _ as *const u8,
+                        self.0[4..].as_mut_ptr(),
+                        ::core::mem::size_of::<<f32 as ::flatbuffers::EndianScalar>::Scalar>(),
+                    );
+                }
+            }
+
+            pub fn z(&self) -> f32 {
+                let mut mem = ::core::mem::MaybeUninit::<
+                    <f32 as ::flatbuffers::EndianScalar>::Scalar,
+                >::uninit();
+                // Safety:
+                // Created from a valid Table for this object
+                // Which contains a valid value in this slot
+                ::flatbuffers::EndianScalar::from_little_endian(unsafe {
+                    ::core::ptr::copy_nonoverlapping(
+                        self.0[8..].as_ptr(),
+                        mem.as_mut_ptr() as *mut u8,
+                        ::core::mem::size_of::<<f32 as ::flatbuffers::EndianScalar>::Scalar>(),
+                    );
+                    mem.assume_init()
+                })
+            }
+
+            pub fn set_z(&mut self, x: f32) {
+                let x_le = ::flatbuffers::EndianScalar::to_little_endian(x);
+                // Safety:
+                // Created from a valid Table for this object
+                // Which contains a valid value in this slot
+                unsafe {
+                    ::core::ptr::copy_nonoverlapping(
+                        &x_le as *const _ as *const u8,
+                        self.0[8..].as_mut_ptr(),
+                        ::core::mem::size_of::<<f32 as ::flatbuffers::EndianScalar>::Scalar>(),
+                    );
+                }
+            }
+
+            pub fn w(&self) -> f32 {
+                let mut mem = ::core::mem::MaybeUninit::<
+                    <f32 as ::flatbuffers::EndianScalar>::Scalar,
+                >::uninit();
+                // Safety:
+                // Created from a valid Table for this object
+                // Which contains a valid value in this slot
+                ::flatbuffers::EndianScalar::from_little_endian(unsafe {
+                    ::core::ptr::copy_nonoverlapping(
+                        self.0[12..].as_ptr(),
+                        mem.as_mut_ptr() as *mut u8,
+                        ::core::mem::size_of::<<f32 as ::flatbuffers::EndianScalar>::Scalar>(),
+                    );
+                    mem.assume_init()
+                })
+            }
+
+            pub fn set_w(&mut self, x: f32) {
+                let x_le = ::flatbuffers::EndianScalar::to_little_endian(x);
+                // Safety:
+                // Created from a valid Table for this object
+                // Which contains a valid value in this slot
+                unsafe {
+                    ::core::ptr::copy_nonoverlapping(
+                        &x_le as *const _ as *const u8,
+                        self.0[12..].as_mut_ptr(),
+                        ::core::mem::size_of::<<f32 as ::flatbuffers::EndianScalar>::Scalar>(),
+                    );
+                }
+            }
+
+            pub fn unpack(&self) -> Vec4T {
+                Vec4T {
+                    x: self.x(),
+                    y: self.y(),
+                    z: self.z(),
+                    w: self.w(),
+                }
+            }
+        }
+
+        #[derive(Debug, Clone, PartialEq, Default, serde::Serialize)]
+        pub struct Vec4T {
+            pub x: f32,
+            pub y: f32,
+            pub z: f32,
+            pub w: f32,
+        }
+        impl Vec4T {
+            pub fn pack(&self) -> Vec4 {
+                Vec4::new(self.x, self.y, self.z, self.w)
+            }
+        }
+
+        pub enum TexCoordOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct TexCoord<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for TexCoord<'a> {
+            type Inner = TexCoord<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> TexCoord<'a> {
+            pub const VT_CHANNEL: ::flatbuffers::VOffsetT = 4;
+            pub const VT_DIMENSION: ::flatbuffers::VOffsetT = 6;
+            pub const VT_VALUES: ::flatbuffers::VOffsetT = 8;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                TexCoord { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args TexCoordArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<TexCoord<'bldr>> {
+                let mut builder = TexCoordBuilder::new(_fbb);
+                if let Some(x) = args.values {
+                    builder.add_values(x);
+                }
+                builder.add_dimension(args.dimension);
+                builder.add_channel(args.channel);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> TexCoordT {
+                let channel = self.channel();
+                let dimension = self.dimension();
+                let values = {
+                    let x = self.values();
+                    x.iter().map(|t| t.unpack()).collect()
+                };
+                TexCoordT {
+                    channel,
+                    dimension,
+                    values,
+                }
+            }
+
+            #[inline]
+            pub fn channel(&self) -> u8 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe { self._tab.get::<u8>(TexCoord::VT_CHANNEL, Some(0)).unwrap() }
+            }
+            #[inline]
+            pub fn dimension(&self) -> u8 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u8>(TexCoord::VT_DIMENSION, Some(2))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn values(&self) -> ::flatbuffers::Vector<'a, Vec4> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, Vec4>>>(
+                            TexCoord::VT_VALUES,
+                            None,
+                        )
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for TexCoord<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<u8>("channel", Self::VT_CHANNEL, false)?
+                    .visit_field::<u8>("dimension", Self::VT_DIMENSION, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, Vec4>>>(
+                        "values",
+                        Self::VT_VALUES,
+                        true,
+                    )?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct TexCoordArgs<'a> {
+            pub channel: u8,
+            pub dimension: u8,
+            pub values: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, Vec4>>>,
+        }
+        impl<'a> Default for TexCoordArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                TexCoordArgs {
+                    channel: 0,
+                    dimension: 2,
+                    values: None, // required field
+                }
+            }
+        }
+
+        impl Serialize for TexCoord<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("TexCoord", 3)?;
+                s.serialize_field("channel", &self.channel())?;
+                s.serialize_field("dimension", &self.dimension())?;
+                s.serialize_field("values", &self.values())?;
+                s.end()
+            }
+        }
+
+        pub struct TexCoordBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> TexCoordBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_channel(&mut self, channel: u8) {
+                self.fbb_.push_slot::<u8>(TexCoord::VT_CHANNEL, channel, 0);
+            }
+            #[inline]
+            pub fn add_dimension(&mut self, dimension: u8) {
+                self.fbb_
+                    .push_slot::<u8>(TexCoord::VT_DIMENSION, dimension, 2);
+            }
+            #[inline]
+            pub fn add_values(
+                &mut self,
+                values: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b, Vec4>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<_>>(TexCoord::VT_VALUES, values);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> TexCoordBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                TexCoordBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<TexCoord<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                self.fbb_.required(o, TexCoord::VT_VALUES, "values");
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for TexCoord<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("TexCoord");
+                ds.field("channel", &self.channel());
+                ds.field("dimension", &self.dimension());
+                ds.field("values", &self.values());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct TexCoordT {
+            pub channel: u8,
+            pub dimension: u8,
+            pub values: alloc::vec::Vec<Vec4T>,
+        }
+        impl Default for TexCoordT {
+            fn default() -> Self {
+                Self {
+                    channel: 0,
+                    dimension: 2,
+                    values: Default::default(),
+                }
+            }
+        }
+        impl TexCoordT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<TexCoord<'b>> {
+                let channel = self.channel;
+                let dimension = self.dimension;
+                let values = Some({
+                    let x = &self.values;
+                    let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack()).collect();
+                    _fbb.create_vector(&w)
+                });
+                TexCoord::create(
+                    _fbb,
+                    &TexCoordArgs {
+                        channel,
+                        dimension,
+                        values,
+                    },
+                )
+            }
+        }
         pub enum SubmeshOffset {}
         #[derive(Copy, Clone, PartialEq)]
 
@@ -589,9 +888,11 @@ pub mod noa {
             pub const VT_NAME: ::flatbuffers::VOffsetT = 8;
             pub const VT_POSITIONS: ::flatbuffers::VOffsetT = 10;
             pub const VT_NORMALS: ::flatbuffers::VOffsetT = 12;
-            pub const VT_UV0: ::flatbuffers::VOffsetT = 14;
-            pub const VT_INDICES: ::flatbuffers::VOffsetT = 16;
-            pub const VT_SUBMESHES: ::flatbuffers::VOffsetT = 18;
+            pub const VT_TANGENTS: ::flatbuffers::VOffsetT = 14;
+            pub const VT_COLORS: ::flatbuffers::VOffsetT = 16;
+            pub const VT_TEXCOORDS: ::flatbuffers::VOffsetT = 18;
+            pub const VT_INDICES: ::flatbuffers::VOffsetT = 20;
+            pub const VT_SUBMESHES: ::flatbuffers::VOffsetT = 22;
 
             #[inline]
             pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -614,8 +915,14 @@ pub mod noa {
                 if let Some(x) = args.indices {
                     builder.add_indices(x);
                 }
-                if let Some(x) = args.uv0 {
-                    builder.add_uv0(x);
+                if let Some(x) = args.texcoords {
+                    builder.add_texcoords(x);
+                }
+                if let Some(x) = args.colors {
+                    builder.add_colors(x);
+                }
+                if let Some(x) = args.tangents {
+                    builder.add_tangents(x);
                 }
                 if let Some(x) = args.normals {
                     builder.add_normals(x);
@@ -642,7 +949,15 @@ pub mod noa {
                 let normals = self
                     .normals()
                     .map(|x| x.iter().map(|t| t.unpack()).collect());
-                let uv0 = self.uv0().map(|x| x.iter().map(|t| t.unpack()).collect());
+                let tangents = self
+                    .tangents()
+                    .map(|x| x.iter().map(|t| t.unpack()).collect());
+                let colors = self
+                    .colors()
+                    .map(|x| x.iter().map(|t| t.unpack()).collect());
+                let texcoords = self
+                    .texcoords()
+                    .map(|x| x.iter().map(|t| t.unpack()).collect());
                 let indices = {
                     let x = self.indices();
                     x.into_iter().collect()
@@ -657,7 +972,9 @@ pub mod noa {
                     name,
                     positions,
                     normals,
-                    uv0,
+                    tangents,
+                    colors,
+                    texcoords,
                     indices,
                     submeshes,
                 }
@@ -670,7 +987,7 @@ pub mod noa {
                 // which contains a valid value in this slot
                 unsafe {
                     self._tab
-                        .get::<u16>(Mesh::VT_FORMAT_MAJOR, Some(1))
+                        .get::<u16>(Mesh::VT_FORMAT_MAJOR, Some(0))
                         .unwrap()
                 }
             }
@@ -723,16 +1040,43 @@ pub mod noa {
                 }
             }
             #[inline]
-            pub fn uv0(&self) -> Option<::flatbuffers::Vector<'a, Vec2>> {
+            pub fn tangents(&self) -> Option<::flatbuffers::Vector<'a, Vec4>> {
                 // Safety:
                 // Created from valid Table for this object
                 // which contains a valid value in this slot
                 unsafe {
                     self._tab
-                        .get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, Vec2>>>(
-                            Mesh::VT_UV0,
+                        .get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, Vec4>>>(
+                            Mesh::VT_TANGENTS,
                             None,
                         )
+                }
+            }
+            #[inline]
+            pub fn colors(&self) -> Option<::flatbuffers::Vector<'a, Vec4>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, Vec4>>>(
+                            Mesh::VT_COLORS,
+                            None,
+                        )
+                }
+            }
+            #[inline]
+            pub fn texcoords(
+                &self,
+            ) -> Option<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<TexCoord<'a>>>>
+            {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab.get::<::flatbuffers::ForwardsUOffset<
+                        ::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<TexCoord>>,
+                    >>(Mesh::VT_TEXCOORDS, None)
                 }
             }
             #[inline]
@@ -791,11 +1135,19 @@ pub mod noa {
                         Self::VT_NORMALS,
                         false,
                     )?
-                    .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, Vec2>>>(
-                        "uv0",
-                        Self::VT_UV0,
+                    .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, Vec4>>>(
+                        "tangents",
+                        Self::VT_TANGENTS,
                         false,
                     )?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, Vec4>>>(
+                        "colors",
+                        Self::VT_COLORS,
+                        false,
+                    )?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<
+                        ::flatbuffers::Vector<'_, ::flatbuffers::ForwardsUOffset<TexCoord>>,
+                    >>("texcoords", Self::VT_TEXCOORDS, false)?
                     .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, u32>>>(
                         "indices",
                         Self::VT_INDICES,
@@ -814,7 +1166,13 @@ pub mod noa {
             pub name: Option<::flatbuffers::WIPOffset<&'a str>>,
             pub positions: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, Vec3>>>,
             pub normals: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, Vec3>>>,
-            pub uv0: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, Vec2>>>,
+            pub tangents: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, Vec4>>>,
+            pub colors: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, Vec4>>>,
+            pub texcoords: Option<
+                ::flatbuffers::WIPOffset<
+                    ::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<TexCoord<'a>>>,
+                >,
+            >,
             pub indices: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, u32>>>,
             pub submeshes: Option<
                 ::flatbuffers::WIPOffset<
@@ -826,12 +1184,14 @@ pub mod noa {
             #[inline]
             fn default() -> Self {
                 MeshArgs {
-                    format_major: 1,
+                    format_major: 0,
                     format_minor: 0,
                     name: None,
                     positions: None, // required field
                     normals: None,
-                    uv0: None,
+                    tangents: None,
+                    colors: None,
+                    texcoords: None,
                     indices: None,   // required field
                     submeshes: None, // required field
                 }
@@ -843,7 +1203,7 @@ pub mod noa {
             where
                 S: Serializer,
             {
-                let mut s = serializer.serialize_struct("Mesh", 8)?;
+                let mut s = serializer.serialize_struct("Mesh", 10)?;
                 s.serialize_field("format_major", &self.format_major())?;
                 s.serialize_field("format_minor", &self.format_minor())?;
                 if let Some(f) = self.name() {
@@ -857,10 +1217,20 @@ pub mod noa {
                 } else {
                     s.skip_field("normals")?;
                 }
-                if let Some(f) = self.uv0() {
-                    s.serialize_field("uv0", &f)?;
+                if let Some(f) = self.tangents() {
+                    s.serialize_field("tangents", &f)?;
                 } else {
-                    s.skip_field("uv0")?;
+                    s.skip_field("tangents")?;
+                }
+                if let Some(f) = self.colors() {
+                    s.serialize_field("colors", &f)?;
+                } else {
+                    s.skip_field("colors")?;
+                }
+                if let Some(f) = self.texcoords() {
+                    s.serialize_field("texcoords", &f)?;
+                } else {
+                    s.skip_field("texcoords")?;
                 }
                 s.serialize_field("indices", &self.indices())?;
                 s.serialize_field("submeshes", &self.submeshes())?;
@@ -876,7 +1246,7 @@ pub mod noa {
             #[inline]
             pub fn add_format_major(&mut self, format_major: u16) {
                 self.fbb_
-                    .push_slot::<u16>(Mesh::VT_FORMAT_MAJOR, format_major, 1);
+                    .push_slot::<u16>(Mesh::VT_FORMAT_MAJOR, format_major, 0);
             }
             #[inline]
             pub fn add_format_minor(&mut self, format_minor: u16) {
@@ -905,12 +1275,30 @@ pub mod noa {
                     .push_slot_always::<::flatbuffers::WIPOffset<_>>(Mesh::VT_NORMALS, normals);
             }
             #[inline]
-            pub fn add_uv0(
+            pub fn add_tangents(
                 &mut self,
-                uv0: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b, Vec2>>,
+                tangents: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b, Vec4>>,
             ) {
                 self.fbb_
-                    .push_slot_always::<::flatbuffers::WIPOffset<_>>(Mesh::VT_UV0, uv0);
+                    .push_slot_always::<::flatbuffers::WIPOffset<_>>(Mesh::VT_TANGENTS, tangents);
+            }
+            #[inline]
+            pub fn add_colors(
+                &mut self,
+                colors: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b, Vec4>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<_>>(Mesh::VT_COLORS, colors);
+            }
+            #[inline]
+            pub fn add_texcoords(
+                &mut self,
+                texcoords: ::flatbuffers::WIPOffset<
+                    ::flatbuffers::Vector<'b, ::flatbuffers::ForwardsUOffset<TexCoord<'b>>>,
+                >,
+            ) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<_>>(Mesh::VT_TEXCOORDS, texcoords);
             }
             #[inline]
             pub fn add_indices(
@@ -958,7 +1346,9 @@ pub mod noa {
                 ds.field("name", &self.name());
                 ds.field("positions", &self.positions());
                 ds.field("normals", &self.normals());
-                ds.field("uv0", &self.uv0());
+                ds.field("tangents", &self.tangents());
+                ds.field("colors", &self.colors());
+                ds.field("texcoords", &self.texcoords());
                 ds.field("indices", &self.indices());
                 ds.field("submeshes", &self.submeshes());
                 ds.finish()
@@ -972,19 +1362,23 @@ pub mod noa {
             pub name: Option<alloc::string::String>,
             pub positions: alloc::vec::Vec<Vec3T>,
             pub normals: Option<alloc::vec::Vec<Vec3T>>,
-            pub uv0: Option<alloc::vec::Vec<Vec2T>>,
+            pub tangents: Option<alloc::vec::Vec<Vec4T>>,
+            pub colors: Option<alloc::vec::Vec<Vec4T>>,
+            pub texcoords: Option<alloc::vec::Vec<TexCoordT>>,
             pub indices: alloc::vec::Vec<u32>,
             pub submeshes: alloc::vec::Vec<SubmeshT>,
         }
         impl Default for MeshT {
             fn default() -> Self {
                 Self {
-                    format_major: 1,
+                    format_major: 0,
                     format_minor: 0,
                     name: None,
                     positions: Default::default(),
                     normals: None,
-                    uv0: None,
+                    tangents: None,
+                    colors: None,
+                    texcoords: None,
                     indices: Default::default(),
                     submeshes: Default::default(),
                 }
@@ -1007,8 +1401,16 @@ pub mod noa {
                     let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack()).collect();
                     _fbb.create_vector(&w)
                 });
-                let uv0 = self.uv0.as_ref().map(|x| {
+                let tangents = self.tangents.as_ref().map(|x| {
                     let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack()).collect();
+                    _fbb.create_vector(&w)
+                });
+                let colors = self.colors.as_ref().map(|x| {
+                    let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack()).collect();
+                    _fbb.create_vector(&w)
+                });
+                let texcoords = self.texcoords.as_ref().map(|x| {
+                    let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack(_fbb)).collect();
                     _fbb.create_vector(&w)
                 });
                 let indices = Some({
@@ -1028,7 +1430,9 @@ pub mod noa {
                         name,
                         positions,
                         normals,
-                        uv0,
+                        tangents,
+                        colors,
+                        texcoords,
                         indices,
                         submeshes,
                     },

@@ -12,6 +12,9 @@ use sha2::{Digest, Sha256};
 use std::{collections::BTreeMap, fs};
 
 mod builtin_shaders;
+mod render_state;
+mod sprites;
+mod unlit;
 
 pub(crate) struct Resources<'a> {
     pub index: &'a AssetIndex,
@@ -89,6 +92,39 @@ impl<'a> Resources<'a> {
         self.assets.insert(id, n!(AssetT { id, kind }));
         self.files.insert(format!("assets/{id}.{extension}"), bytes);
     }
+    pub(crate) fn mesh(&mut self, entry: &str, r: &Y) -> Result<u32, Error> {
+        let key = self.reference(entry, r)?;
+        if let Some(t) = self.targets.get(&key) {
+            return Ok(t.id.get());
+        }
+        let id = self.ids.get(&key.0, key.1)?.get();
+        let mesh = if key.0.starts_with("builtin/") {
+            crate::assets::builtin_mesh(&key.0.trim_start_matches("builtin/").parse()?, key.1)?
+        } else {
+            let o = self
+                .sources
+                .files
+                .get(&key.0)
+                .and_then(|f| f.objects.get(&key.1))
+                .ok_or_else(|| err("Mesh", "not found"))?;
+            if o.class_id != 43 {
+                return Err(err("Mesh", "wrong source class"));
+            }
+            crate::assets::geometry::decode(
+                &o.data,
+                o.data["m_Name"].as_str().unwrap_or(""),
+                int(&o.data, "m_IndexFormat")?,
+            )?
+        };
+        self.asset(
+            id,
+            w::AssetKind::Mesh,
+            "nomesh",
+            mesh.encode().map_err(|e| err("Mesh", e))?,
+        );
+        self.target(key, id, ReferenceKind::Asset);
+        Ok(id)
+    }
     pub fn material(&mut self, entry: &str, r: &Y) -> Result<u32, Error> {
         if int(r, "fileID")? == 0 {
             return Ok(0);
@@ -128,11 +164,29 @@ impl<'a> Resources<'a> {
             .ok_or_else(|| err("Shader", "expected compiled program"))?;
         let bytes = hex(blob)?;
         let hash = format!("{:x}", Sha256::digest(&bytes));
-        if hash != "f4c3959fbb391fd5e4722820c271a04f3d3ced65bd2029429033936e7ae264f9" {
+        let simple = matches!(
+            hash.as_str(),
+            "f07136c5ab507bfcb309c1920a6afce6f1d5653f80c1c2f97e8ec0066ba58ac2"
+                | "09bc049fd22991be3a180c1550dd85a5f3cbdc1a7b764383cca275b3afbcf236"
+        );
+        if !simple && hash != "f4c3959fbb391fd5e4722820c271a04f3d3ced65bd2029429033936e7ae264f9" {
             return Err(err("Shader", format!("unrecognized program {hash}")));
         }
         let sid = self.ids.get(&shader_key.0, shader_key.1)?.get();
-        let shader_data = json!({"format":"noa-shader-data","version":1,"model":"particle-add-alpha","program_sha256":hash,"revision":1,"color_formula":"c = texture(MainTex, uv) * vertexColor; rgb = c.rgb * c.a; alpha = custom1.x <= 0.5 ? c.a : 0","output_policy":"primary-color","outputs":[0],"source_outputs":[0,1,2],"alpha_mode":{"stream":0,"component":0,"comparison":"less_equal","threshold":0.5},"rgb_premultiply":true,"source_passes":shader.data["m_ParsedForm"]["m_SubShaders"],"source_program_encoding":"unity-metal-lz4","source_program_hex":blob});
+        let mut shader_data = json!({"format":"noa-shader-data","version":1,"model":"particle-add-alpha","program_sha256":hash,"revision":1,"color_formula":"c = texture(MainTex, uv) * vertexColor; rgb = c.rgb * c.a; alpha = custom1.x <= 0.5 ? c.a : 0","output_policy":"primary-color","outputs":[0],"source_outputs":[0,1,2],"alpha_mode":{"stream":0,"component":0,"comparison":"less_equal","threshold":0.5},"rgb_premultiply":true,"source_passes":shader.data["m_ParsedForm"]["m_SubShaders"],"source_program_encoding":"unity-metal-lz4","source_program_hex":blob});
+        if simple {
+            shader_data["model"] = json!("texture-vertex-color");
+            shader_data["color_formula"] =
+                json!("c = texture(MainTex, uv * MainTex_ST.xy + MainTex_ST.zw) * vertexColor");
+            shader_data["alpha_mode"] = serde_json::Value::Null;
+            shader_data["rgb_premultiply"] = json!(false);
+            shader_data["global_mip_bias"] = json!(hash.starts_with("f07136"));
+            shader_data["global_mip_bias_slot"] = json!(if hash.starts_with("f07136") {
+                Some("source-global-mip-bias")
+            } else {
+                None
+            });
+        }
         self.asset(
             sid,
             w::AssetKind::ShaderData,
@@ -168,7 +222,11 @@ impl<'a> Resources<'a> {
         let m = n!(MaterialT {
             id,
             name: v.get("m_Name").and_then(Y::as_str).map(str::to_owned),
-            model: w::MaterialModel::ParticleAddAlpha,
+            model: if simple {
+                w::MaterialModel::TextureVertexColor
+            } else {
+                w::MaterialModel::ParticleAddAlpha
+            },
             tint: Some(n!(ColorT {
                 r: 1.,
                 g: 1.,
@@ -176,7 +234,7 @@ impl<'a> Resources<'a> {
                 a: 1.
             })),
             textures: Some(textures),
-            render_state: Box::new(render_state(state)?),
+            render_state: Box::new(render_state::convert(state, &v, parsed)?),
             render_queue: if queue == -1 {
                 3000
             } else {
@@ -266,6 +324,9 @@ impl<'a> Resources<'a> {
         Ok((id, space, sampler))
     }
     fn default_material(&mut self, key: (String, i64)) -> Result<u32, Error> {
+        if key == ("builtin/0000000000000000f000000000000000".into(), 10754) {
+            return self.sprite_default(key, false);
+        }
         if key != ("builtin/0000000000000000f000000000000000".into(), 10308) {
             return Err(err("builtin material", format!("unknown {key:?}")));
         }

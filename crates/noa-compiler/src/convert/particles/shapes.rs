@@ -66,6 +66,34 @@ pub(super) fn convert(m: &Y) -> Result<w::ShapeModuleT, Error> {
                 spread: num(radius, "spread")?
             })))
         }
+        17 => {
+            let arc = get(m, "arc")?;
+            w::ShapeGeometryT::DonutShape(Box::new(n!(DonutShapeT {
+                radius: num(get(m, "radius")?, "value")?,
+                tube_radius: num(m, "donutRadius")?,
+                radius_thickness: num(m, "radiusThickness")?,
+                arc_radians: num(arc, "value")?.to_radians(),
+                arc_mode: sweep(arc)?,
+                arc_speed: boxed(p(arc, "speed")?),
+                arc_spread: num(arc, "spread")?
+            })))
+        }
+        19 => w::ShapeGeometryT::SpriteShape(Box::new(n!(SpriteShapeT {
+            placement: enum_value(
+                int(m, "placementMode")?,
+                &[
+                    w::GeometryPlacement::Vertex,
+                    w::GeometryPlacement::Edge,
+                    w::GeometryPlacement::Triangle
+                ],
+                "Sprite placement"
+            )?,
+            normal_offset: num(m, "m_MeshNormalOffset")?,
+            use_mesh_colors: flag(m, "m_UseMeshColors")?,
+            spawn_mode: sweep(get(m, "m_MeshSpawn")?)?,
+            spawn_speed: boxed(p(get(m, "m_MeshSpawn")?, "speed")?),
+            spawn_spread: num(get(m, "m_MeshSpawn")?, "spread")?
+        }))),
         _ => return Err(err("ShapeModule.type", format!("unsupported shape {kind}"))),
     };
     let r = vec3(get(m, "m_Rotation")?)?;

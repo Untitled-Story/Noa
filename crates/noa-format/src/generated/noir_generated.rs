@@ -30,17 +30,18 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MAX_ASSET_KIND: u8 = 3;
+        pub const ENUM_MAX_ASSET_KIND: u8 = 4;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
         #[allow(non_camel_case_types)]
-        pub const ENUM_VALUES_ASSET_KIND: [AssetKind; 4] = [
+        pub const ENUM_VALUES_ASSET_KIND: [AssetKind; 5] = [
             AssetKind::Unknown,
             AssetKind::Image,
             AssetKind::Mesh,
             AssetKind::ShaderData,
+            AssetKind::Sprite,
         ];
 
         #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -52,11 +53,17 @@ pub mod noa {
             pub const Image: Self = Self(1);
             pub const Mesh: Self = Self(2);
             pub const ShaderData: Self = Self(3);
+            pub const Sprite: Self = Self(4);
 
             pub const ENUM_MIN: u8 = 0;
-            pub const ENUM_MAX: u8 = 3;
-            pub const ENUM_VALUES: &'static [Self] =
-                &[Self::Unknown, Self::Image, Self::Mesh, Self::ShaderData];
+            pub const ENUM_MAX: u8 = 4;
+            pub const ENUM_VALUES: &'static [Self] = &[
+                Self::Unknown,
+                Self::Image,
+                Self::Mesh,
+                Self::ShaderData,
+                Self::Sprite,
+            ];
             /// Returns the variant's name or "" if unknown.
             pub fn variant_name(self) -> Option<&'static str> {
                 match self {
@@ -64,6 +71,7 @@ pub mod noa {
                     Self::Image => Some("Image"),
                     Self::Mesh => Some("Mesh"),
                     Self::ShaderData => Some("ShaderData"),
+                    Self::Sprite => Some("Sprite"),
                     _ => None,
                 }
             }
@@ -2650,19 +2658,22 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MAX_MATERIAL_MODEL: u8 = 5;
+        pub const ENUM_MAX_MATERIAL_MODEL: u8 = 8;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
         #[allow(non_camel_case_types)]
-        pub const ENUM_VALUES_MATERIAL_MODEL: [MaterialModel; 6] = [
+        pub const ENUM_VALUES_MATERIAL_MODEL: [MaterialModel; 9] = [
             MaterialModel::Unknown,
             MaterialModel::ParticleUnlit,
             MaterialModel::ParticleAddAlpha,
             MaterialModel::ParticleMultiply,
             MaterialModel::LegacyParticleAdditive,
             MaterialModel::LegacyParticleAlphaBlend,
+            MaterialModel::SpriteDefault,
+            MaterialModel::UIDefault,
+            MaterialModel::TextureVertexColor,
         ];
 
         #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -2676,9 +2687,12 @@ pub mod noa {
             pub const ParticleMultiply: Self = Self(3);
             pub const LegacyParticleAdditive: Self = Self(4);
             pub const LegacyParticleAlphaBlend: Self = Self(5);
+            pub const SpriteDefault: Self = Self(6);
+            pub const UIDefault: Self = Self(7);
+            pub const TextureVertexColor: Self = Self(8);
 
             pub const ENUM_MIN: u8 = 0;
-            pub const ENUM_MAX: u8 = 5;
+            pub const ENUM_MAX: u8 = 8;
             pub const ENUM_VALUES: &'static [Self] = &[
                 Self::Unknown,
                 Self::ParticleUnlit,
@@ -2686,6 +2700,9 @@ pub mod noa {
                 Self::ParticleMultiply,
                 Self::LegacyParticleAdditive,
                 Self::LegacyParticleAlphaBlend,
+                Self::SpriteDefault,
+                Self::UIDefault,
+                Self::TextureVertexColor,
             ];
             /// Returns the variant's name or "" if unknown.
             pub fn variant_name(self) -> Option<&'static str> {
@@ -2696,6 +2713,9 @@ pub mod noa {
                     Self::ParticleMultiply => Some("ParticleMultiply"),
                     Self::LegacyParticleAdditive => Some("LegacyParticleAdditive"),
                     Self::LegacyParticleAlphaBlend => Some("LegacyParticleAlphaBlend"),
+                    Self::SpriteDefault => Some("SpriteDefault"),
+                    Self::UIDefault => Some("UIDefault"),
+                    Self::TextureVertexColor => Some("TextureVertexColor"),
                     _ => None,
                 }
             }
@@ -2793,18 +2813,19 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MAX_RENDER_MODE: u8 = 4;
+        pub const ENUM_MAX_RENDER_MODE: u8 = 5;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
         #[allow(non_camel_case_types)]
-        pub const ENUM_VALUES_RENDER_MODE: [RenderMode; 5] = [
+        pub const ENUM_VALUES_RENDER_MODE: [RenderMode; 6] = [
             RenderMode::Billboard,
             RenderMode::StretchedBillboard,
             RenderMode::HorizontalBillboard,
             RenderMode::VerticalBillboard,
             RenderMode::Mesh,
+            RenderMode::None,
         ];
 
         #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -2817,15 +2838,17 @@ pub mod noa {
             pub const HorizontalBillboard: Self = Self(2);
             pub const VerticalBillboard: Self = Self(3);
             pub const Mesh: Self = Self(4);
+            pub const None: Self = Self(5);
 
             pub const ENUM_MIN: u8 = 0;
-            pub const ENUM_MAX: u8 = 4;
+            pub const ENUM_MAX: u8 = 5;
             pub const ENUM_VALUES: &'static [Self] = &[
                 Self::Billboard,
                 Self::StretchedBillboard,
                 Self::HorizontalBillboard,
                 Self::VerticalBillboard,
                 Self::Mesh,
+                Self::None,
             ];
             /// Returns the variant's name or "" if unknown.
             pub fn variant_name(self) -> Option<&'static str> {
@@ -2835,6 +2858,7 @@ pub mod noa {
                     Self::HorizontalBillboard => Some("HorizontalBillboard"),
                     Self::VerticalBillboard => Some("VerticalBillboard"),
                     Self::Mesh => Some("Mesh"),
+                    Self::None => Some("None"),
                     _ => None,
                 }
             }
@@ -3205,6 +3229,134 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
+        pub const ENUM_MIN_MASK_INTERACTION: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_MASK_INTERACTION: u8 = 2;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_MASK_INTERACTION: [MaskInteraction; 3] = [
+            MaskInteraction::None,
+            MaskInteraction::VisibleInside,
+            MaskInteraction::VisibleOutside,
+        ];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct MaskInteraction(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl MaskInteraction {
+            pub const None: Self = Self(0);
+            pub const VisibleInside: Self = Self(1);
+            pub const VisibleOutside: Self = Self(2);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 2;
+            pub const ENUM_VALUES: &'static [Self] =
+                &[Self::None, Self::VisibleInside, Self::VisibleOutside];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::None => Some("None"),
+                    Self::VisibleInside => Some("VisibleInside"),
+                    Self::VisibleOutside => Some("VisibleOutside"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for MaskInteraction {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for MaskInteraction {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "MaskInteraction",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for MaskInteraction {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in MaskInteraction::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown MaskInteraction variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for MaskInteraction {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for MaskInteraction {
+            type Output = MaskInteraction;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for MaskInteraction {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for MaskInteraction {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for MaskInteraction {}
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
         pub const ENUM_MIN_SEED_MODE: u8 = 0;
         #[deprecated(
             since = "2.0.0",
@@ -3470,13 +3622,13 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MAX_ANIMATION_PROPERTY: u16 = 28;
+        pub const ENUM_MAX_ANIMATION_PROPERTY: u16 = 29;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
         #[allow(non_camel_case_types)]
-        pub const ENUM_VALUES_ANIMATION_PROPERTY: [AnimationProperty; 29] = [
+        pub const ENUM_VALUES_ANIMATION_PROPERTY: [AnimationProperty; 30] = [
             AnimationProperty::Unknown,
             AnimationProperty::NodeActive,
             AnimationProperty::NodePosition,
@@ -3506,6 +3658,7 @@ pub mod noa {
             AnimationProperty::ParticleColor,
             AnimationProperty::ParticleCustomColor,
             AnimationProperty::ParticleLoop,
+            AnimationProperty::SpriteColor,
         ];
 
         #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -3542,9 +3695,10 @@ pub mod noa {
             pub const ParticleColor: Self = Self(26);
             pub const ParticleCustomColor: Self = Self(27);
             pub const ParticleLoop: Self = Self(28);
+            pub const SpriteColor: Self = Self(29);
 
             pub const ENUM_MIN: u16 = 0;
-            pub const ENUM_MAX: u16 = 28;
+            pub const ENUM_MAX: u16 = 29;
             pub const ENUM_VALUES: &'static [Self] = &[
                 Self::Unknown,
                 Self::NodeActive,
@@ -3575,6 +3729,7 @@ pub mod noa {
                 Self::ParticleColor,
                 Self::ParticleCustomColor,
                 Self::ParticleLoop,
+                Self::SpriteColor,
             ];
             /// Returns the variant's name or "" if unknown.
             pub fn variant_name(self) -> Option<&'static str> {
@@ -3608,6 +3763,7 @@ pub mod noa {
                     Self::ParticleColor => Some("ParticleColor"),
                     Self::ParticleCustomColor => Some("ParticleCustomColor"),
                     Self::ParticleLoop => Some("ParticleLoop"),
+                    Self::SpriteColor => Some("SpriteColor"),
                     _ => None,
                 }
             }
@@ -3891,6 +4047,279 @@ pub mod noa {
         }
 
         impl ::flatbuffers::SimpleToVerifyInSlice for ParticleParameter {}
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MIN_STENCIL_OP: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_STENCIL_OP: u8 = 7;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_STENCIL_OP: [StencilOp; 8] = [
+            StencilOp::Keep,
+            StencilOp::Zero,
+            StencilOp::Replace,
+            StencilOp::IncrementSaturate,
+            StencilOp::DecrementSaturate,
+            StencilOp::Invert,
+            StencilOp::IncrementWrap,
+            StencilOp::DecrementWrap,
+        ];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct StencilOp(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl StencilOp {
+            pub const Keep: Self = Self(0);
+            pub const Zero: Self = Self(1);
+            pub const Replace: Self = Self(2);
+            pub const IncrementSaturate: Self = Self(3);
+            pub const DecrementSaturate: Self = Self(4);
+            pub const Invert: Self = Self(5);
+            pub const IncrementWrap: Self = Self(6);
+            pub const DecrementWrap: Self = Self(7);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 7;
+            pub const ENUM_VALUES: &'static [Self] = &[
+                Self::Keep,
+                Self::Zero,
+                Self::Replace,
+                Self::IncrementSaturate,
+                Self::DecrementSaturate,
+                Self::Invert,
+                Self::IncrementWrap,
+                Self::DecrementWrap,
+            ];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::Keep => Some("Keep"),
+                    Self::Zero => Some("Zero"),
+                    Self::Replace => Some("Replace"),
+                    Self::IncrementSaturate => Some("IncrementSaturate"),
+                    Self::DecrementSaturate => Some("DecrementSaturate"),
+                    Self::Invert => Some("Invert"),
+                    Self::IncrementWrap => Some("IncrementWrap"),
+                    Self::DecrementWrap => Some("DecrementWrap"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for StencilOp {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for StencilOp {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "StencilOp",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for StencilOp {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in StencilOp::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown StencilOp variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for StencilOp {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for StencilOp {
+            type Output = StencilOp;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for StencilOp {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for StencilOp {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for StencilOp {}
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MIN_DEPTH_TEST_SOURCE: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_DEPTH_TEST_SOURCE: u8 = 1;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_DEPTH_TEST_SOURCE: [DepthTestSource; 2] =
+            [DepthTestSource::Fixed, DepthTestSource::Canvas];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct DepthTestSource(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl DepthTestSource {
+            pub const Fixed: Self = Self(0);
+            pub const Canvas: Self = Self(1);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 1;
+            pub const ENUM_VALUES: &'static [Self] = &[Self::Fixed, Self::Canvas];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::Fixed => Some("Fixed"),
+                    Self::Canvas => Some("Canvas"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for DepthTestSource {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for DepthTestSource {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "DepthTestSource",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for DepthTestSource {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in DepthTestSource::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown DepthTestSource variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for DepthTestSource {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for DepthTestSource {
+            type Output = DepthTestSource;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for DepthTestSource {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for DepthTestSource {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for DepthTestSource {}
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
@@ -4271,24 +4700,153 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MIN_SHAPE_GEOMETRY: u8 = 0;
+        pub const ENUM_MIN_GEOMETRY_PLACEMENT: u8 = 0;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MAX_SHAPE_GEOMETRY: u8 = 5;
+        pub const ENUM_MAX_GEOMETRY_PLACEMENT: u8 = 2;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
         #[allow(non_camel_case_types)]
-        pub const ENUM_VALUES_SHAPE_GEOMETRY: [ShapeGeometry; 6] = [
+        pub const ENUM_VALUES_GEOMETRY_PLACEMENT: [GeometryPlacement; 3] = [
+            GeometryPlacement::Vertex,
+            GeometryPlacement::Edge,
+            GeometryPlacement::Triangle,
+        ];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct GeometryPlacement(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl GeometryPlacement {
+            pub const Vertex: Self = Self(0);
+            pub const Edge: Self = Self(1);
+            pub const Triangle: Self = Self(2);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 2;
+            pub const ENUM_VALUES: &'static [Self] = &[Self::Vertex, Self::Edge, Self::Triangle];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::Vertex => Some("Vertex"),
+                    Self::Edge => Some("Edge"),
+                    Self::Triangle => Some("Triangle"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for GeometryPlacement {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for GeometryPlacement {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "GeometryPlacement",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for GeometryPlacement {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in GeometryPlacement::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown GeometryPlacement variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for GeometryPlacement {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for GeometryPlacement {
+            type Output = GeometryPlacement;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for GeometryPlacement {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for GeometryPlacement {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for GeometryPlacement {}
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MIN_SHAPE_GEOMETRY: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_SHAPE_GEOMETRY: u8 = 7;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_SHAPE_GEOMETRY: [ShapeGeometry; 8] = [
             ShapeGeometry::NONE,
             ShapeGeometry::CircleShape,
             ShapeGeometry::BoxShape,
             ShapeGeometry::SphereShape,
             ShapeGeometry::ConeShape,
             ShapeGeometry::EdgeShape,
+            ShapeGeometry::DonutShape,
+            ShapeGeometry::SpriteShape,
         ];
 
         #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -4302,9 +4860,11 @@ pub mod noa {
             pub const SphereShape: Self = Self(3);
             pub const ConeShape: Self = Self(4);
             pub const EdgeShape: Self = Self(5);
+            pub const DonutShape: Self = Self(6);
+            pub const SpriteShape: Self = Self(7);
 
             pub const ENUM_MIN: u8 = 0;
-            pub const ENUM_MAX: u8 = 5;
+            pub const ENUM_MAX: u8 = 7;
             pub const ENUM_VALUES: &'static [Self] = &[
                 Self::NONE,
                 Self::CircleShape,
@@ -4312,6 +4872,8 @@ pub mod noa {
                 Self::SphereShape,
                 Self::ConeShape,
                 Self::EdgeShape,
+                Self::DonutShape,
+                Self::SpriteShape,
             ];
             /// Returns the variant's name or "" if unknown.
             pub fn variant_name(self) -> Option<&'static str> {
@@ -4322,6 +4884,8 @@ pub mod noa {
                     Self::SphereShape => Some("SphereShape"),
                     Self::ConeShape => Some("ConeShape"),
                     Self::EdgeShape => Some("EdgeShape"),
+                    Self::DonutShape => Some("DonutShape"),
+                    Self::SpriteShape => Some("SpriteShape"),
                     _ => None,
                 }
             }
@@ -4422,6 +4986,8 @@ pub mod noa {
             SphereShape(alloc::boxed::Box<SphereShapeT>),
             ConeShape(alloc::boxed::Box<ConeShapeT>),
             EdgeShape(alloc::boxed::Box<EdgeShapeT>),
+            DonutShape(alloc::boxed::Box<DonutShapeT>),
+            SpriteShape(alloc::boxed::Box<SpriteShapeT>),
         }
         impl Default for ShapeGeometryT {
             fn default() -> Self {
@@ -4437,6 +5003,8 @@ pub mod noa {
                     Self::SphereShape(_) => ShapeGeometry::SphereShape,
                     Self::ConeShape(_) => ShapeGeometry::ConeShape,
                     Self::EdgeShape(_) => ShapeGeometry::EdgeShape,
+                    Self::DonutShape(_) => ShapeGeometry::DonutShape,
+                    Self::SpriteShape(_) => ShapeGeometry::SpriteShape,
                 }
             }
             pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
@@ -4450,6 +5018,8 @@ pub mod noa {
                     Self::SphereShape(v) => Some(v.pack(fbb).as_union_value()),
                     Self::ConeShape(v) => Some(v.pack(fbb).as_union_value()),
                     Self::EdgeShape(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::DonutShape(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::SpriteShape(v) => Some(v.pack(fbb).as_union_value()),
                 }
             }
             /// If the union variant matches, return the owned CircleShapeT, setting the union to NONE.
@@ -4592,6 +5162,64 @@ pub mod noa {
             /// If the union variant matches, return a mutable reference to the EdgeShapeT.
             pub fn as_edge_shape_mut(&mut self) -> Option<&mut EdgeShapeT> {
                 if let Self::EdgeShape(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned DonutShapeT, setting the union to NONE.
+            pub fn take_donut_shape(&mut self) -> Option<alloc::boxed::Box<DonutShapeT>> {
+                if let Self::DonutShape(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::DonutShape(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the DonutShapeT.
+            pub fn as_donut_shape(&self) -> Option<&DonutShapeT> {
+                if let Self::DonutShape(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the DonutShapeT.
+            pub fn as_donut_shape_mut(&mut self) -> Option<&mut DonutShapeT> {
+                if let Self::DonutShape(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned SpriteShapeT, setting the union to NONE.
+            pub fn take_sprite_shape(&mut self) -> Option<alloc::boxed::Box<SpriteShapeT>> {
+                if let Self::SpriteShape(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::SpriteShape(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the SpriteShapeT.
+            pub fn as_sprite_shape(&self) -> Option<&SpriteShapeT> {
+                if let Self::SpriteShape(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the SpriteShapeT.
+            pub fn as_sprite_shape_mut(&mut self) -> Option<&mut SpriteShapeT> {
+                if let Self::SpriteShape(v) = self {
                     Some(v.as_mut())
                 } else {
                     None
@@ -5092,6 +5720,127 @@ pub mod noa {
         }
 
         impl ::flatbuffers::SimpleToVerifyInSlice for SheetRow {}
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MIN_SHEET_MODE: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_SHEET_MODE: u8 = 1;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_SHEET_MODE: [SheetMode; 2] = [SheetMode::Grid, SheetMode::Sprites];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct SheetMode(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl SheetMode {
+            pub const Grid: Self = Self(0);
+            pub const Sprites: Self = Self(1);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 1;
+            pub const ENUM_VALUES: &'static [Self] = &[Self::Grid, Self::Sprites];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::Grid => Some("Grid"),
+                    Self::Sprites => Some("Sprites"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for SheetMode {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for SheetMode {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "SheetMode",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for SheetMode {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in SheetMode::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown SheetMode variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for SheetMode {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for SheetMode {
+            type Output = SheetMode;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for SheetMode {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for SheetMode {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for SheetMode {}
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
@@ -6739,18 +7488,526 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MIN_COMPONENT_DATA: u8 = 0;
+        pub const ENUM_MIN_SPRITE_DRAW_MODE: u8 = 0;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MAX_COMPONENT_DATA: u8 = 6;
+        pub const ENUM_MAX_SPRITE_DRAW_MODE: u8 = 2;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
         #[allow(non_camel_case_types)]
-        pub const ENUM_VALUES_COMPONENT_DATA: [ComponentData; 7] = [
+        pub const ENUM_VALUES_SPRITE_DRAW_MODE: [SpriteDrawMode; 3] = [
+            SpriteDrawMode::Simple,
+            SpriteDrawMode::Sliced,
+            SpriteDrawMode::Tiled,
+        ];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct SpriteDrawMode(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl SpriteDrawMode {
+            pub const Simple: Self = Self(0);
+            pub const Sliced: Self = Self(1);
+            pub const Tiled: Self = Self(2);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 2;
+            pub const ENUM_VALUES: &'static [Self] = &[Self::Simple, Self::Sliced, Self::Tiled];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::Simple => Some("Simple"),
+                    Self::Sliced => Some("Sliced"),
+                    Self::Tiled => Some("Tiled"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for SpriteDrawMode {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for SpriteDrawMode {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "SpriteDrawMode",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for SpriteDrawMode {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in SpriteDrawMode::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown SpriteDrawMode variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for SpriteDrawMode {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for SpriteDrawMode {
+            type Output = SpriteDrawMode;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for SpriteDrawMode {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for SpriteDrawMode {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for SpriteDrawMode {}
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MIN_SPRITE_SORT_POINT: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_SPRITE_SORT_POINT: u8 = 1;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_SPRITE_SORT_POINT: [SpriteSortPoint; 2] =
+            [SpriteSortPoint::Center, SpriteSortPoint::Pivot];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct SpriteSortPoint(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl SpriteSortPoint {
+            pub const Center: Self = Self(0);
+            pub const Pivot: Self = Self(1);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 1;
+            pub const ENUM_VALUES: &'static [Self] = &[Self::Center, Self::Pivot];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::Center => Some("Center"),
+                    Self::Pivot => Some("Pivot"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for SpriteSortPoint {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for SpriteSortPoint {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "SpriteSortPoint",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for SpriteSortPoint {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in SpriteSortPoint::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown SpriteSortPoint variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for SpriteSortPoint {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for SpriteSortPoint {
+            type Output = SpriteSortPoint;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for SpriteSortPoint {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for SpriteSortPoint {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for SpriteSortPoint {}
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MIN_CANVAS_MODE: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_CANVAS_MODE: u8 = 2;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_CANVAS_MODE: [CanvasMode; 3] = [
+            CanvasMode::ScreenOverlay,
+            CanvasMode::ScreenCamera,
+            CanvasMode::World,
+        ];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct CanvasMode(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl CanvasMode {
+            pub const ScreenOverlay: Self = Self(0);
+            pub const ScreenCamera: Self = Self(1);
+            pub const World: Self = Self(2);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 2;
+            pub const ENUM_VALUES: &'static [Self] =
+                &[Self::ScreenOverlay, Self::ScreenCamera, Self::World];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::ScreenOverlay => Some("ScreenOverlay"),
+                    Self::ScreenCamera => Some("ScreenCamera"),
+                    Self::World => Some("World"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for CanvasMode {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for CanvasMode {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "CanvasMode",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for CanvasMode {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in CanvasMode::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown CanvasMode variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for CanvasMode {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for CanvasMode {
+            type Output = CanvasMode;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for CanvasMode {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for CanvasMode {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for CanvasMode {}
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MIN_IMAGE_TYPE: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_IMAGE_TYPE: u8 = 3;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_IMAGE_TYPE: [ImageType; 4] = [
+            ImageType::Simple,
+            ImageType::Sliced,
+            ImageType::Tiled,
+            ImageType::Filled,
+        ];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct ImageType(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl ImageType {
+            pub const Simple: Self = Self(0);
+            pub const Sliced: Self = Self(1);
+            pub const Tiled: Self = Self(2);
+            pub const Filled: Self = Self(3);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 3;
+            pub const ENUM_VALUES: &'static [Self] =
+                &[Self::Simple, Self::Sliced, Self::Tiled, Self::Filled];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::Simple => Some("Simple"),
+                    Self::Sliced => Some("Sliced"),
+                    Self::Tiled => Some("Tiled"),
+                    Self::Filled => Some("Filled"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for ImageType {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for ImageType {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "ImageType",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for ImageType {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in ImageType::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown ImageType variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for ImageType {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for ImageType {
+            type Output = ImageType;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for ImageType {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for ImageType {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for ImageType {}
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MIN_COMPONENT_DATA: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_COMPONENT_DATA: u8 = 16;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_COMPONENT_DATA: [ComponentData; 17] = [
             ComponentData::NONE,
             ComponentData::RectLayout,
             ComponentData::Camera,
@@ -6758,6 +8015,16 @@ pub mod noa {
             ComponentData::ParticleRenderer,
             ComponentData::CustomComponent,
             ComponentData::Animator,
+            ComponentData::MeshRenderer,
+            ComponentData::SpriteRenderer,
+            ComponentData::SpriteMask,
+            ComponentData::Canvas,
+            ComponentData::CanvasRenderer,
+            ComponentData::MeshFilter,
+            ComponentData::UIImage,
+            ComponentData::UIMask,
+            ComponentData::RectMask2D,
+            ComponentData::CanvasGroup,
         ];
 
         #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -6772,9 +8039,19 @@ pub mod noa {
             pub const ParticleRenderer: Self = Self(4);
             pub const CustomComponent: Self = Self(5);
             pub const Animator: Self = Self(6);
+            pub const MeshRenderer: Self = Self(7);
+            pub const SpriteRenderer: Self = Self(8);
+            pub const SpriteMask: Self = Self(9);
+            pub const Canvas: Self = Self(10);
+            pub const CanvasRenderer: Self = Self(11);
+            pub const MeshFilter: Self = Self(12);
+            pub const UIImage: Self = Self(13);
+            pub const UIMask: Self = Self(14);
+            pub const RectMask2D: Self = Self(15);
+            pub const CanvasGroup: Self = Self(16);
 
             pub const ENUM_MIN: u8 = 0;
-            pub const ENUM_MAX: u8 = 6;
+            pub const ENUM_MAX: u8 = 16;
             pub const ENUM_VALUES: &'static [Self] = &[
                 Self::NONE,
                 Self::RectLayout,
@@ -6783,6 +8060,16 @@ pub mod noa {
                 Self::ParticleRenderer,
                 Self::CustomComponent,
                 Self::Animator,
+                Self::MeshRenderer,
+                Self::SpriteRenderer,
+                Self::SpriteMask,
+                Self::Canvas,
+                Self::CanvasRenderer,
+                Self::MeshFilter,
+                Self::UIImage,
+                Self::UIMask,
+                Self::RectMask2D,
+                Self::CanvasGroup,
             ];
             /// Returns the variant's name or "" if unknown.
             pub fn variant_name(self) -> Option<&'static str> {
@@ -6794,6 +8081,16 @@ pub mod noa {
                     Self::ParticleRenderer => Some("ParticleRenderer"),
                     Self::CustomComponent => Some("CustomComponent"),
                     Self::Animator => Some("Animator"),
+                    Self::MeshRenderer => Some("MeshRenderer"),
+                    Self::SpriteRenderer => Some("SpriteRenderer"),
+                    Self::SpriteMask => Some("SpriteMask"),
+                    Self::Canvas => Some("Canvas"),
+                    Self::CanvasRenderer => Some("CanvasRenderer"),
+                    Self::MeshFilter => Some("MeshFilter"),
+                    Self::UIImage => Some("UIImage"),
+                    Self::UIMask => Some("UIMask"),
+                    Self::RectMask2D => Some("RectMask2D"),
+                    Self::CanvasGroup => Some("CanvasGroup"),
                     _ => None,
                 }
             }
@@ -6895,6 +8192,16 @@ pub mod noa {
             ParticleRenderer(alloc::boxed::Box<ParticleRendererT>),
             CustomComponent(alloc::boxed::Box<CustomComponentT>),
             Animator(alloc::boxed::Box<AnimatorT>),
+            MeshRenderer(alloc::boxed::Box<MeshRendererT>),
+            SpriteRenderer(alloc::boxed::Box<SpriteRendererT>),
+            SpriteMask(alloc::boxed::Box<SpriteMaskT>),
+            Canvas(alloc::boxed::Box<CanvasT>),
+            CanvasRenderer(alloc::boxed::Box<CanvasRendererT>),
+            MeshFilter(alloc::boxed::Box<MeshFilterT>),
+            UIImage(alloc::boxed::Box<UIImageT>),
+            UIMask(alloc::boxed::Box<UIMaskT>),
+            RectMask2D(alloc::boxed::Box<RectMask2DT>),
+            CanvasGroup(alloc::boxed::Box<CanvasGroupT>),
         }
         impl Default for ComponentDataT {
             fn default() -> Self {
@@ -6911,6 +8218,16 @@ pub mod noa {
                     Self::ParticleRenderer(_) => ComponentData::ParticleRenderer,
                     Self::CustomComponent(_) => ComponentData::CustomComponent,
                     Self::Animator(_) => ComponentData::Animator,
+                    Self::MeshRenderer(_) => ComponentData::MeshRenderer,
+                    Self::SpriteRenderer(_) => ComponentData::SpriteRenderer,
+                    Self::SpriteMask(_) => ComponentData::SpriteMask,
+                    Self::Canvas(_) => ComponentData::Canvas,
+                    Self::CanvasRenderer(_) => ComponentData::CanvasRenderer,
+                    Self::MeshFilter(_) => ComponentData::MeshFilter,
+                    Self::UIImage(_) => ComponentData::UIImage,
+                    Self::UIMask(_) => ComponentData::UIMask,
+                    Self::RectMask2D(_) => ComponentData::RectMask2D,
+                    Self::CanvasGroup(_) => ComponentData::CanvasGroup,
                 }
             }
             pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
@@ -6925,6 +8242,16 @@ pub mod noa {
                     Self::ParticleRenderer(v) => Some(v.pack(fbb).as_union_value()),
                     Self::CustomComponent(v) => Some(v.pack(fbb).as_union_value()),
                     Self::Animator(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::MeshRenderer(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::SpriteRenderer(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::SpriteMask(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::Canvas(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::CanvasRenderer(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::MeshFilter(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::UIImage(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::UIMask(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::RectMask2D(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::CanvasGroup(v) => Some(v.pack(fbb).as_union_value()),
                 }
             }
             /// If the union variant matches, return the owned RectLayoutT, setting the union to NONE.
@@ -7098,6 +8425,296 @@ pub mod noa {
             /// If the union variant matches, return a mutable reference to the AnimatorT.
             pub fn as_animator_mut(&mut self) -> Option<&mut AnimatorT> {
                 if let Self::Animator(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned MeshRendererT, setting the union to NONE.
+            pub fn take_mesh_renderer(&mut self) -> Option<alloc::boxed::Box<MeshRendererT>> {
+                if let Self::MeshRenderer(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::MeshRenderer(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the MeshRendererT.
+            pub fn as_mesh_renderer(&self) -> Option<&MeshRendererT> {
+                if let Self::MeshRenderer(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the MeshRendererT.
+            pub fn as_mesh_renderer_mut(&mut self) -> Option<&mut MeshRendererT> {
+                if let Self::MeshRenderer(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned SpriteRendererT, setting the union to NONE.
+            pub fn take_sprite_renderer(&mut self) -> Option<alloc::boxed::Box<SpriteRendererT>> {
+                if let Self::SpriteRenderer(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::SpriteRenderer(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the SpriteRendererT.
+            pub fn as_sprite_renderer(&self) -> Option<&SpriteRendererT> {
+                if let Self::SpriteRenderer(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the SpriteRendererT.
+            pub fn as_sprite_renderer_mut(&mut self) -> Option<&mut SpriteRendererT> {
+                if let Self::SpriteRenderer(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned SpriteMaskT, setting the union to NONE.
+            pub fn take_sprite_mask(&mut self) -> Option<alloc::boxed::Box<SpriteMaskT>> {
+                if let Self::SpriteMask(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::SpriteMask(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the SpriteMaskT.
+            pub fn as_sprite_mask(&self) -> Option<&SpriteMaskT> {
+                if let Self::SpriteMask(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the SpriteMaskT.
+            pub fn as_sprite_mask_mut(&mut self) -> Option<&mut SpriteMaskT> {
+                if let Self::SpriteMask(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned CanvasT, setting the union to NONE.
+            pub fn take_canvas(&mut self) -> Option<alloc::boxed::Box<CanvasT>> {
+                if let Self::Canvas(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::Canvas(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the CanvasT.
+            pub fn as_canvas(&self) -> Option<&CanvasT> {
+                if let Self::Canvas(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the CanvasT.
+            pub fn as_canvas_mut(&mut self) -> Option<&mut CanvasT> {
+                if let Self::Canvas(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned CanvasRendererT, setting the union to NONE.
+            pub fn take_canvas_renderer(&mut self) -> Option<alloc::boxed::Box<CanvasRendererT>> {
+                if let Self::CanvasRenderer(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::CanvasRenderer(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the CanvasRendererT.
+            pub fn as_canvas_renderer(&self) -> Option<&CanvasRendererT> {
+                if let Self::CanvasRenderer(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the CanvasRendererT.
+            pub fn as_canvas_renderer_mut(&mut self) -> Option<&mut CanvasRendererT> {
+                if let Self::CanvasRenderer(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned MeshFilterT, setting the union to NONE.
+            pub fn take_mesh_filter(&mut self) -> Option<alloc::boxed::Box<MeshFilterT>> {
+                if let Self::MeshFilter(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::MeshFilter(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the MeshFilterT.
+            pub fn as_mesh_filter(&self) -> Option<&MeshFilterT> {
+                if let Self::MeshFilter(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the MeshFilterT.
+            pub fn as_mesh_filter_mut(&mut self) -> Option<&mut MeshFilterT> {
+                if let Self::MeshFilter(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned UIImageT, setting the union to NONE.
+            pub fn take_uiimage(&mut self) -> Option<alloc::boxed::Box<UIImageT>> {
+                if let Self::UIImage(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::UIImage(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the UIImageT.
+            pub fn as_uiimage(&self) -> Option<&UIImageT> {
+                if let Self::UIImage(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the UIImageT.
+            pub fn as_uiimage_mut(&mut self) -> Option<&mut UIImageT> {
+                if let Self::UIImage(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned UIMaskT, setting the union to NONE.
+            pub fn take_uimask(&mut self) -> Option<alloc::boxed::Box<UIMaskT>> {
+                if let Self::UIMask(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::UIMask(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the UIMaskT.
+            pub fn as_uimask(&self) -> Option<&UIMaskT> {
+                if let Self::UIMask(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the UIMaskT.
+            pub fn as_uimask_mut(&mut self) -> Option<&mut UIMaskT> {
+                if let Self::UIMask(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned RectMask2DT, setting the union to NONE.
+            pub fn take_rect_mask_2_d(&mut self) -> Option<alloc::boxed::Box<RectMask2DT>> {
+                if let Self::RectMask2D(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::RectMask2D(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the RectMask2DT.
+            pub fn as_rect_mask_2_d(&self) -> Option<&RectMask2DT> {
+                if let Self::RectMask2D(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the RectMask2DT.
+            pub fn as_rect_mask_2_d_mut(&mut self) -> Option<&mut RectMask2DT> {
+                if let Self::RectMask2D(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned CanvasGroupT, setting the union to NONE.
+            pub fn take_canvas_group(&mut self) -> Option<alloc::boxed::Box<CanvasGroupT>> {
+                if let Self::CanvasGroup(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::CanvasGroup(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the CanvasGroupT.
+            pub fn as_canvas_group(&self) -> Option<&CanvasGroupT> {
+                if let Self::CanvasGroup(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the CanvasGroupT.
+            pub fn as_canvas_group_mut(&mut self) -> Option<&mut CanvasGroupT> {
+                if let Self::CanvasGroup(v) = self {
                     Some(v.as_mut())
                 } else {
                     None
@@ -11937,6 +13554,596 @@ pub mod noa {
                 )
             }
         }
+        pub enum SpriteAssetOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct SpriteAsset<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for SpriteAsset<'a> {
+            type Inner = SpriteAsset<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> SpriteAsset<'a> {
+            pub const VT_MESH_ASSET_ID: ::flatbuffers::VOffsetT = 4;
+            pub const VT_IMAGE_ASSET_ID: ::flatbuffers::VOffsetT = 6;
+            pub const VT_RECT: ::flatbuffers::VOffsetT = 8;
+            pub const VT_TEXTURE_RECT: ::flatbuffers::VOffsetT = 10;
+            pub const VT_TEXTURE_RECT_OFFSET: ::flatbuffers::VOffsetT = 12;
+            pub const VT_ATLAS_RECT_OFFSET: ::flatbuffers::VOffsetT = 14;
+            pub const VT_PIVOT: ::flatbuffers::VOffsetT = 16;
+            pub const VT_BORDER: ::flatbuffers::VOffsetT = 18;
+            pub const VT_PIXELS_PER_UNIT: ::flatbuffers::VOffsetT = 20;
+            pub const VT_UV_TRANSFORM: ::flatbuffers::VOffsetT = 22;
+            pub const VT_PACKING_FLAGS: ::flatbuffers::VOffsetT = 24;
+            pub const VT_DOWNSCALE_MULTIPLIER: ::flatbuffers::VOffsetT = 26;
+            pub const VT_SAMPLER: ::flatbuffers::VOffsetT = 28;
+            pub const VT_COLOR_SPACE: ::flatbuffers::VOffsetT = 30;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                SpriteAsset { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args SpriteAssetArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<SpriteAsset<'bldr>> {
+                let mut builder = SpriteAssetBuilder::new(_fbb);
+                if let Some(x) = args.sampler {
+                    builder.add_sampler(x);
+                }
+                builder.add_downscale_multiplier(args.downscale_multiplier);
+                builder.add_packing_flags(args.packing_flags);
+                if let Some(x) = args.uv_transform {
+                    builder.add_uv_transform(x);
+                }
+                builder.add_pixels_per_unit(args.pixels_per_unit);
+                if let Some(x) = args.border {
+                    builder.add_border(x);
+                }
+                if let Some(x) = args.pivot {
+                    builder.add_pivot(x);
+                }
+                if let Some(x) = args.atlas_rect_offset {
+                    builder.add_atlas_rect_offset(x);
+                }
+                if let Some(x) = args.texture_rect_offset {
+                    builder.add_texture_rect_offset(x);
+                }
+                if let Some(x) = args.texture_rect {
+                    builder.add_texture_rect(x);
+                }
+                if let Some(x) = args.rect {
+                    builder.add_rect(x);
+                }
+                builder.add_image_asset_id(args.image_asset_id);
+                builder.add_mesh_asset_id(args.mesh_asset_id);
+                builder.add_color_space(args.color_space);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> SpriteAssetT {
+                let mesh_asset_id = self.mesh_asset_id();
+                let image_asset_id = self.image_asset_id();
+                let rect = self.rect().map(|x| x.unpack());
+                let texture_rect = self.texture_rect().map(|x| x.unpack());
+                let texture_rect_offset = self.texture_rect_offset().map(|x| x.unpack());
+                let atlas_rect_offset = self.atlas_rect_offset().map(|x| x.unpack());
+                let pivot = self.pivot().map(|x| x.unpack());
+                let border = self.border().map(|x| x.unpack());
+                let pixels_per_unit = self.pixels_per_unit();
+                let uv_transform = self.uv_transform().map(|x| x.unpack());
+                let packing_flags = self.packing_flags();
+                let downscale_multiplier = self.downscale_multiplier();
+                let sampler = self.sampler().map(|x| alloc::boxed::Box::new(x.unpack()));
+                let color_space = self.color_space();
+                SpriteAssetT {
+                    mesh_asset_id,
+                    image_asset_id,
+                    rect,
+                    texture_rect,
+                    texture_rect_offset,
+                    atlas_rect_offset,
+                    pivot,
+                    border,
+                    pixels_per_unit,
+                    uv_transform,
+                    packing_flags,
+                    downscale_multiplier,
+                    sampler,
+                    color_space,
+                }
+            }
+
+            #[inline]
+            pub fn mesh_asset_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(SpriteAsset::VT_MESH_ASSET_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn image_asset_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(SpriteAsset::VT_IMAGE_ASSET_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn rect(&self) -> Option<&'a Vec4> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe { self._tab.get::<Vec4>(SpriteAsset::VT_RECT, None) }
+            }
+            #[inline]
+            pub fn texture_rect(&self) -> Option<&'a Vec4> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe { self._tab.get::<Vec4>(SpriteAsset::VT_TEXTURE_RECT, None) }
+            }
+            #[inline]
+            pub fn texture_rect_offset(&self) -> Option<&'a Vec2> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<Vec2>(SpriteAsset::VT_TEXTURE_RECT_OFFSET, None)
+                }
+            }
+            #[inline]
+            pub fn atlas_rect_offset(&self) -> Option<&'a Vec2> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<Vec2>(SpriteAsset::VT_ATLAS_RECT_OFFSET, None)
+                }
+            }
+            #[inline]
+            pub fn pivot(&self) -> Option<&'a Vec2> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe { self._tab.get::<Vec2>(SpriteAsset::VT_PIVOT, None) }
+            }
+            #[inline]
+            pub fn border(&self) -> Option<&'a Vec4> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe { self._tab.get::<Vec4>(SpriteAsset::VT_BORDER, None) }
+            }
+            #[inline]
+            pub fn pixels_per_unit(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(SpriteAsset::VT_PIXELS_PER_UNIT, Some(100.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn uv_transform(&self) -> Option<&'a Vec4> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe { self._tab.get::<Vec4>(SpriteAsset::VT_UV_TRANSFORM, None) }
+            }
+            #[inline]
+            pub fn packing_flags(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(SpriteAsset::VT_PACKING_FLAGS, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn downscale_multiplier(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(SpriteAsset::VT_DOWNSCALE_MULTIPLIER, Some(1.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn sampler(&self) -> Option<Sampler<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab.get::<::flatbuffers::ForwardsUOffset<Sampler>>(
+                        SpriteAsset::VT_SAMPLER,
+                        None,
+                    )
+                }
+            }
+            #[inline]
+            pub fn color_space(&self) -> ColorSpace {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<ColorSpace>(SpriteAsset::VT_COLOR_SPACE, Some(ColorSpace::SRGB))
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for SpriteAsset<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<u32>("mesh_asset_id", Self::VT_MESH_ASSET_ID, false)?
+                    .visit_field::<u32>("image_asset_id", Self::VT_IMAGE_ASSET_ID, false)?
+                    .visit_field::<Vec4>("rect", Self::VT_RECT, false)?
+                    .visit_field::<Vec4>("texture_rect", Self::VT_TEXTURE_RECT, false)?
+                    .visit_field::<Vec2>(
+                        "texture_rect_offset",
+                        Self::VT_TEXTURE_RECT_OFFSET,
+                        false,
+                    )?
+                    .visit_field::<Vec2>("atlas_rect_offset", Self::VT_ATLAS_RECT_OFFSET, false)?
+                    .visit_field::<Vec2>("pivot", Self::VT_PIVOT, false)?
+                    .visit_field::<Vec4>("border", Self::VT_BORDER, false)?
+                    .visit_field::<f32>("pixels_per_unit", Self::VT_PIXELS_PER_UNIT, false)?
+                    .visit_field::<Vec4>("uv_transform", Self::VT_UV_TRANSFORM, false)?
+                    .visit_field::<u32>("packing_flags", Self::VT_PACKING_FLAGS, false)?
+                    .visit_field::<f32>(
+                        "downscale_multiplier",
+                        Self::VT_DOWNSCALE_MULTIPLIER,
+                        false,
+                    )?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<Sampler>>(
+                        "sampler",
+                        Self::VT_SAMPLER,
+                        false,
+                    )?
+                    .visit_field::<ColorSpace>("color_space", Self::VT_COLOR_SPACE, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct SpriteAssetArgs<'a> {
+            pub mesh_asset_id: u32,
+            pub image_asset_id: u32,
+            pub rect: Option<&'a Vec4>,
+            pub texture_rect: Option<&'a Vec4>,
+            pub texture_rect_offset: Option<&'a Vec2>,
+            pub atlas_rect_offset: Option<&'a Vec2>,
+            pub pivot: Option<&'a Vec2>,
+            pub border: Option<&'a Vec4>,
+            pub pixels_per_unit: f32,
+            pub uv_transform: Option<&'a Vec4>,
+            pub packing_flags: u32,
+            pub downscale_multiplier: f32,
+            pub sampler: Option<::flatbuffers::WIPOffset<Sampler<'a>>>,
+            pub color_space: ColorSpace,
+        }
+        impl<'a> Default for SpriteAssetArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                SpriteAssetArgs {
+                    mesh_asset_id: 0,
+                    image_asset_id: 0,
+                    rect: None,
+                    texture_rect: None,
+                    texture_rect_offset: None,
+                    atlas_rect_offset: None,
+                    pivot: None,
+                    border: None,
+                    pixels_per_unit: 100.0,
+                    uv_transform: None,
+                    packing_flags: 0,
+                    downscale_multiplier: 1.0,
+                    sampler: None,
+                    color_space: ColorSpace::SRGB,
+                }
+            }
+        }
+
+        impl Serialize for SpriteAsset<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("SpriteAsset", 14)?;
+                s.serialize_field("mesh_asset_id", &self.mesh_asset_id())?;
+                s.serialize_field("image_asset_id", &self.image_asset_id())?;
+                if let Some(f) = self.rect() {
+                    s.serialize_field("rect", &f)?;
+                } else {
+                    s.skip_field("rect")?;
+                }
+                if let Some(f) = self.texture_rect() {
+                    s.serialize_field("texture_rect", &f)?;
+                } else {
+                    s.skip_field("texture_rect")?;
+                }
+                if let Some(f) = self.texture_rect_offset() {
+                    s.serialize_field("texture_rect_offset", &f)?;
+                } else {
+                    s.skip_field("texture_rect_offset")?;
+                }
+                if let Some(f) = self.atlas_rect_offset() {
+                    s.serialize_field("atlas_rect_offset", &f)?;
+                } else {
+                    s.skip_field("atlas_rect_offset")?;
+                }
+                if let Some(f) = self.pivot() {
+                    s.serialize_field("pivot", &f)?;
+                } else {
+                    s.skip_field("pivot")?;
+                }
+                if let Some(f) = self.border() {
+                    s.serialize_field("border", &f)?;
+                } else {
+                    s.skip_field("border")?;
+                }
+                s.serialize_field("pixels_per_unit", &self.pixels_per_unit())?;
+                if let Some(f) = self.uv_transform() {
+                    s.serialize_field("uv_transform", &f)?;
+                } else {
+                    s.skip_field("uv_transform")?;
+                }
+                s.serialize_field("packing_flags", &self.packing_flags())?;
+                s.serialize_field("downscale_multiplier", &self.downscale_multiplier())?;
+                if let Some(f) = self.sampler() {
+                    s.serialize_field("sampler", &f)?;
+                } else {
+                    s.skip_field("sampler")?;
+                }
+                s.serialize_field("color_space", &self.color_space())?;
+                s.end()
+            }
+        }
+
+        pub struct SpriteAssetBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> SpriteAssetBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_mesh_asset_id(&mut self, mesh_asset_id: u32) {
+                self.fbb_
+                    .push_slot::<u32>(SpriteAsset::VT_MESH_ASSET_ID, mesh_asset_id, 0);
+            }
+            #[inline]
+            pub fn add_image_asset_id(&mut self, image_asset_id: u32) {
+                self.fbb_
+                    .push_slot::<u32>(SpriteAsset::VT_IMAGE_ASSET_ID, image_asset_id, 0);
+            }
+            #[inline]
+            pub fn add_rect(&mut self, rect: &Vec4) {
+                self.fbb_
+                    .push_slot_always::<&Vec4>(SpriteAsset::VT_RECT, rect);
+            }
+            #[inline]
+            pub fn add_texture_rect(&mut self, texture_rect: &Vec4) {
+                self.fbb_
+                    .push_slot_always::<&Vec4>(SpriteAsset::VT_TEXTURE_RECT, texture_rect);
+            }
+            #[inline]
+            pub fn add_texture_rect_offset(&mut self, texture_rect_offset: &Vec2) {
+                self.fbb_.push_slot_always::<&Vec2>(
+                    SpriteAsset::VT_TEXTURE_RECT_OFFSET,
+                    texture_rect_offset,
+                );
+            }
+            #[inline]
+            pub fn add_atlas_rect_offset(&mut self, atlas_rect_offset: &Vec2) {
+                self.fbb_.push_slot_always::<&Vec2>(
+                    SpriteAsset::VT_ATLAS_RECT_OFFSET,
+                    atlas_rect_offset,
+                );
+            }
+            #[inline]
+            pub fn add_pivot(&mut self, pivot: &Vec2) {
+                self.fbb_
+                    .push_slot_always::<&Vec2>(SpriteAsset::VT_PIVOT, pivot);
+            }
+            #[inline]
+            pub fn add_border(&mut self, border: &Vec4) {
+                self.fbb_
+                    .push_slot_always::<&Vec4>(SpriteAsset::VT_BORDER, border);
+            }
+            #[inline]
+            pub fn add_pixels_per_unit(&mut self, pixels_per_unit: f32) {
+                self.fbb_
+                    .push_slot::<f32>(SpriteAsset::VT_PIXELS_PER_UNIT, pixels_per_unit, 100.0);
+            }
+            #[inline]
+            pub fn add_uv_transform(&mut self, uv_transform: &Vec4) {
+                self.fbb_
+                    .push_slot_always::<&Vec4>(SpriteAsset::VT_UV_TRANSFORM, uv_transform);
+            }
+            #[inline]
+            pub fn add_packing_flags(&mut self, packing_flags: u32) {
+                self.fbb_
+                    .push_slot::<u32>(SpriteAsset::VT_PACKING_FLAGS, packing_flags, 0);
+            }
+            #[inline]
+            pub fn add_downscale_multiplier(&mut self, downscale_multiplier: f32) {
+                self.fbb_.push_slot::<f32>(
+                    SpriteAsset::VT_DOWNSCALE_MULTIPLIER,
+                    downscale_multiplier,
+                    1.0,
+                );
+            }
+            #[inline]
+            pub fn add_sampler(&mut self, sampler: ::flatbuffers::WIPOffset<Sampler<'b>>) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<Sampler>>(
+                        SpriteAsset::VT_SAMPLER,
+                        sampler,
+                    );
+            }
+            #[inline]
+            pub fn add_color_space(&mut self, color_space: ColorSpace) {
+                self.fbb_.push_slot::<ColorSpace>(
+                    SpriteAsset::VT_COLOR_SPACE,
+                    color_space,
+                    ColorSpace::SRGB,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> SpriteAssetBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                SpriteAssetBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<SpriteAsset<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for SpriteAsset<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("SpriteAsset");
+                ds.field("mesh_asset_id", &self.mesh_asset_id());
+                ds.field("image_asset_id", &self.image_asset_id());
+                ds.field("rect", &self.rect());
+                ds.field("texture_rect", &self.texture_rect());
+                ds.field("texture_rect_offset", &self.texture_rect_offset());
+                ds.field("atlas_rect_offset", &self.atlas_rect_offset());
+                ds.field("pivot", &self.pivot());
+                ds.field("border", &self.border());
+                ds.field("pixels_per_unit", &self.pixels_per_unit());
+                ds.field("uv_transform", &self.uv_transform());
+                ds.field("packing_flags", &self.packing_flags());
+                ds.field("downscale_multiplier", &self.downscale_multiplier());
+                ds.field("sampler", &self.sampler());
+                ds.field("color_space", &self.color_space());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct SpriteAssetT {
+            pub mesh_asset_id: u32,
+            pub image_asset_id: u32,
+            pub rect: Option<Vec4T>,
+            pub texture_rect: Option<Vec4T>,
+            pub texture_rect_offset: Option<Vec2T>,
+            pub atlas_rect_offset: Option<Vec2T>,
+            pub pivot: Option<Vec2T>,
+            pub border: Option<Vec4T>,
+            pub pixels_per_unit: f32,
+            pub uv_transform: Option<Vec4T>,
+            pub packing_flags: u32,
+            pub downscale_multiplier: f32,
+            pub sampler: Option<alloc::boxed::Box<SamplerT>>,
+            pub color_space: ColorSpace,
+        }
+        impl Default for SpriteAssetT {
+            fn default() -> Self {
+                Self {
+                    mesh_asset_id: 0,
+                    image_asset_id: 0,
+                    rect: None,
+                    texture_rect: None,
+                    texture_rect_offset: None,
+                    atlas_rect_offset: None,
+                    pivot: None,
+                    border: None,
+                    pixels_per_unit: 100.0,
+                    uv_transform: None,
+                    packing_flags: 0,
+                    downscale_multiplier: 1.0,
+                    sampler: None,
+                    color_space: ColorSpace::SRGB,
+                }
+            }
+        }
+        impl SpriteAssetT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<SpriteAsset<'b>> {
+                let mesh_asset_id = self.mesh_asset_id;
+                let image_asset_id = self.image_asset_id;
+                let rect_tmp = self.rect.as_ref().map(|x| x.pack());
+                let rect = rect_tmp.as_ref();
+                let texture_rect_tmp = self.texture_rect.as_ref().map(|x| x.pack());
+                let texture_rect = texture_rect_tmp.as_ref();
+                let texture_rect_offset_tmp = self.texture_rect_offset.as_ref().map(|x| x.pack());
+                let texture_rect_offset = texture_rect_offset_tmp.as_ref();
+                let atlas_rect_offset_tmp = self.atlas_rect_offset.as_ref().map(|x| x.pack());
+                let atlas_rect_offset = atlas_rect_offset_tmp.as_ref();
+                let pivot_tmp = self.pivot.as_ref().map(|x| x.pack());
+                let pivot = pivot_tmp.as_ref();
+                let border_tmp = self.border.as_ref().map(|x| x.pack());
+                let border = border_tmp.as_ref();
+                let pixels_per_unit = self.pixels_per_unit;
+                let uv_transform_tmp = self.uv_transform.as_ref().map(|x| x.pack());
+                let uv_transform = uv_transform_tmp.as_ref();
+                let packing_flags = self.packing_flags;
+                let downscale_multiplier = self.downscale_multiplier;
+                let sampler = self.sampler.as_ref().map(|x| x.pack(_fbb));
+                let color_space = self.color_space;
+                SpriteAsset::create(
+                    _fbb,
+                    &SpriteAssetArgs {
+                        mesh_asset_id,
+                        image_asset_id,
+                        rect,
+                        texture_rect,
+                        texture_rect_offset,
+                        atlas_rect_offset,
+                        pivot,
+                        border,
+                        pixels_per_unit,
+                        uv_transform,
+                        packing_flags,
+                        downscale_multiplier,
+                        sampler,
+                        color_space,
+                    },
+                )
+            }
+        }
         pub enum AssetOffset {}
         #[derive(Copy, Clone, PartialEq)]
 
@@ -11957,6 +14164,7 @@ pub mod noa {
         impl<'a> Asset<'a> {
             pub const VT_ID: ::flatbuffers::VOffsetT = 4;
             pub const VT_KIND: ::flatbuffers::VOffsetT = 6;
+            pub const VT_SPRITE: ::flatbuffers::VOffsetT = 8;
 
             #[inline]
             pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -11970,9 +14178,12 @@ pub mod noa {
                 A: ::flatbuffers::Allocator + 'bldr,
             >(
                 _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
-                args: &'args AssetArgs,
+                args: &'args AssetArgs<'args>,
             ) -> ::flatbuffers::WIPOffset<Asset<'bldr>> {
                 let mut builder = AssetBuilder::new(_fbb);
+                if let Some(x) = args.sprite {
+                    builder.add_sprite(x);
+                }
                 builder.add_id(args.id);
                 builder.add_kind(args.kind);
                 builder.finish()
@@ -11981,7 +14192,8 @@ pub mod noa {
             pub fn unpack(&self) -> AssetT {
                 let id = self.id();
                 let kind = self.kind();
-                AssetT { id, kind }
+                let sprite = self.sprite().map(|x| alloc::boxed::Box::new(x.unpack()));
+                AssetT { id, kind, sprite }
             }
 
             #[inline]
@@ -12002,6 +14214,16 @@ pub mod noa {
                         .unwrap()
                 }
             }
+            #[inline]
+            pub fn sprite(&self) -> Option<SpriteAsset<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<SpriteAsset>>(Asset::VT_SPRITE, None)
+                }
+            }
         }
 
         impl ::flatbuffers::Verifiable for Asset<'_> {
@@ -12013,20 +14235,27 @@ pub mod noa {
                 v.visit_table(pos)?
                     .visit_field::<u32>("id", Self::VT_ID, false)?
                     .visit_field::<AssetKind>("kind", Self::VT_KIND, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<SpriteAsset>>(
+                        "sprite",
+                        Self::VT_SPRITE,
+                        false,
+                    )?
                     .finish();
                 Ok(())
             }
         }
-        pub struct AssetArgs {
+        pub struct AssetArgs<'a> {
             pub id: u32,
             pub kind: AssetKind,
+            pub sprite: Option<::flatbuffers::WIPOffset<SpriteAsset<'a>>>,
         }
-        impl<'a> Default for AssetArgs {
+        impl<'a> Default for AssetArgs<'a> {
             #[inline]
             fn default() -> Self {
                 AssetArgs {
                     id: 0,
                     kind: AssetKind::Unknown,
+                    sprite: None,
                 }
             }
         }
@@ -12036,9 +14265,14 @@ pub mod noa {
             where
                 S: Serializer,
             {
-                let mut s = serializer.serialize_struct("Asset", 2)?;
+                let mut s = serializer.serialize_struct("Asset", 3)?;
                 s.serialize_field("id", &self.id())?;
                 s.serialize_field("kind", &self.kind())?;
+                if let Some(f) = self.sprite() {
+                    s.serialize_field("sprite", &f)?;
+                } else {
+                    s.skip_field("sprite")?;
+                }
                 s.end()
             }
         }
@@ -12056,6 +14290,14 @@ pub mod noa {
             pub fn add_kind(&mut self, kind: AssetKind) {
                 self.fbb_
                     .push_slot::<AssetKind>(Asset::VT_KIND, kind, AssetKind::Unknown);
+            }
+            #[inline]
+            pub fn add_sprite(&mut self, sprite: ::flatbuffers::WIPOffset<SpriteAsset<'b>>) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<SpriteAsset>>(
+                        Asset::VT_SPRITE,
+                        sprite,
+                    );
             }
             #[inline]
             pub fn new(
@@ -12079,6 +14321,7 @@ pub mod noa {
                 let mut ds = f.debug_struct("Asset");
                 ds.field("id", &self.id());
                 ds.field("kind", &self.kind());
+                ds.field("sprite", &self.sprite());
                 ds.finish()
             }
         }
@@ -12087,12 +14330,14 @@ pub mod noa {
         pub struct AssetT {
             pub id: u32,
             pub kind: AssetKind,
+            pub sprite: Option<alloc::boxed::Box<SpriteAssetT>>,
         }
         impl Default for AssetT {
             fn default() -> Self {
                 Self {
                     id: 0,
                     kind: AssetKind::Unknown,
+                    sprite: None,
                 }
             }
         }
@@ -12103,7 +14348,8 @@ pub mod noa {
             ) -> ::flatbuffers::WIPOffset<Asset<'b>> {
                 let id = self.id;
                 let kind = self.kind;
-                Asset::create(_fbb, &AssetArgs { id, kind })
+                let sprite = self.sprite.as_ref().map(|x| x.pack(_fbb));
+                Asset::create(_fbb, &AssetArgs { id, kind, sprite })
             }
         }
         pub enum SamplerOffset {}
@@ -13094,6 +15340,561 @@ pub mod noa {
                 VectorProperty::create(_fbb, &VectorPropertyArgs { name, value })
             }
         }
+        pub enum StencilFaceOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct StencilFace<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for StencilFace<'a> {
+            type Inner = StencilFace<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> StencilFace<'a> {
+            pub const VT_COMPARE: ::flatbuffers::VOffsetT = 4;
+            pub const VT_PASS: ::flatbuffers::VOffsetT = 6;
+            pub const VT_FAIL: ::flatbuffers::VOffsetT = 8;
+            pub const VT_DEPTH_FAIL: ::flatbuffers::VOffsetT = 10;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                StencilFace { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args StencilFaceArgs,
+            ) -> ::flatbuffers::WIPOffset<StencilFace<'bldr>> {
+                let mut builder = StencilFaceBuilder::new(_fbb);
+                builder.add_depth_fail(args.depth_fail);
+                builder.add_fail(args.fail);
+                builder.add_pass(args.pass);
+                builder.add_compare(args.compare);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> StencilFaceT {
+                let compare = self.compare();
+                let pass = self.pass();
+                let fail = self.fail();
+                let depth_fail = self.depth_fail();
+                StencilFaceT {
+                    compare,
+                    pass,
+                    fail,
+                    depth_fail,
+                }
+            }
+
+            #[inline]
+            pub fn compare(&self) -> CompareOp {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<CompareOp>(StencilFace::VT_COMPARE, Some(CompareOp::Always))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn pass(&self) -> StencilOp {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<StencilOp>(StencilFace::VT_PASS, Some(StencilOp::Keep))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn fail(&self) -> StencilOp {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<StencilOp>(StencilFace::VT_FAIL, Some(StencilOp::Keep))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn depth_fail(&self) -> StencilOp {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<StencilOp>(StencilFace::VT_DEPTH_FAIL, Some(StencilOp::Keep))
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for StencilFace<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<CompareOp>("compare", Self::VT_COMPARE, false)?
+                    .visit_field::<StencilOp>("pass", Self::VT_PASS, false)?
+                    .visit_field::<StencilOp>("fail", Self::VT_FAIL, false)?
+                    .visit_field::<StencilOp>("depth_fail", Self::VT_DEPTH_FAIL, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct StencilFaceArgs {
+            pub compare: CompareOp,
+            pub pass: StencilOp,
+            pub fail: StencilOp,
+            pub depth_fail: StencilOp,
+        }
+        impl<'a> Default for StencilFaceArgs {
+            #[inline]
+            fn default() -> Self {
+                StencilFaceArgs {
+                    compare: CompareOp::Always,
+                    pass: StencilOp::Keep,
+                    fail: StencilOp::Keep,
+                    depth_fail: StencilOp::Keep,
+                }
+            }
+        }
+
+        impl Serialize for StencilFace<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("StencilFace", 4)?;
+                s.serialize_field("compare", &self.compare())?;
+                s.serialize_field("pass", &self.pass())?;
+                s.serialize_field("fail", &self.fail())?;
+                s.serialize_field("depth_fail", &self.depth_fail())?;
+                s.end()
+            }
+        }
+
+        pub struct StencilFaceBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> StencilFaceBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_compare(&mut self, compare: CompareOp) {
+                self.fbb_.push_slot::<CompareOp>(
+                    StencilFace::VT_COMPARE,
+                    compare,
+                    CompareOp::Always,
+                );
+            }
+            #[inline]
+            pub fn add_pass(&mut self, pass: StencilOp) {
+                self.fbb_
+                    .push_slot::<StencilOp>(StencilFace::VT_PASS, pass, StencilOp::Keep);
+            }
+            #[inline]
+            pub fn add_fail(&mut self, fail: StencilOp) {
+                self.fbb_
+                    .push_slot::<StencilOp>(StencilFace::VT_FAIL, fail, StencilOp::Keep);
+            }
+            #[inline]
+            pub fn add_depth_fail(&mut self, depth_fail: StencilOp) {
+                self.fbb_.push_slot::<StencilOp>(
+                    StencilFace::VT_DEPTH_FAIL,
+                    depth_fail,
+                    StencilOp::Keep,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> StencilFaceBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                StencilFaceBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<StencilFace<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for StencilFace<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("StencilFace");
+                ds.field("compare", &self.compare());
+                ds.field("pass", &self.pass());
+                ds.field("fail", &self.fail());
+                ds.field("depth_fail", &self.depth_fail());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct StencilFaceT {
+            pub compare: CompareOp,
+            pub pass: StencilOp,
+            pub fail: StencilOp,
+            pub depth_fail: StencilOp,
+        }
+        impl Default for StencilFaceT {
+            fn default() -> Self {
+                Self {
+                    compare: CompareOp::Always,
+                    pass: StencilOp::Keep,
+                    fail: StencilOp::Keep,
+                    depth_fail: StencilOp::Keep,
+                }
+            }
+        }
+        impl StencilFaceT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<StencilFace<'b>> {
+                let compare = self.compare;
+                let pass = self.pass;
+                let fail = self.fail;
+                let depth_fail = self.depth_fail;
+                StencilFace::create(
+                    _fbb,
+                    &StencilFaceArgs {
+                        compare,
+                        pass,
+                        fail,
+                        depth_fail,
+                    },
+                )
+            }
+        }
+        pub enum StencilStateOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct StencilState<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for StencilState<'a> {
+            type Inner = StencilState<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> StencilState<'a> {
+            pub const VT_REFERENCE: ::flatbuffers::VOffsetT = 4;
+            pub const VT_READ_MASK: ::flatbuffers::VOffsetT = 6;
+            pub const VT_WRITE_MASK: ::flatbuffers::VOffsetT = 8;
+            pub const VT_FRONT: ::flatbuffers::VOffsetT = 10;
+            pub const VT_BACK: ::flatbuffers::VOffsetT = 12;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                StencilState { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args StencilStateArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<StencilState<'bldr>> {
+                let mut builder = StencilStateBuilder::new(_fbb);
+                if let Some(x) = args.back {
+                    builder.add_back(x);
+                }
+                if let Some(x) = args.front {
+                    builder.add_front(x);
+                }
+                builder.add_write_mask(args.write_mask);
+                builder.add_read_mask(args.read_mask);
+                builder.add_reference(args.reference);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> StencilStateT {
+                let reference = self.reference();
+                let read_mask = self.read_mask();
+                let write_mask = self.write_mask();
+                let front = {
+                    let x = self.front();
+                    alloc::boxed::Box::new(x.unpack())
+                };
+                let back = {
+                    let x = self.back();
+                    alloc::boxed::Box::new(x.unpack())
+                };
+                StencilStateT {
+                    reference,
+                    read_mask,
+                    write_mask,
+                    front,
+                    back,
+                }
+            }
+
+            #[inline]
+            pub fn reference(&self) -> u8 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u8>(StencilState::VT_REFERENCE, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn read_mask(&self) -> u8 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u8>(StencilState::VT_READ_MASK, Some(255))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn write_mask(&self) -> u8 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u8>(StencilState::VT_WRITE_MASK, Some(255))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn front(&self) -> StencilFace<'a> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<StencilFace>>(
+                            StencilState::VT_FRONT,
+                            None,
+                        )
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn back(&self) -> StencilFace<'a> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<StencilFace>>(
+                            StencilState::VT_BACK,
+                            None,
+                        )
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for StencilState<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<u8>("reference", Self::VT_REFERENCE, false)?
+                    .visit_field::<u8>("read_mask", Self::VT_READ_MASK, false)?
+                    .visit_field::<u8>("write_mask", Self::VT_WRITE_MASK, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<StencilFace>>(
+                        "front",
+                        Self::VT_FRONT,
+                        true,
+                    )?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<StencilFace>>(
+                        "back",
+                        Self::VT_BACK,
+                        true,
+                    )?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct StencilStateArgs<'a> {
+            pub reference: u8,
+            pub read_mask: u8,
+            pub write_mask: u8,
+            pub front: Option<::flatbuffers::WIPOffset<StencilFace<'a>>>,
+            pub back: Option<::flatbuffers::WIPOffset<StencilFace<'a>>>,
+        }
+        impl<'a> Default for StencilStateArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                StencilStateArgs {
+                    reference: 0,
+                    read_mask: 255,
+                    write_mask: 255,
+                    front: None, // required field
+                    back: None,  // required field
+                }
+            }
+        }
+
+        impl Serialize for StencilState<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("StencilState", 5)?;
+                s.serialize_field("reference", &self.reference())?;
+                s.serialize_field("read_mask", &self.read_mask())?;
+                s.serialize_field("write_mask", &self.write_mask())?;
+                s.serialize_field("front", &self.front())?;
+                s.serialize_field("back", &self.back())?;
+                s.end()
+            }
+        }
+
+        pub struct StencilStateBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> StencilStateBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_reference(&mut self, reference: u8) {
+                self.fbb_
+                    .push_slot::<u8>(StencilState::VT_REFERENCE, reference, 0);
+            }
+            #[inline]
+            pub fn add_read_mask(&mut self, read_mask: u8) {
+                self.fbb_
+                    .push_slot::<u8>(StencilState::VT_READ_MASK, read_mask, 255);
+            }
+            #[inline]
+            pub fn add_write_mask(&mut self, write_mask: u8) {
+                self.fbb_
+                    .push_slot::<u8>(StencilState::VT_WRITE_MASK, write_mask, 255);
+            }
+            #[inline]
+            pub fn add_front(&mut self, front: ::flatbuffers::WIPOffset<StencilFace<'b>>) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<StencilFace>>(
+                        StencilState::VT_FRONT,
+                        front,
+                    );
+            }
+            #[inline]
+            pub fn add_back(&mut self, back: ::flatbuffers::WIPOffset<StencilFace<'b>>) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<StencilFace>>(
+                        StencilState::VT_BACK,
+                        back,
+                    );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> StencilStateBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                StencilStateBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<StencilState<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                self.fbb_.required(o, StencilState::VT_FRONT, "front");
+                self.fbb_.required(o, StencilState::VT_BACK, "back");
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for StencilState<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("StencilState");
+                ds.field("reference", &self.reference());
+                ds.field("read_mask", &self.read_mask());
+                ds.field("write_mask", &self.write_mask());
+                ds.field("front", &self.front());
+                ds.field("back", &self.back());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct StencilStateT {
+            pub reference: u8,
+            pub read_mask: u8,
+            pub write_mask: u8,
+            pub front: alloc::boxed::Box<StencilFaceT>,
+            pub back: alloc::boxed::Box<StencilFaceT>,
+        }
+        impl Default for StencilStateT {
+            fn default() -> Self {
+                Self {
+                    reference: 0,
+                    read_mask: 255,
+                    write_mask: 255,
+                    front: Default::default(),
+                    back: Default::default(),
+                }
+            }
+        }
+        impl StencilStateT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<StencilState<'b>> {
+                let reference = self.reference;
+                let read_mask = self.read_mask;
+                let write_mask = self.write_mask;
+                let front = Some({
+                    let x = &self.front;
+                    x.pack(_fbb)
+                });
+                let back = Some({
+                    let x = &self.back;
+                    x.pack(_fbb)
+                });
+                StencilState::create(
+                    _fbb,
+                    &StencilStateArgs {
+                        reference,
+                        read_mask,
+                        write_mask,
+                        front,
+                        back,
+                    },
+                )
+            }
+        }
         pub enum RenderStateOffset {}
         #[derive(Copy, Clone, PartialEq)]
 
@@ -13112,16 +15913,18 @@ pub mod noa {
         }
 
         impl<'a> RenderState<'a> {
-            pub const VT_SRC_RGB: ::flatbuffers::VOffsetT = 4;
-            pub const VT_DST_RGB: ::flatbuffers::VOffsetT = 6;
-            pub const VT_SRC_ALPHA: ::flatbuffers::VOffsetT = 8;
-            pub const VT_DST_ALPHA: ::flatbuffers::VOffsetT = 10;
-            pub const VT_RGB_OP: ::flatbuffers::VOffsetT = 12;
-            pub const VT_ALPHA_OP: ::flatbuffers::VOffsetT = 14;
-            pub const VT_DEPTH_TEST: ::flatbuffers::VOffsetT = 16;
-            pub const VT_DEPTH_WRITE: ::flatbuffers::VOffsetT = 18;
-            pub const VT_CULL: ::flatbuffers::VOffsetT = 20;
-            pub const VT_COLOR_WRITE_MASK: ::flatbuffers::VOffsetT = 22;
+            pub const VT_DEPTH_TEST_SOURCE: ::flatbuffers::VOffsetT = 4;
+            pub const VT_STENCIL: ::flatbuffers::VOffsetT = 6;
+            pub const VT_SRC_RGB: ::flatbuffers::VOffsetT = 8;
+            pub const VT_DST_RGB: ::flatbuffers::VOffsetT = 10;
+            pub const VT_SRC_ALPHA: ::flatbuffers::VOffsetT = 12;
+            pub const VT_DST_ALPHA: ::flatbuffers::VOffsetT = 14;
+            pub const VT_RGB_OP: ::flatbuffers::VOffsetT = 16;
+            pub const VT_ALPHA_OP: ::flatbuffers::VOffsetT = 18;
+            pub const VT_DEPTH_TEST: ::flatbuffers::VOffsetT = 20;
+            pub const VT_DEPTH_WRITE: ::flatbuffers::VOffsetT = 22;
+            pub const VT_CULL: ::flatbuffers::VOffsetT = 24;
+            pub const VT_COLOR_WRITE_MASK: ::flatbuffers::VOffsetT = 26;
 
             #[inline]
             pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -13135,9 +15938,12 @@ pub mod noa {
                 A: ::flatbuffers::Allocator + 'bldr,
             >(
                 _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
-                args: &'args RenderStateArgs,
+                args: &'args RenderStateArgs<'args>,
             ) -> ::flatbuffers::WIPOffset<RenderState<'bldr>> {
                 let mut builder = RenderStateBuilder::new(_fbb);
+                if let Some(x) = args.stencil {
+                    builder.add_stencil(x);
+                }
                 builder.add_color_write_mask(args.color_write_mask);
                 builder.add_cull(args.cull);
                 builder.add_depth_write(args.depth_write);
@@ -13148,10 +15954,13 @@ pub mod noa {
                 builder.add_src_alpha(args.src_alpha);
                 builder.add_dst_rgb(args.dst_rgb);
                 builder.add_src_rgb(args.src_rgb);
+                builder.add_depth_test_source(args.depth_test_source);
                 builder.finish()
             }
 
             pub fn unpack(&self) -> RenderStateT {
+                let depth_test_source = self.depth_test_source();
+                let stencil = self.stencil().map(|x| alloc::boxed::Box::new(x.unpack()));
                 let src_rgb = self.src_rgb();
                 let dst_rgb = self.dst_rgb();
                 let src_alpha = self.src_alpha();
@@ -13163,6 +15972,8 @@ pub mod noa {
                 let cull = self.cull();
                 let color_write_mask = self.color_write_mask();
                 RenderStateT {
+                    depth_test_source,
+                    stencil,
                     src_rgb,
                     dst_rgb,
                     src_alpha,
@@ -13176,6 +15987,33 @@ pub mod noa {
                 }
             }
 
+            #[inline]
+            pub fn depth_test_source(&self) -> DepthTestSource {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<DepthTestSource>(
+                            RenderState::VT_DEPTH_TEST_SOURCE,
+                            Some(DepthTestSource::Fixed),
+                        )
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn stencil(&self) -> Option<StencilState<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<StencilState>>(
+                            RenderState::VT_STENCIL,
+                            None,
+                        )
+                }
+            }
             #[inline]
             pub fn src_rgb(&self) -> BlendFactor {
                 // Safety:
@@ -13301,6 +16139,16 @@ pub mod noa {
                 pos: usize,
             ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
                 v.visit_table(pos)?
+                    .visit_field::<DepthTestSource>(
+                        "depth_test_source",
+                        Self::VT_DEPTH_TEST_SOURCE,
+                        false,
+                    )?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<StencilState>>(
+                        "stencil",
+                        Self::VT_STENCIL,
+                        false,
+                    )?
                     .visit_field::<BlendFactor>("src_rgb", Self::VT_SRC_RGB, false)?
                     .visit_field::<BlendFactor>("dst_rgb", Self::VT_DST_RGB, false)?
                     .visit_field::<BlendFactor>("src_alpha", Self::VT_SRC_ALPHA, false)?
@@ -13315,7 +16163,9 @@ pub mod noa {
                 Ok(())
             }
         }
-        pub struct RenderStateArgs {
+        pub struct RenderStateArgs<'a> {
+            pub depth_test_source: DepthTestSource,
+            pub stencil: Option<::flatbuffers::WIPOffset<StencilState<'a>>>,
             pub src_rgb: BlendFactor,
             pub dst_rgb: BlendFactor,
             pub src_alpha: BlendFactor,
@@ -13327,10 +16177,12 @@ pub mod noa {
             pub cull: CullMode,
             pub color_write_mask: u8,
         }
-        impl<'a> Default for RenderStateArgs {
+        impl<'a> Default for RenderStateArgs<'a> {
             #[inline]
             fn default() -> Self {
                 RenderStateArgs {
+                    depth_test_source: DepthTestSource::Fixed,
+                    stencil: None,
                     src_rgb: BlendFactor::SrcAlpha,
                     dst_rgb: BlendFactor::OneMinusSrcAlpha,
                     src_alpha: BlendFactor::One,
@@ -13350,7 +16202,13 @@ pub mod noa {
             where
                 S: Serializer,
             {
-                let mut s = serializer.serialize_struct("RenderState", 10)?;
+                let mut s = serializer.serialize_struct("RenderState", 12)?;
+                s.serialize_field("depth_test_source", &self.depth_test_source())?;
+                if let Some(f) = self.stencil() {
+                    s.serialize_field("stencil", &f)?;
+                } else {
+                    s.skip_field("stencil")?;
+                }
                 s.serialize_field("src_rgb", &self.src_rgb())?;
                 s.serialize_field("dst_rgb", &self.dst_rgb())?;
                 s.serialize_field("src_alpha", &self.src_alpha())?;
@@ -13370,6 +16228,22 @@ pub mod noa {
             start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
         }
         impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> RenderStateBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_depth_test_source(&mut self, depth_test_source: DepthTestSource) {
+                self.fbb_.push_slot::<DepthTestSource>(
+                    RenderState::VT_DEPTH_TEST_SOURCE,
+                    depth_test_source,
+                    DepthTestSource::Fixed,
+                );
+            }
+            #[inline]
+            pub fn add_stencil(&mut self, stencil: ::flatbuffers::WIPOffset<StencilState<'b>>) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<StencilState>>(
+                        RenderState::VT_STENCIL,
+                        stencil,
+                    );
+            }
             #[inline]
             pub fn add_src_rgb(&mut self, src_rgb: BlendFactor) {
                 self.fbb_.push_slot::<BlendFactor>(
@@ -13455,6 +16329,8 @@ pub mod noa {
         impl ::core::fmt::Debug for RenderState<'_> {
             fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                 let mut ds = f.debug_struct("RenderState");
+                ds.field("depth_test_source", &self.depth_test_source());
+                ds.field("stencil", &self.stencil());
                 ds.field("src_rgb", &self.src_rgb());
                 ds.field("dst_rgb", &self.dst_rgb());
                 ds.field("src_alpha", &self.src_alpha());
@@ -13471,6 +16347,8 @@ pub mod noa {
         #[non_exhaustive]
         #[derive(Debug, Clone, PartialEq, serde::Serialize)]
         pub struct RenderStateT {
+            pub depth_test_source: DepthTestSource,
+            pub stencil: Option<alloc::boxed::Box<StencilStateT>>,
             pub src_rgb: BlendFactor,
             pub dst_rgb: BlendFactor,
             pub src_alpha: BlendFactor,
@@ -13485,6 +16363,8 @@ pub mod noa {
         impl Default for RenderStateT {
             fn default() -> Self {
                 Self {
+                    depth_test_source: DepthTestSource::Fixed,
+                    stencil: None,
                     src_rgb: BlendFactor::SrcAlpha,
                     dst_rgb: BlendFactor::OneMinusSrcAlpha,
                     src_alpha: BlendFactor::One,
@@ -13503,6 +16383,8 @@ pub mod noa {
                 &self,
                 _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
             ) -> ::flatbuffers::WIPOffset<RenderState<'b>> {
+                let depth_test_source = self.depth_test_source;
+                let stencil = self.stencil.as_ref().map(|x| x.pack(_fbb));
                 let src_rgb = self.src_rgb;
                 let dst_rgb = self.dst_rgb;
                 let src_alpha = self.src_alpha;
@@ -13516,6 +16398,8 @@ pub mod noa {
                 RenderState::create(
                     _fbb,
                     &RenderStateArgs {
+                        depth_test_source,
+                        stencil,
                         src_rgb,
                         dst_rgb,
                         src_alpha,
@@ -18825,6 +21709,715 @@ pub mod noa {
                 )
             }
         }
+        pub enum DonutShapeOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct DonutShape<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for DonutShape<'a> {
+            type Inner = DonutShape<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> DonutShape<'a> {
+            pub const VT_RADIUS: ::flatbuffers::VOffsetT = 4;
+            pub const VT_TUBE_RADIUS: ::flatbuffers::VOffsetT = 6;
+            pub const VT_RADIUS_THICKNESS: ::flatbuffers::VOffsetT = 8;
+            pub const VT_ARC_RADIANS: ::flatbuffers::VOffsetT = 10;
+            pub const VT_ARC_MODE: ::flatbuffers::VOffsetT = 12;
+            pub const VT_ARC_SPEED: ::flatbuffers::VOffsetT = 14;
+            pub const VT_ARC_SPREAD: ::flatbuffers::VOffsetT = 16;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                DonutShape { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args DonutShapeArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<DonutShape<'bldr>> {
+                let mut builder = DonutShapeBuilder::new(_fbb);
+                builder.add_arc_spread(args.arc_spread);
+                if let Some(x) = args.arc_speed {
+                    builder.add_arc_speed(x);
+                }
+                builder.add_arc_radians(args.arc_radians);
+                builder.add_radius_thickness(args.radius_thickness);
+                builder.add_tube_radius(args.tube_radius);
+                builder.add_radius(args.radius);
+                builder.add_arc_mode(args.arc_mode);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> DonutShapeT {
+                let radius = self.radius();
+                let tube_radius = self.tube_radius();
+                let radius_thickness = self.radius_thickness();
+                let arc_radians = self.arc_radians();
+                let arc_mode = self.arc_mode();
+                let arc_speed = self.arc_speed().map(|x| alloc::boxed::Box::new(x.unpack()));
+                let arc_spread = self.arc_spread();
+                DonutShapeT {
+                    radius,
+                    tube_radius,
+                    radius_thickness,
+                    arc_radians,
+                    arc_mode,
+                    arc_speed,
+                    arc_spread,
+                }
+            }
+
+            #[inline]
+            pub fn radius(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(DonutShape::VT_RADIUS, Some(0.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn tube_radius(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(DonutShape::VT_TUBE_RADIUS, Some(0.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn radius_thickness(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(DonutShape::VT_RADIUS_THICKNESS, Some(1.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn arc_radians(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(DonutShape::VT_ARC_RADIANS, Some(6.2831855))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn arc_mode(&self) -> ShapeSweep {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<ShapeSweep>(DonutShape::VT_ARC_MODE, Some(ShapeSweep::Random))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn arc_speed(&self) -> Option<ScalarParameter<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<ScalarParameter>>(
+                            DonutShape::VT_ARC_SPEED,
+                            None,
+                        )
+                }
+            }
+            #[inline]
+            pub fn arc_spread(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(DonutShape::VT_ARC_SPREAD, Some(0.0))
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for DonutShape<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<f32>("radius", Self::VT_RADIUS, false)?
+                    .visit_field::<f32>("tube_radius", Self::VT_TUBE_RADIUS, false)?
+                    .visit_field::<f32>("radius_thickness", Self::VT_RADIUS_THICKNESS, false)?
+                    .visit_field::<f32>("arc_radians", Self::VT_ARC_RADIANS, false)?
+                    .visit_field::<ShapeSweep>("arc_mode", Self::VT_ARC_MODE, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<ScalarParameter>>(
+                        "arc_speed",
+                        Self::VT_ARC_SPEED,
+                        false,
+                    )?
+                    .visit_field::<f32>("arc_spread", Self::VT_ARC_SPREAD, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct DonutShapeArgs<'a> {
+            pub radius: f32,
+            pub tube_radius: f32,
+            pub radius_thickness: f32,
+            pub arc_radians: f32,
+            pub arc_mode: ShapeSweep,
+            pub arc_speed: Option<::flatbuffers::WIPOffset<ScalarParameter<'a>>>,
+            pub arc_spread: f32,
+        }
+        impl<'a> Default for DonutShapeArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                DonutShapeArgs {
+                    radius: 0.0,
+                    tube_radius: 0.0,
+                    radius_thickness: 1.0,
+                    arc_radians: 6.2831855,
+                    arc_mode: ShapeSweep::Random,
+                    arc_speed: None,
+                    arc_spread: 0.0,
+                }
+            }
+        }
+
+        impl Serialize for DonutShape<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("DonutShape", 7)?;
+                s.serialize_field("radius", &self.radius())?;
+                s.serialize_field("tube_radius", &self.tube_radius())?;
+                s.serialize_field("radius_thickness", &self.radius_thickness())?;
+                s.serialize_field("arc_radians", &self.arc_radians())?;
+                s.serialize_field("arc_mode", &self.arc_mode())?;
+                if let Some(f) = self.arc_speed() {
+                    s.serialize_field("arc_speed", &f)?;
+                } else {
+                    s.skip_field("arc_speed")?;
+                }
+                s.serialize_field("arc_spread", &self.arc_spread())?;
+                s.end()
+            }
+        }
+
+        pub struct DonutShapeBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> DonutShapeBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_radius(&mut self, radius: f32) {
+                self.fbb_
+                    .push_slot::<f32>(DonutShape::VT_RADIUS, radius, 0.0);
+            }
+            #[inline]
+            pub fn add_tube_radius(&mut self, tube_radius: f32) {
+                self.fbb_
+                    .push_slot::<f32>(DonutShape::VT_TUBE_RADIUS, tube_radius, 0.0);
+            }
+            #[inline]
+            pub fn add_radius_thickness(&mut self, radius_thickness: f32) {
+                self.fbb_
+                    .push_slot::<f32>(DonutShape::VT_RADIUS_THICKNESS, radius_thickness, 1.0);
+            }
+            #[inline]
+            pub fn add_arc_radians(&mut self, arc_radians: f32) {
+                self.fbb_
+                    .push_slot::<f32>(DonutShape::VT_ARC_RADIANS, arc_radians, 6.2831855);
+            }
+            #[inline]
+            pub fn add_arc_mode(&mut self, arc_mode: ShapeSweep) {
+                self.fbb_.push_slot::<ShapeSweep>(
+                    DonutShape::VT_ARC_MODE,
+                    arc_mode,
+                    ShapeSweep::Random,
+                );
+            }
+            #[inline]
+            pub fn add_arc_speed(
+                &mut self,
+                arc_speed: ::flatbuffers::WIPOffset<ScalarParameter<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<ScalarParameter>>(
+                        DonutShape::VT_ARC_SPEED,
+                        arc_speed,
+                    );
+            }
+            #[inline]
+            pub fn add_arc_spread(&mut self, arc_spread: f32) {
+                self.fbb_
+                    .push_slot::<f32>(DonutShape::VT_ARC_SPREAD, arc_spread, 0.0);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> DonutShapeBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                DonutShapeBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<DonutShape<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for DonutShape<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("DonutShape");
+                ds.field("radius", &self.radius());
+                ds.field("tube_radius", &self.tube_radius());
+                ds.field("radius_thickness", &self.radius_thickness());
+                ds.field("arc_radians", &self.arc_radians());
+                ds.field("arc_mode", &self.arc_mode());
+                ds.field("arc_speed", &self.arc_speed());
+                ds.field("arc_spread", &self.arc_spread());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct DonutShapeT {
+            pub radius: f32,
+            pub tube_radius: f32,
+            pub radius_thickness: f32,
+            pub arc_radians: f32,
+            pub arc_mode: ShapeSweep,
+            pub arc_speed: Option<alloc::boxed::Box<ScalarParameterT>>,
+            pub arc_spread: f32,
+        }
+        impl Default for DonutShapeT {
+            fn default() -> Self {
+                Self {
+                    radius: 0.0,
+                    tube_radius: 0.0,
+                    radius_thickness: 1.0,
+                    arc_radians: 6.2831855,
+                    arc_mode: ShapeSweep::Random,
+                    arc_speed: None,
+                    arc_spread: 0.0,
+                }
+            }
+        }
+        impl DonutShapeT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<DonutShape<'b>> {
+                let radius = self.radius;
+                let tube_radius = self.tube_radius;
+                let radius_thickness = self.radius_thickness;
+                let arc_radians = self.arc_radians;
+                let arc_mode = self.arc_mode;
+                let arc_speed = self.arc_speed.as_ref().map(|x| x.pack(_fbb));
+                let arc_spread = self.arc_spread;
+                DonutShape::create(
+                    _fbb,
+                    &DonutShapeArgs {
+                        radius,
+                        tube_radius,
+                        radius_thickness,
+                        arc_radians,
+                        arc_mode,
+                        arc_speed,
+                        arc_spread,
+                    },
+                )
+            }
+        }
+        pub enum SpriteShapeOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct SpriteShape<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for SpriteShape<'a> {
+            type Inner = SpriteShape<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> SpriteShape<'a> {
+            pub const VT_SPRITE_ASSET_ID: ::flatbuffers::VOffsetT = 4;
+            pub const VT_PLACEMENT: ::flatbuffers::VOffsetT = 6;
+            pub const VT_NORMAL_OFFSET: ::flatbuffers::VOffsetT = 8;
+            pub const VT_USE_MESH_COLORS: ::flatbuffers::VOffsetT = 10;
+            pub const VT_SPAWN_MODE: ::flatbuffers::VOffsetT = 12;
+            pub const VT_SPAWN_SPEED: ::flatbuffers::VOffsetT = 14;
+            pub const VT_SPAWN_SPREAD: ::flatbuffers::VOffsetT = 16;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                SpriteShape { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args SpriteShapeArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<SpriteShape<'bldr>> {
+                let mut builder = SpriteShapeBuilder::new(_fbb);
+                builder.add_spawn_spread(args.spawn_spread);
+                if let Some(x) = args.spawn_speed {
+                    builder.add_spawn_speed(x);
+                }
+                builder.add_normal_offset(args.normal_offset);
+                builder.add_sprite_asset_id(args.sprite_asset_id);
+                builder.add_spawn_mode(args.spawn_mode);
+                builder.add_use_mesh_colors(args.use_mesh_colors);
+                builder.add_placement(args.placement);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> SpriteShapeT {
+                let sprite_asset_id = self.sprite_asset_id();
+                let placement = self.placement();
+                let normal_offset = self.normal_offset();
+                let use_mesh_colors = self.use_mesh_colors();
+                let spawn_mode = self.spawn_mode();
+                let spawn_speed = self
+                    .spawn_speed()
+                    .map(|x| alloc::boxed::Box::new(x.unpack()));
+                let spawn_spread = self.spawn_spread();
+                SpriteShapeT {
+                    sprite_asset_id,
+                    placement,
+                    normal_offset,
+                    use_mesh_colors,
+                    spawn_mode,
+                    spawn_speed,
+                    spawn_spread,
+                }
+            }
+
+            #[inline]
+            pub fn sprite_asset_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(SpriteShape::VT_SPRITE_ASSET_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn placement(&self) -> GeometryPlacement {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<GeometryPlacement>(
+                            SpriteShape::VT_PLACEMENT,
+                            Some(GeometryPlacement::Vertex),
+                        )
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn normal_offset(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(SpriteShape::VT_NORMAL_OFFSET, Some(0.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn use_mesh_colors(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(SpriteShape::VT_USE_MESH_COLORS, Some(false))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn spawn_mode(&self) -> ShapeSweep {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<ShapeSweep>(SpriteShape::VT_SPAWN_MODE, Some(ShapeSweep::Random))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn spawn_speed(&self) -> Option<ScalarParameter<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<ScalarParameter>>(
+                            SpriteShape::VT_SPAWN_SPEED,
+                            None,
+                        )
+                }
+            }
+            #[inline]
+            pub fn spawn_spread(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(SpriteShape::VT_SPAWN_SPREAD, Some(0.0))
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for SpriteShape<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<u32>("sprite_asset_id", Self::VT_SPRITE_ASSET_ID, false)?
+                    .visit_field::<GeometryPlacement>("placement", Self::VT_PLACEMENT, false)?
+                    .visit_field::<f32>("normal_offset", Self::VT_NORMAL_OFFSET, false)?
+                    .visit_field::<bool>("use_mesh_colors", Self::VT_USE_MESH_COLORS, false)?
+                    .visit_field::<ShapeSweep>("spawn_mode", Self::VT_SPAWN_MODE, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<ScalarParameter>>(
+                        "spawn_speed",
+                        Self::VT_SPAWN_SPEED,
+                        false,
+                    )?
+                    .visit_field::<f32>("spawn_spread", Self::VT_SPAWN_SPREAD, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct SpriteShapeArgs<'a> {
+            pub sprite_asset_id: u32,
+            pub placement: GeometryPlacement,
+            pub normal_offset: f32,
+            pub use_mesh_colors: bool,
+            pub spawn_mode: ShapeSweep,
+            pub spawn_speed: Option<::flatbuffers::WIPOffset<ScalarParameter<'a>>>,
+            pub spawn_spread: f32,
+        }
+        impl<'a> Default for SpriteShapeArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                SpriteShapeArgs {
+                    sprite_asset_id: 0,
+                    placement: GeometryPlacement::Vertex,
+                    normal_offset: 0.0,
+                    use_mesh_colors: false,
+                    spawn_mode: ShapeSweep::Random,
+                    spawn_speed: None,
+                    spawn_spread: 0.0,
+                }
+            }
+        }
+
+        impl Serialize for SpriteShape<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("SpriteShape", 7)?;
+                s.serialize_field("sprite_asset_id", &self.sprite_asset_id())?;
+                s.serialize_field("placement", &self.placement())?;
+                s.serialize_field("normal_offset", &self.normal_offset())?;
+                s.serialize_field("use_mesh_colors", &self.use_mesh_colors())?;
+                s.serialize_field("spawn_mode", &self.spawn_mode())?;
+                if let Some(f) = self.spawn_speed() {
+                    s.serialize_field("spawn_speed", &f)?;
+                } else {
+                    s.skip_field("spawn_speed")?;
+                }
+                s.serialize_field("spawn_spread", &self.spawn_spread())?;
+                s.end()
+            }
+        }
+
+        pub struct SpriteShapeBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> SpriteShapeBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_sprite_asset_id(&mut self, sprite_asset_id: u32) {
+                self.fbb_
+                    .push_slot::<u32>(SpriteShape::VT_SPRITE_ASSET_ID, sprite_asset_id, 0);
+            }
+            #[inline]
+            pub fn add_placement(&mut self, placement: GeometryPlacement) {
+                self.fbb_.push_slot::<GeometryPlacement>(
+                    SpriteShape::VT_PLACEMENT,
+                    placement,
+                    GeometryPlacement::Vertex,
+                );
+            }
+            #[inline]
+            pub fn add_normal_offset(&mut self, normal_offset: f32) {
+                self.fbb_
+                    .push_slot::<f32>(SpriteShape::VT_NORMAL_OFFSET, normal_offset, 0.0);
+            }
+            #[inline]
+            pub fn add_use_mesh_colors(&mut self, use_mesh_colors: bool) {
+                self.fbb_.push_slot::<bool>(
+                    SpriteShape::VT_USE_MESH_COLORS,
+                    use_mesh_colors,
+                    false,
+                );
+            }
+            #[inline]
+            pub fn add_spawn_mode(&mut self, spawn_mode: ShapeSweep) {
+                self.fbb_.push_slot::<ShapeSweep>(
+                    SpriteShape::VT_SPAWN_MODE,
+                    spawn_mode,
+                    ShapeSweep::Random,
+                );
+            }
+            #[inline]
+            pub fn add_spawn_speed(
+                &mut self,
+                spawn_speed: ::flatbuffers::WIPOffset<ScalarParameter<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<ScalarParameter>>(
+                        SpriteShape::VT_SPAWN_SPEED,
+                        spawn_speed,
+                    );
+            }
+            #[inline]
+            pub fn add_spawn_spread(&mut self, spawn_spread: f32) {
+                self.fbb_
+                    .push_slot::<f32>(SpriteShape::VT_SPAWN_SPREAD, spawn_spread, 0.0);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> SpriteShapeBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                SpriteShapeBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<SpriteShape<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for SpriteShape<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("SpriteShape");
+                ds.field("sprite_asset_id", &self.sprite_asset_id());
+                ds.field("placement", &self.placement());
+                ds.field("normal_offset", &self.normal_offset());
+                ds.field("use_mesh_colors", &self.use_mesh_colors());
+                ds.field("spawn_mode", &self.spawn_mode());
+                ds.field("spawn_speed", &self.spawn_speed());
+                ds.field("spawn_spread", &self.spawn_spread());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct SpriteShapeT {
+            pub sprite_asset_id: u32,
+            pub placement: GeometryPlacement,
+            pub normal_offset: f32,
+            pub use_mesh_colors: bool,
+            pub spawn_mode: ShapeSweep,
+            pub spawn_speed: Option<alloc::boxed::Box<ScalarParameterT>>,
+            pub spawn_spread: f32,
+        }
+        impl Default for SpriteShapeT {
+            fn default() -> Self {
+                Self {
+                    sprite_asset_id: 0,
+                    placement: GeometryPlacement::Vertex,
+                    normal_offset: 0.0,
+                    use_mesh_colors: false,
+                    spawn_mode: ShapeSweep::Random,
+                    spawn_speed: None,
+                    spawn_spread: 0.0,
+                }
+            }
+        }
+        impl SpriteShapeT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<SpriteShape<'b>> {
+                let sprite_asset_id = self.sprite_asset_id;
+                let placement = self.placement;
+                let normal_offset = self.normal_offset;
+                let use_mesh_colors = self.use_mesh_colors;
+                let spawn_mode = self.spawn_mode;
+                let spawn_speed = self.spawn_speed.as_ref().map(|x| x.pack(_fbb));
+                let spawn_spread = self.spawn_spread;
+                SpriteShape::create(
+                    _fbb,
+                    &SpriteShapeArgs {
+                        sprite_asset_id,
+                        placement,
+                        normal_offset,
+                        use_mesh_colors,
+                        spawn_mode,
+                        spawn_speed,
+                        spawn_spread,
+                    },
+                )
+            }
+        }
         pub enum ShapeModuleOffset {}
         #[derive(Copy, Clone, PartialEq)]
 
@@ -18916,6 +22509,24 @@ pub mod noa {
                             .expect("Invalid union table, expected `ShapeGeometry::EdgeShape`.")
                             .unpack(),
                     )),
+                    ShapeGeometry::DonutShape => {
+                        ShapeGeometryT::DonutShape(alloc::boxed::Box::new(
+                            self.geometry_as_donut_shape()
+                                .expect(
+                                    "Invalid union table, expected `ShapeGeometry::DonutShape`.",
+                                )
+                                .unpack(),
+                        ))
+                    }
+                    ShapeGeometry::SpriteShape => {
+                        ShapeGeometryT::SpriteShape(alloc::boxed::Box::new(
+                            self.geometry_as_sprite_shape()
+                                .expect(
+                                    "Invalid union table, expected `ShapeGeometry::SpriteShape`.",
+                                )
+                                .unpack(),
+                        ))
+                    }
                     _ => ShapeGeometryT::NONE,
                 };
                 let transform = {
@@ -19095,6 +22706,36 @@ pub mod noa {
                     None
                 }
             }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn geometry_as_donut_shape(&self) -> Option<DonutShape<'a>> {
+                if self.geometry_type() == ShapeGeometry::DonutShape {
+                    self.geometry().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { DonutShape::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn geometry_as_sprite_shape(&self) -> Option<SpriteShape<'a>> {
+                if self.geometry_type() == ShapeGeometry::SpriteShape {
+                    self.geometry().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { SpriteShape::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
         }
 
         impl ::flatbuffers::Verifiable for ShapeModule<'_> {
@@ -19111,6 +22752,8 @@ pub mod noa {
           ShapeGeometry::SphereShape => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<SphereShape>>("ShapeGeometry::SphereShape", pos),
           ShapeGeometry::ConeShape => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<ConeShape>>("ShapeGeometry::ConeShape", pos),
           ShapeGeometry::EdgeShape => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<EdgeShape>>("ShapeGeometry::EdgeShape", pos),
+          ShapeGeometry::DonutShape => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<DonutShape>>("ShapeGeometry::DonutShape", pos),
+          ShapeGeometry::SpriteShape => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<SpriteShape>>("ShapeGeometry::SpriteShape", pos),
           _ => Ok(()),
         }
      })?
@@ -19184,6 +22827,18 @@ pub mod noa {
                         let f = self
                             .geometry_as_edge_shape()
                             .expect("Invalid union table, expected `ShapeGeometry::EdgeShape`.");
+                        s.serialize_field("geometry", &f)?;
+                    }
+                    ShapeGeometry::DonutShape => {
+                        let f = self
+                            .geometry_as_donut_shape()
+                            .expect("Invalid union table, expected `ShapeGeometry::DonutShape`.");
+                        s.serialize_field("geometry", &f)?;
+                    }
+                    ShapeGeometry::SpriteShape => {
+                        let f = self
+                            .geometry_as_sprite_shape()
+                            .expect("Invalid union table, expected `ShapeGeometry::SpriteShape`.");
                         s.serialize_field("geometry", &f)?;
                     }
                     _ => unimplemented!(),
@@ -19320,6 +22975,26 @@ pub mod noa {
                     }
                     ShapeGeometry::EdgeShape => {
                         if let Some(x) = self.geometry_as_edge_shape() {
+                            ds.field("geometry", &x)
+                        } else {
+                            ds.field(
+                                "geometry",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ShapeGeometry::DonutShape => {
+                        if let Some(x) = self.geometry_as_donut_shape() {
+                            ds.field("geometry", &x)
+                        } else {
+                            ds.field(
+                                "geometry",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ShapeGeometry::SpriteShape => {
+                        if let Some(x) = self.geometry_as_sprite_shape() {
                             ds.field("geometry", &x)
                         } else {
                             ds.field(
@@ -21491,18 +25166,20 @@ pub mod noa {
         }
 
         impl<'a> TextureSheetModule<'a> {
-            pub const VT_COLUMNS: ::flatbuffers::VOffsetT = 4;
-            pub const VT_ROWS: ::flatbuffers::VOffsetT = 6;
-            pub const VT_TIME_MODE: ::flatbuffers::VOffsetT = 8;
-            pub const VT_FRAME_OVER_TIME: ::flatbuffers::VOffsetT = 10;
-            pub const VT_START_FRAME: ::flatbuffers::VOffsetT = 12;
-            pub const VT_CYCLES: ::flatbuffers::VOffsetT = 14;
-            pub const VT_ANIMATION: ::flatbuffers::VOffsetT = 16;
-            pub const VT_ROW_MODE: ::flatbuffers::VOffsetT = 18;
-            pub const VT_ROW: ::flatbuffers::VOffsetT = 20;
-            pub const VT_FPS: ::flatbuffers::VOffsetT = 22;
-            pub const VT_SPEED_RANGE: ::flatbuffers::VOffsetT = 24;
-            pub const VT_UV_CHANNEL_MASK: ::flatbuffers::VOffsetT = 26;
+            pub const VT_MODE: ::flatbuffers::VOffsetT = 4;
+            pub const VT_SPRITE_ASSET_IDS: ::flatbuffers::VOffsetT = 6;
+            pub const VT_COLUMNS: ::flatbuffers::VOffsetT = 8;
+            pub const VT_ROWS: ::flatbuffers::VOffsetT = 10;
+            pub const VT_TIME_MODE: ::flatbuffers::VOffsetT = 12;
+            pub const VT_FRAME_OVER_TIME: ::flatbuffers::VOffsetT = 14;
+            pub const VT_START_FRAME: ::flatbuffers::VOffsetT = 16;
+            pub const VT_CYCLES: ::flatbuffers::VOffsetT = 18;
+            pub const VT_ANIMATION: ::flatbuffers::VOffsetT = 20;
+            pub const VT_ROW_MODE: ::flatbuffers::VOffsetT = 22;
+            pub const VT_ROW: ::flatbuffers::VOffsetT = 24;
+            pub const VT_FPS: ::flatbuffers::VOffsetT = 26;
+            pub const VT_SPEED_RANGE: ::flatbuffers::VOffsetT = 28;
+            pub const VT_UV_CHANNEL_MASK: ::flatbuffers::VOffsetT = 30;
 
             #[inline]
             pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -21534,13 +25211,19 @@ pub mod noa {
                 }
                 builder.add_rows(args.rows);
                 builder.add_columns(args.columns);
+                if let Some(x) = args.sprite_asset_ids {
+                    builder.add_sprite_asset_ids(x);
+                }
                 builder.add_row_mode(args.row_mode);
                 builder.add_animation(args.animation);
                 builder.add_time_mode(args.time_mode);
+                builder.add_mode(args.mode);
                 builder.finish()
             }
 
             pub fn unpack(&self) -> TextureSheetModuleT {
+                let mode = self.mode();
+                let sprite_asset_ids = self.sprite_asset_ids().map(|x| x.into_iter().collect());
                 let columns = self.columns();
                 let rows = self.rows();
                 let time_mode = self.time_mode();
@@ -21558,6 +25241,8 @@ pub mod noa {
                 let speed_range = self.speed_range().map(|x| x.unpack());
                 let uv_channel_mask = self.uv_channel_mask();
                 TextureSheetModuleT {
+                    mode,
+                    sprite_asset_ids,
                     columns,
                     rows,
                     time_mode,
@@ -21573,6 +25258,30 @@ pub mod noa {
                 }
             }
 
+            #[inline]
+            pub fn mode(&self) -> SheetMode {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<SheetMode>(TextureSheetModule::VT_MODE, Some(SheetMode::Grid))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn sprite_asset_ids(&self) -> Option<::flatbuffers::Vector<'a, u32>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, u32>>>(
+                            TextureSheetModule::VT_SPRITE_ASSET_IDS,
+                            None,
+                        )
+                }
+            }
             #[inline]
             pub fn columns(&self) -> u32 {
                 // Safety:
@@ -21723,6 +25432,12 @@ pub mod noa {
                 pos: usize,
             ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
                 v.visit_table(pos)?
+                    .visit_field::<SheetMode>("mode", Self::VT_MODE, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, u32>>>(
+                        "sprite_asset_ids",
+                        Self::VT_SPRITE_ASSET_IDS,
+                        false,
+                    )?
                     .visit_field::<u32>("columns", Self::VT_COLUMNS, false)?
                     .visit_field::<u32>("rows", Self::VT_ROWS, false)?
                     .visit_field::<SheetTime>("time_mode", Self::VT_TIME_MODE, false)?
@@ -21748,6 +25463,8 @@ pub mod noa {
             }
         }
         pub struct TextureSheetModuleArgs<'a> {
+            pub mode: SheetMode,
+            pub sprite_asset_ids: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, u32>>>,
             pub columns: u32,
             pub rows: u32,
             pub time_mode: SheetTime,
@@ -21765,6 +25482,8 @@ pub mod noa {
             #[inline]
             fn default() -> Self {
                 TextureSheetModuleArgs {
+                    mode: SheetMode::Grid,
+                    sprite_asset_ids: None,
                     columns: 1,
                     rows: 1,
                     time_mode: SheetTime::Lifetime,
@@ -21786,7 +25505,13 @@ pub mod noa {
             where
                 S: Serializer,
             {
-                let mut s = serializer.serialize_struct("TextureSheetModule", 12)?;
+                let mut s = serializer.serialize_struct("TextureSheetModule", 14)?;
+                s.serialize_field("mode", &self.mode())?;
+                if let Some(f) = self.sprite_asset_ids() {
+                    s.serialize_field("sprite_asset_ids", &f)?;
+                } else {
+                    s.skip_field("sprite_asset_ids")?;
+                }
                 s.serialize_field("columns", &self.columns())?;
                 s.serialize_field("rows", &self.rows())?;
                 s.serialize_field("time_mode", &self.time_mode())?;
@@ -21820,6 +25545,24 @@ pub mod noa {
             start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
         }
         impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> TextureSheetModuleBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_mode(&mut self, mode: SheetMode) {
+                self.fbb_.push_slot::<SheetMode>(
+                    TextureSheetModule::VT_MODE,
+                    mode,
+                    SheetMode::Grid,
+                );
+            }
+            #[inline]
+            pub fn add_sprite_asset_ids(
+                &mut self,
+                sprite_asset_ids: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b, u32>>,
+            ) {
+                self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(
+                    TextureSheetModule::VT_SPRITE_ASSET_IDS,
+                    sprite_asset_ids,
+                );
+            }
             #[inline]
             pub fn add_columns(&mut self, columns: u32) {
                 self.fbb_
@@ -21924,6 +25667,8 @@ pub mod noa {
         impl ::core::fmt::Debug for TextureSheetModule<'_> {
             fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                 let mut ds = f.debug_struct("TextureSheetModule");
+                ds.field("mode", &self.mode());
+                ds.field("sprite_asset_ids", &self.sprite_asset_ids());
                 ds.field("columns", &self.columns());
                 ds.field("rows", &self.rows());
                 ds.field("time_mode", &self.time_mode());
@@ -21942,6 +25687,8 @@ pub mod noa {
         #[non_exhaustive]
         #[derive(Debug, Clone, PartialEq, serde::Serialize)]
         pub struct TextureSheetModuleT {
+            pub mode: SheetMode,
+            pub sprite_asset_ids: Option<alloc::vec::Vec<u32>>,
             pub columns: u32,
             pub rows: u32,
             pub time_mode: SheetTime,
@@ -21958,6 +25705,8 @@ pub mod noa {
         impl Default for TextureSheetModuleT {
             fn default() -> Self {
                 Self {
+                    mode: SheetMode::Grid,
+                    sprite_asset_ids: None,
                     columns: 1,
                     rows: 1,
                     time_mode: SheetTime::Lifetime,
@@ -21978,6 +25727,11 @@ pub mod noa {
                 &self,
                 _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
             ) -> ::flatbuffers::WIPOffset<TextureSheetModule<'b>> {
+                let mode = self.mode;
+                let sprite_asset_ids = self
+                    .sprite_asset_ids
+                    .as_ref()
+                    .map(|x| _fbb.create_vector(x));
                 let columns = self.columns;
                 let rows = self.rows;
                 let time_mode = self.time_mode;
@@ -21994,6 +25748,8 @@ pub mod noa {
                 TextureSheetModule::create(
                     _fbb,
                     &TextureSheetModuleArgs {
+                        mode,
+                        sprite_asset_ids,
                         columns,
                         rows,
                         time_mode,
@@ -24062,31 +27818,33 @@ pub mod noa {
         }
 
         impl<'a> ParticleRenderer<'a> {
-            pub const VT_SYSTEM_COMPONENT_ID: ::flatbuffers::VOffsetT = 4;
-            pub const VT_MATERIALS: ::flatbuffers::VOffsetT = 6;
-            pub const VT_MODE: ::flatbuffers::VOffsetT = 8;
-            pub const VT_ALIGNMENT: ::flatbuffers::VOffsetT = 10;
-            pub const VT_MESH_ASSET_IDS: ::flatbuffers::VOffsetT = 12;
-            pub const VT_MESH_WEIGHTS: ::flatbuffers::VOffsetT = 14;
-            pub const VT_SORTING_LAYER_RANK: ::flatbuffers::VOffsetT = 16;
-            pub const VT_SORTING_ORDER: ::flatbuffers::VOffsetT = 18;
-            pub const VT_SORTING_FUDGE: ::flatbuffers::VOffsetT = 20;
-            pub const VT_SORT: ::flatbuffers::VOffsetT = 22;
-            pub const VT_PIVOT: ::flatbuffers::VOffsetT = 24;
-            pub const VT_FLIP: ::flatbuffers::VOffsetT = 26;
-            pub const VT_MIN_SIZE: ::flatbuffers::VOffsetT = 28;
-            pub const VT_MAX_SIZE: ::flatbuffers::VOffsetT = 30;
-            pub const VT_CAMERA_VELOCITY_SCALE: ::flatbuffers::VOffsetT = 32;
-            pub const VT_VELOCITY_SCALE: ::flatbuffers::VOffsetT = 34;
-            pub const VT_LENGTH_SCALE: ::flatbuffers::VOffsetT = 36;
-            pub const VT_ALLOW_ROLL: ::flatbuffers::VOffsetT = 38;
-            pub const VT_VERTEX_STREAMS: ::flatbuffers::VOffsetT = 40;
-            pub const VT_APPLY_ACTIVE_COLOR_SPACE: ::flatbuffers::VOffsetT = 42;
-            pub const VT_NORMAL_DIRECTION: ::flatbuffers::VOffsetT = 44;
-            pub const VT_FREEFORM_STRETCHING: ::flatbuffers::VOffsetT = 46;
-            pub const VT_ROTATE_WITH_STRETCH_DIRECTION: ::flatbuffers::VOffsetT = 48;
-            pub const VT_SOURCE_SORTING_LAYER_ID: ::flatbuffers::VOffsetT = 50;
-            pub const VT_MESH_DISTRIBUTION: ::flatbuffers::VOffsetT = 52;
+            pub const VT_MASK_INTERACTION: ::flatbuffers::VOffsetT = 4;
+            pub const VT_ENVIRONMENT: ::flatbuffers::VOffsetT = 6;
+            pub const VT_SYSTEM_COMPONENT_ID: ::flatbuffers::VOffsetT = 8;
+            pub const VT_MATERIALS: ::flatbuffers::VOffsetT = 10;
+            pub const VT_MODE: ::flatbuffers::VOffsetT = 12;
+            pub const VT_ALIGNMENT: ::flatbuffers::VOffsetT = 14;
+            pub const VT_MESH_ASSET_IDS: ::flatbuffers::VOffsetT = 16;
+            pub const VT_MESH_WEIGHTS: ::flatbuffers::VOffsetT = 18;
+            pub const VT_SORTING_LAYER_RANK: ::flatbuffers::VOffsetT = 20;
+            pub const VT_SORTING_ORDER: ::flatbuffers::VOffsetT = 22;
+            pub const VT_SORTING_FUDGE: ::flatbuffers::VOffsetT = 24;
+            pub const VT_SORT: ::flatbuffers::VOffsetT = 26;
+            pub const VT_PIVOT: ::flatbuffers::VOffsetT = 28;
+            pub const VT_FLIP: ::flatbuffers::VOffsetT = 30;
+            pub const VT_MIN_SIZE: ::flatbuffers::VOffsetT = 32;
+            pub const VT_MAX_SIZE: ::flatbuffers::VOffsetT = 34;
+            pub const VT_CAMERA_VELOCITY_SCALE: ::flatbuffers::VOffsetT = 36;
+            pub const VT_VELOCITY_SCALE: ::flatbuffers::VOffsetT = 38;
+            pub const VT_LENGTH_SCALE: ::flatbuffers::VOffsetT = 40;
+            pub const VT_ALLOW_ROLL: ::flatbuffers::VOffsetT = 42;
+            pub const VT_VERTEX_STREAMS: ::flatbuffers::VOffsetT = 44;
+            pub const VT_APPLY_ACTIVE_COLOR_SPACE: ::flatbuffers::VOffsetT = 46;
+            pub const VT_NORMAL_DIRECTION: ::flatbuffers::VOffsetT = 48;
+            pub const VT_FREEFORM_STRETCHING: ::flatbuffers::VOffsetT = 50;
+            pub const VT_ROTATE_WITH_STRETCH_DIRECTION: ::flatbuffers::VOffsetT = 52;
+            pub const VT_SOURCE_SORTING_LAYER_ID: ::flatbuffers::VOffsetT = 54;
+            pub const VT_MESH_DISTRIBUTION: ::flatbuffers::VOffsetT = 56;
 
             #[inline]
             pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -24132,6 +27890,9 @@ pub mod noa {
                     builder.add_materials(x);
                 }
                 builder.add_system_component_id(args.system_component_id);
+                if let Some(x) = args.environment {
+                    builder.add_environment(x);
+                }
                 builder.add_mesh_distribution(args.mesh_distribution);
                 builder.add_rotate_with_stretch_direction(args.rotate_with_stretch_direction);
                 builder.add_freeform_stretching(args.freeform_stretching);
@@ -24140,10 +27901,15 @@ pub mod noa {
                 builder.add_sort(args.sort);
                 builder.add_alignment(args.alignment);
                 builder.add_mode(args.mode);
+                builder.add_mask_interaction(args.mask_interaction);
                 builder.finish()
             }
 
             pub fn unpack(&self) -> ParticleRendererT {
+                let mask_interaction = self.mask_interaction();
+                let environment = self
+                    .environment()
+                    .map(|x| alloc::boxed::Box::new(x.unpack()));
                 let system_component_id = self.system_component_id();
                 let materials = {
                     let x = self.materials();
@@ -24175,6 +27941,8 @@ pub mod noa {
                 let source_sorting_layer_id = self.source_sorting_layer_id();
                 let mesh_distribution = self.mesh_distribution();
                 ParticleRendererT {
+                    mask_interaction,
+                    environment,
                     system_component_id,
                     materials,
                     mode,
@@ -24203,6 +27971,33 @@ pub mod noa {
                 }
             }
 
+            #[inline]
+            pub fn mask_interaction(&self) -> MaskInteraction {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<MaskInteraction>(
+                            ParticleRenderer::VT_MASK_INTERACTION,
+                            Some(MaskInteraction::None),
+                        )
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn environment(&self) -> Option<RenderEnvironment<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<RenderEnvironment>>(
+                            ParticleRenderer::VT_ENVIRONMENT,
+                            None,
+                        )
+                }
+            }
             #[inline]
             pub fn system_component_id(&self) -> u32 {
                 // Safety:
@@ -24495,6 +28290,16 @@ pub mod noa {
                 pos: usize,
             ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
                 v.visit_table(pos)?
+                    .visit_field::<MaskInteraction>(
+                        "mask_interaction",
+                        Self::VT_MASK_INTERACTION,
+                        false,
+                    )?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<RenderEnvironment>>(
+                        "environment",
+                        Self::VT_ENVIRONMENT,
+                        false,
+                    )?
                     .visit_field::<u32>("system_component_id", Self::VT_SYSTEM_COMPONENT_ID, false)?
                     .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, u32>>>(
                         "materials",
@@ -24563,6 +28368,8 @@ pub mod noa {
             }
         }
         pub struct ParticleRendererArgs<'a> {
+            pub mask_interaction: MaskInteraction,
+            pub environment: Option<::flatbuffers::WIPOffset<RenderEnvironment<'a>>>,
             pub system_component_id: u32,
             pub materials: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, u32>>>,
             pub mode: RenderMode,
@@ -24597,6 +28404,8 @@ pub mod noa {
             #[inline]
             fn default() -> Self {
                 ParticleRendererArgs {
+                    mask_interaction: MaskInteraction::None,
+                    environment: None,
                     system_component_id: 0,
                     materials: None, // required field
                     mode: RenderMode::Billboard,
@@ -24631,7 +28440,13 @@ pub mod noa {
             where
                 S: Serializer,
             {
-                let mut s = serializer.serialize_struct("ParticleRenderer", 25)?;
+                let mut s = serializer.serialize_struct("ParticleRenderer", 27)?;
+                s.serialize_field("mask_interaction", &self.mask_interaction())?;
+                if let Some(f) = self.environment() {
+                    s.serialize_field("environment", &f)?;
+                } else {
+                    s.skip_field("environment")?;
+                }
                 s.serialize_field("system_component_id", &self.system_component_id())?;
                 s.serialize_field("materials", &self.materials())?;
                 s.serialize_field("mode", &self.mode())?;
@@ -24689,6 +28504,25 @@ pub mod noa {
             start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
         }
         impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> ParticleRendererBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_mask_interaction(&mut self, mask_interaction: MaskInteraction) {
+                self.fbb_.push_slot::<MaskInteraction>(
+                    ParticleRenderer::VT_MASK_INTERACTION,
+                    mask_interaction,
+                    MaskInteraction::None,
+                );
+            }
+            #[inline]
+            pub fn add_environment(
+                &mut self,
+                environment: ::flatbuffers::WIPOffset<RenderEnvironment<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<RenderEnvironment>>(
+                        ParticleRenderer::VT_ENVIRONMENT,
+                        environment,
+                    );
+            }
             #[inline]
             pub fn add_system_component_id(&mut self, system_component_id: u32) {
                 self.fbb_.push_slot::<u32>(
@@ -24900,6 +28734,8 @@ pub mod noa {
         impl ::core::fmt::Debug for ParticleRenderer<'_> {
             fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                 let mut ds = f.debug_struct("ParticleRenderer");
+                ds.field("mask_interaction", &self.mask_interaction());
+                ds.field("environment", &self.environment());
                 ds.field("system_component_id", &self.system_component_id());
                 ds.field("materials", &self.materials());
                 ds.field("mode", &self.mode());
@@ -24934,6 +28770,8 @@ pub mod noa {
         #[non_exhaustive]
         #[derive(Debug, Clone, PartialEq, serde::Serialize)]
         pub struct ParticleRendererT {
+            pub mask_interaction: MaskInteraction,
+            pub environment: Option<alloc::boxed::Box<RenderEnvironmentT>>,
             pub system_component_id: u32,
             pub materials: alloc::vec::Vec<u32>,
             pub mode: RenderMode,
@@ -24963,6 +28801,8 @@ pub mod noa {
         impl Default for ParticleRendererT {
             fn default() -> Self {
                 Self {
+                    mask_interaction: MaskInteraction::None,
+                    environment: None,
                     system_component_id: 0,
                     materials: Default::default(),
                     mode: RenderMode::Billboard,
@@ -24996,6 +28836,8 @@ pub mod noa {
                 &self,
                 _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
             ) -> ::flatbuffers::WIPOffset<ParticleRenderer<'b>> {
+                let mask_interaction = self.mask_interaction;
+                let environment = self.environment.as_ref().map(|x| x.pack(_fbb));
                 let system_component_id = self.system_component_id;
                 let materials = Some({
                     let x = &self.materials;
@@ -25032,6 +28874,8 @@ pub mod noa {
                 ParticleRenderer::create(
                     _fbb,
                     &ParticleRendererArgs {
+                        mask_interaction,
+                        environment,
                         system_component_id,
                         materials,
                         mode,
@@ -29034,6 +32878,3554 @@ pub mod noa {
                 )
             }
         }
+        pub enum RenderEnvironmentOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct RenderEnvironment<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for RenderEnvironment<'a> {
+            type Inner = RenderEnvironment<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> RenderEnvironment<'a> {
+            pub const VT_CAST_SHADOWS: ::flatbuffers::VOffsetT = 4;
+            pub const VT_RECEIVE_SHADOWS: ::flatbuffers::VOffsetT = 6;
+            pub const VT_LIGHT_PROBES: ::flatbuffers::VOffsetT = 8;
+            pub const VT_REFLECTION_PROBES: ::flatbuffers::VOffsetT = 10;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                RenderEnvironment { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args RenderEnvironmentArgs,
+            ) -> ::flatbuffers::WIPOffset<RenderEnvironment<'bldr>> {
+                let mut builder = RenderEnvironmentBuilder::new(_fbb);
+                builder.add_reflection_probes(args.reflection_probes);
+                builder.add_light_probes(args.light_probes);
+                builder.add_receive_shadows(args.receive_shadows);
+                builder.add_cast_shadows(args.cast_shadows);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> RenderEnvironmentT {
+                let cast_shadows = self.cast_shadows();
+                let receive_shadows = self.receive_shadows();
+                let light_probes = self.light_probes();
+                let reflection_probes = self.reflection_probes();
+                RenderEnvironmentT {
+                    cast_shadows,
+                    receive_shadows,
+                    light_probes,
+                    reflection_probes,
+                }
+            }
+
+            #[inline]
+            pub fn cast_shadows(&self) -> u8 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u8>(RenderEnvironment::VT_CAST_SHADOWS, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn receive_shadows(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(RenderEnvironment::VT_RECEIVE_SHADOWS, Some(false))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn light_probes(&self) -> u8 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u8>(RenderEnvironment::VT_LIGHT_PROBES, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn reflection_probes(&self) -> u8 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u8>(RenderEnvironment::VT_REFLECTION_PROBES, Some(0))
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for RenderEnvironment<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<u8>("cast_shadows", Self::VT_CAST_SHADOWS, false)?
+                    .visit_field::<bool>("receive_shadows", Self::VT_RECEIVE_SHADOWS, false)?
+                    .visit_field::<u8>("light_probes", Self::VT_LIGHT_PROBES, false)?
+                    .visit_field::<u8>("reflection_probes", Self::VT_REFLECTION_PROBES, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct RenderEnvironmentArgs {
+            pub cast_shadows: u8,
+            pub receive_shadows: bool,
+            pub light_probes: u8,
+            pub reflection_probes: u8,
+        }
+        impl<'a> Default for RenderEnvironmentArgs {
+            #[inline]
+            fn default() -> Self {
+                RenderEnvironmentArgs {
+                    cast_shadows: 0,
+                    receive_shadows: false,
+                    light_probes: 0,
+                    reflection_probes: 0,
+                }
+            }
+        }
+
+        impl Serialize for RenderEnvironment<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("RenderEnvironment", 4)?;
+                s.serialize_field("cast_shadows", &self.cast_shadows())?;
+                s.serialize_field("receive_shadows", &self.receive_shadows())?;
+                s.serialize_field("light_probes", &self.light_probes())?;
+                s.serialize_field("reflection_probes", &self.reflection_probes())?;
+                s.end()
+            }
+        }
+
+        pub struct RenderEnvironmentBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> RenderEnvironmentBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_cast_shadows(&mut self, cast_shadows: u8) {
+                self.fbb_
+                    .push_slot::<u8>(RenderEnvironment::VT_CAST_SHADOWS, cast_shadows, 0);
+            }
+            #[inline]
+            pub fn add_receive_shadows(&mut self, receive_shadows: bool) {
+                self.fbb_.push_slot::<bool>(
+                    RenderEnvironment::VT_RECEIVE_SHADOWS,
+                    receive_shadows,
+                    false,
+                );
+            }
+            #[inline]
+            pub fn add_light_probes(&mut self, light_probes: u8) {
+                self.fbb_
+                    .push_slot::<u8>(RenderEnvironment::VT_LIGHT_PROBES, light_probes, 0);
+            }
+            #[inline]
+            pub fn add_reflection_probes(&mut self, reflection_probes: u8) {
+                self.fbb_.push_slot::<u8>(
+                    RenderEnvironment::VT_REFLECTION_PROBES,
+                    reflection_probes,
+                    0,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> RenderEnvironmentBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                RenderEnvironmentBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<RenderEnvironment<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for RenderEnvironment<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("RenderEnvironment");
+                ds.field("cast_shadows", &self.cast_shadows());
+                ds.field("receive_shadows", &self.receive_shadows());
+                ds.field("light_probes", &self.light_probes());
+                ds.field("reflection_probes", &self.reflection_probes());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct RenderEnvironmentT {
+            pub cast_shadows: u8,
+            pub receive_shadows: bool,
+            pub light_probes: u8,
+            pub reflection_probes: u8,
+        }
+        impl Default for RenderEnvironmentT {
+            fn default() -> Self {
+                Self {
+                    cast_shadows: 0,
+                    receive_shadows: false,
+                    light_probes: 0,
+                    reflection_probes: 0,
+                }
+            }
+        }
+        impl RenderEnvironmentT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<RenderEnvironment<'b>> {
+                let cast_shadows = self.cast_shadows;
+                let receive_shadows = self.receive_shadows;
+                let light_probes = self.light_probes;
+                let reflection_probes = self.reflection_probes;
+                RenderEnvironment::create(
+                    _fbb,
+                    &RenderEnvironmentArgs {
+                        cast_shadows,
+                        receive_shadows,
+                        light_probes,
+                        reflection_probes,
+                    },
+                )
+            }
+        }
+        pub enum MeshFilterOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct MeshFilter<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for MeshFilter<'a> {
+            type Inner = MeshFilter<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> MeshFilter<'a> {
+            pub const VT_MESH_ASSET_ID: ::flatbuffers::VOffsetT = 4;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                MeshFilter { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args MeshFilterArgs,
+            ) -> ::flatbuffers::WIPOffset<MeshFilter<'bldr>> {
+                let mut builder = MeshFilterBuilder::new(_fbb);
+                builder.add_mesh_asset_id(args.mesh_asset_id);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> MeshFilterT {
+                let mesh_asset_id = self.mesh_asset_id();
+                MeshFilterT { mesh_asset_id }
+            }
+
+            #[inline]
+            pub fn mesh_asset_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(MeshFilter::VT_MESH_ASSET_ID, Some(0))
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for MeshFilter<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<u32>("mesh_asset_id", Self::VT_MESH_ASSET_ID, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct MeshFilterArgs {
+            pub mesh_asset_id: u32,
+        }
+        impl<'a> Default for MeshFilterArgs {
+            #[inline]
+            fn default() -> Self {
+                MeshFilterArgs { mesh_asset_id: 0 }
+            }
+        }
+
+        impl Serialize for MeshFilter<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("MeshFilter", 1)?;
+                s.serialize_field("mesh_asset_id", &self.mesh_asset_id())?;
+                s.end()
+            }
+        }
+
+        pub struct MeshFilterBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> MeshFilterBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_mesh_asset_id(&mut self, mesh_asset_id: u32) {
+                self.fbb_
+                    .push_slot::<u32>(MeshFilter::VT_MESH_ASSET_ID, mesh_asset_id, 0);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> MeshFilterBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                MeshFilterBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<MeshFilter<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for MeshFilter<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("MeshFilter");
+                ds.field("mesh_asset_id", &self.mesh_asset_id());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct MeshFilterT {
+            pub mesh_asset_id: u32,
+        }
+        impl Default for MeshFilterT {
+            fn default() -> Self {
+                Self { mesh_asset_id: 0 }
+            }
+        }
+        impl MeshFilterT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<MeshFilter<'b>> {
+                let mesh_asset_id = self.mesh_asset_id;
+                MeshFilter::create(_fbb, &MeshFilterArgs { mesh_asset_id })
+            }
+        }
+        pub enum MeshRendererOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct MeshRenderer<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for MeshRenderer<'a> {
+            type Inner = MeshRenderer<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> MeshRenderer<'a> {
+            pub const VT_MESH_FILTER_COMPONENT_ID: ::flatbuffers::VOffsetT = 4;
+            pub const VT_MATERIALS: ::flatbuffers::VOffsetT = 6;
+            pub const VT_SORTING_LAYER_ID: ::flatbuffers::VOffsetT = 8;
+            pub const VT_SORTING_LAYER_INDEX: ::flatbuffers::VOffsetT = 10;
+            pub const VT_SORTING_ORDER: ::flatbuffers::VOffsetT = 12;
+            pub const VT_ENVIRONMENT: ::flatbuffers::VOffsetT = 14;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                MeshRenderer { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args MeshRendererArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<MeshRenderer<'bldr>> {
+                let mut builder = MeshRendererBuilder::new(_fbb);
+                if let Some(x) = args.environment {
+                    builder.add_environment(x);
+                }
+                builder.add_sorting_order(args.sorting_order);
+                builder.add_sorting_layer_index(args.sorting_layer_index);
+                builder.add_sorting_layer_id(args.sorting_layer_id);
+                if let Some(x) = args.materials {
+                    builder.add_materials(x);
+                }
+                builder.add_mesh_filter_component_id(args.mesh_filter_component_id);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> MeshRendererT {
+                let mesh_filter_component_id = self.mesh_filter_component_id();
+                let materials = {
+                    let x = self.materials();
+                    x.into_iter().collect()
+                };
+                let sorting_layer_id = self.sorting_layer_id();
+                let sorting_layer_index = self.sorting_layer_index();
+                let sorting_order = self.sorting_order();
+                let environment = self
+                    .environment()
+                    .map(|x| alloc::boxed::Box::new(x.unpack()));
+                MeshRendererT {
+                    mesh_filter_component_id,
+                    materials,
+                    sorting_layer_id,
+                    sorting_layer_index,
+                    sorting_order,
+                    environment,
+                }
+            }
+
+            #[inline]
+            pub fn mesh_filter_component_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(MeshRenderer::VT_MESH_FILTER_COMPONENT_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn materials(&self) -> ::flatbuffers::Vector<'a, u32> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, u32>>>(
+                            MeshRenderer::VT_MATERIALS,
+                            None,
+                        )
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn sorting_layer_id(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(MeshRenderer::VT_SORTING_LAYER_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn sorting_layer_index(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(MeshRenderer::VT_SORTING_LAYER_INDEX, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn sorting_order(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(MeshRenderer::VT_SORTING_ORDER, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn environment(&self) -> Option<RenderEnvironment<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<RenderEnvironment>>(
+                            MeshRenderer::VT_ENVIRONMENT,
+                            None,
+                        )
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for MeshRenderer<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<u32>(
+                        "mesh_filter_component_id",
+                        Self::VT_MESH_FILTER_COMPONENT_ID,
+                        false,
+                    )?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, u32>>>(
+                        "materials",
+                        Self::VT_MATERIALS,
+                        true,
+                    )?
+                    .visit_field::<i32>("sorting_layer_id", Self::VT_SORTING_LAYER_ID, false)?
+                    .visit_field::<i32>("sorting_layer_index", Self::VT_SORTING_LAYER_INDEX, false)?
+                    .visit_field::<i32>("sorting_order", Self::VT_SORTING_ORDER, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<RenderEnvironment>>(
+                        "environment",
+                        Self::VT_ENVIRONMENT,
+                        false,
+                    )?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct MeshRendererArgs<'a> {
+            pub mesh_filter_component_id: u32,
+            pub materials: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, u32>>>,
+            pub sorting_layer_id: i32,
+            pub sorting_layer_index: i32,
+            pub sorting_order: i32,
+            pub environment: Option<::flatbuffers::WIPOffset<RenderEnvironment<'a>>>,
+        }
+        impl<'a> Default for MeshRendererArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                MeshRendererArgs {
+                    mesh_filter_component_id: 0,
+                    materials: None, // required field
+                    sorting_layer_id: 0,
+                    sorting_layer_index: 0,
+                    sorting_order: 0,
+                    environment: None,
+                }
+            }
+        }
+
+        impl Serialize for MeshRenderer<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("MeshRenderer", 6)?;
+                s.serialize_field("mesh_filter_component_id", &self.mesh_filter_component_id())?;
+                s.serialize_field("materials", &self.materials())?;
+                s.serialize_field("sorting_layer_id", &self.sorting_layer_id())?;
+                s.serialize_field("sorting_layer_index", &self.sorting_layer_index())?;
+                s.serialize_field("sorting_order", &self.sorting_order())?;
+                if let Some(f) = self.environment() {
+                    s.serialize_field("environment", &f)?;
+                } else {
+                    s.skip_field("environment")?;
+                }
+                s.end()
+            }
+        }
+
+        pub struct MeshRendererBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> MeshRendererBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_mesh_filter_component_id(&mut self, mesh_filter_component_id: u32) {
+                self.fbb_.push_slot::<u32>(
+                    MeshRenderer::VT_MESH_FILTER_COMPONENT_ID,
+                    mesh_filter_component_id,
+                    0,
+                );
+            }
+            #[inline]
+            pub fn add_materials(
+                &mut self,
+                materials: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b, u32>>,
+            ) {
+                self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(
+                    MeshRenderer::VT_MATERIALS,
+                    materials,
+                );
+            }
+            #[inline]
+            pub fn add_sorting_layer_id(&mut self, sorting_layer_id: i32) {
+                self.fbb_
+                    .push_slot::<i32>(MeshRenderer::VT_SORTING_LAYER_ID, sorting_layer_id, 0);
+            }
+            #[inline]
+            pub fn add_sorting_layer_index(&mut self, sorting_layer_index: i32) {
+                self.fbb_.push_slot::<i32>(
+                    MeshRenderer::VT_SORTING_LAYER_INDEX,
+                    sorting_layer_index,
+                    0,
+                );
+            }
+            #[inline]
+            pub fn add_sorting_order(&mut self, sorting_order: i32) {
+                self.fbb_
+                    .push_slot::<i32>(MeshRenderer::VT_SORTING_ORDER, sorting_order, 0);
+            }
+            #[inline]
+            pub fn add_environment(
+                &mut self,
+                environment: ::flatbuffers::WIPOffset<RenderEnvironment<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<RenderEnvironment>>(
+                        MeshRenderer::VT_ENVIRONMENT,
+                        environment,
+                    );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> MeshRendererBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                MeshRendererBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<MeshRenderer<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                self.fbb_
+                    .required(o, MeshRenderer::VT_MATERIALS, "materials");
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for MeshRenderer<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("MeshRenderer");
+                ds.field("mesh_filter_component_id", &self.mesh_filter_component_id());
+                ds.field("materials", &self.materials());
+                ds.field("sorting_layer_id", &self.sorting_layer_id());
+                ds.field("sorting_layer_index", &self.sorting_layer_index());
+                ds.field("sorting_order", &self.sorting_order());
+                ds.field("environment", &self.environment());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct MeshRendererT {
+            pub mesh_filter_component_id: u32,
+            pub materials: alloc::vec::Vec<u32>,
+            pub sorting_layer_id: i32,
+            pub sorting_layer_index: i32,
+            pub sorting_order: i32,
+            pub environment: Option<alloc::boxed::Box<RenderEnvironmentT>>,
+        }
+        impl Default for MeshRendererT {
+            fn default() -> Self {
+                Self {
+                    mesh_filter_component_id: 0,
+                    materials: Default::default(),
+                    sorting_layer_id: 0,
+                    sorting_layer_index: 0,
+                    sorting_order: 0,
+                    environment: None,
+                }
+            }
+        }
+        impl MeshRendererT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<MeshRenderer<'b>> {
+                let mesh_filter_component_id = self.mesh_filter_component_id;
+                let materials = Some({
+                    let x = &self.materials;
+                    _fbb.create_vector(x)
+                });
+                let sorting_layer_id = self.sorting_layer_id;
+                let sorting_layer_index = self.sorting_layer_index;
+                let sorting_order = self.sorting_order;
+                let environment = self.environment.as_ref().map(|x| x.pack(_fbb));
+                MeshRenderer::create(
+                    _fbb,
+                    &MeshRendererArgs {
+                        mesh_filter_component_id,
+                        materials,
+                        sorting_layer_id,
+                        sorting_layer_index,
+                        sorting_order,
+                        environment,
+                    },
+                )
+            }
+        }
+        pub enum SpriteRendererOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct SpriteRenderer<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for SpriteRenderer<'a> {
+            type Inner = SpriteRenderer<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> SpriteRenderer<'a> {
+            pub const VT_SPRITE_ASSET_ID: ::flatbuffers::VOffsetT = 4;
+            pub const VT_MATERIALS: ::flatbuffers::VOffsetT = 6;
+            pub const VT_COLOR: ::flatbuffers::VOffsetT = 8;
+            pub const VT_FLIP_X: ::flatbuffers::VOffsetT = 10;
+            pub const VT_FLIP_Y: ::flatbuffers::VOffsetT = 12;
+            pub const VT_DRAW_MODE: ::flatbuffers::VOffsetT = 14;
+            pub const VT_SIZE: ::flatbuffers::VOffsetT = 16;
+            pub const VT_TILE_MODE: ::flatbuffers::VOffsetT = 18;
+            pub const VT_ADAPTIVE_MODE_THRESHOLD: ::flatbuffers::VOffsetT = 20;
+            pub const VT_MASK_INTERACTION: ::flatbuffers::VOffsetT = 22;
+            pub const VT_SORTING_LAYER_ID: ::flatbuffers::VOffsetT = 24;
+            pub const VT_SORTING_LAYER_INDEX: ::flatbuffers::VOffsetT = 26;
+            pub const VT_SORTING_ORDER: ::flatbuffers::VOffsetT = 28;
+            pub const VT_SORT_POINT: ::flatbuffers::VOffsetT = 30;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                SpriteRenderer { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args SpriteRendererArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<SpriteRenderer<'bldr>> {
+                let mut builder = SpriteRendererBuilder::new(_fbb);
+                builder.add_sorting_order(args.sorting_order);
+                builder.add_sorting_layer_index(args.sorting_layer_index);
+                builder.add_sorting_layer_id(args.sorting_layer_id);
+                builder.add_adaptive_mode_threshold(args.adaptive_mode_threshold);
+                if let Some(x) = args.size {
+                    builder.add_size(x);
+                }
+                if let Some(x) = args.color {
+                    builder.add_color(x);
+                }
+                if let Some(x) = args.materials {
+                    builder.add_materials(x);
+                }
+                builder.add_sprite_asset_id(args.sprite_asset_id);
+                builder.add_sort_point(args.sort_point);
+                builder.add_mask_interaction(args.mask_interaction);
+                builder.add_tile_mode(args.tile_mode);
+                builder.add_draw_mode(args.draw_mode);
+                builder.add_flip_y(args.flip_y);
+                builder.add_flip_x(args.flip_x);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> SpriteRendererT {
+                let sprite_asset_id = self.sprite_asset_id();
+                let materials = {
+                    let x = self.materials();
+                    x.into_iter().collect()
+                };
+                let color = self.color().map(|x| x.unpack());
+                let flip_x = self.flip_x();
+                let flip_y = self.flip_y();
+                let draw_mode = self.draw_mode();
+                let size = self.size().map(|x| x.unpack());
+                let tile_mode = self.tile_mode();
+                let adaptive_mode_threshold = self.adaptive_mode_threshold();
+                let mask_interaction = self.mask_interaction();
+                let sorting_layer_id = self.sorting_layer_id();
+                let sorting_layer_index = self.sorting_layer_index();
+                let sorting_order = self.sorting_order();
+                let sort_point = self.sort_point();
+                SpriteRendererT {
+                    sprite_asset_id,
+                    materials,
+                    color,
+                    flip_x,
+                    flip_y,
+                    draw_mode,
+                    size,
+                    tile_mode,
+                    adaptive_mode_threshold,
+                    mask_interaction,
+                    sorting_layer_id,
+                    sorting_layer_index,
+                    sorting_order,
+                    sort_point,
+                }
+            }
+
+            #[inline]
+            pub fn sprite_asset_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(SpriteRenderer::VT_SPRITE_ASSET_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn materials(&self) -> ::flatbuffers::Vector<'a, u32> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, u32>>>(
+                            SpriteRenderer::VT_MATERIALS,
+                            None,
+                        )
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn color(&self) -> Option<&'a Color> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe { self._tab.get::<Color>(SpriteRenderer::VT_COLOR, None) }
+            }
+            #[inline]
+            pub fn flip_x(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(SpriteRenderer::VT_FLIP_X, Some(false))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn flip_y(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(SpriteRenderer::VT_FLIP_Y, Some(false))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn draw_mode(&self) -> SpriteDrawMode {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<SpriteDrawMode>(
+                            SpriteRenderer::VT_DRAW_MODE,
+                            Some(SpriteDrawMode::Simple),
+                        )
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn size(&self) -> Option<&'a Vec2> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe { self._tab.get::<Vec2>(SpriteRenderer::VT_SIZE, None) }
+            }
+            #[inline]
+            pub fn tile_mode(&self) -> u8 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u8>(SpriteRenderer::VT_TILE_MODE, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn adaptive_mode_threshold(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(SpriteRenderer::VT_ADAPTIVE_MODE_THRESHOLD, Some(0.5))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn mask_interaction(&self) -> MaskInteraction {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<MaskInteraction>(
+                            SpriteRenderer::VT_MASK_INTERACTION,
+                            Some(MaskInteraction::None),
+                        )
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn sorting_layer_id(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(SpriteRenderer::VT_SORTING_LAYER_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn sorting_layer_index(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(SpriteRenderer::VT_SORTING_LAYER_INDEX, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn sorting_order(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(SpriteRenderer::VT_SORTING_ORDER, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn sort_point(&self) -> SpriteSortPoint {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<SpriteSortPoint>(
+                            SpriteRenderer::VT_SORT_POINT,
+                            Some(SpriteSortPoint::Center),
+                        )
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for SpriteRenderer<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<u32>("sprite_asset_id", Self::VT_SPRITE_ASSET_ID, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, u32>>>(
+                        "materials",
+                        Self::VT_MATERIALS,
+                        true,
+                    )?
+                    .visit_field::<Color>("color", Self::VT_COLOR, false)?
+                    .visit_field::<bool>("flip_x", Self::VT_FLIP_X, false)?
+                    .visit_field::<bool>("flip_y", Self::VT_FLIP_Y, false)?
+                    .visit_field::<SpriteDrawMode>("draw_mode", Self::VT_DRAW_MODE, false)?
+                    .visit_field::<Vec2>("size", Self::VT_SIZE, false)?
+                    .visit_field::<u8>("tile_mode", Self::VT_TILE_MODE, false)?
+                    .visit_field::<f32>(
+                        "adaptive_mode_threshold",
+                        Self::VT_ADAPTIVE_MODE_THRESHOLD,
+                        false,
+                    )?
+                    .visit_field::<MaskInteraction>(
+                        "mask_interaction",
+                        Self::VT_MASK_INTERACTION,
+                        false,
+                    )?
+                    .visit_field::<i32>("sorting_layer_id", Self::VT_SORTING_LAYER_ID, false)?
+                    .visit_field::<i32>("sorting_layer_index", Self::VT_SORTING_LAYER_INDEX, false)?
+                    .visit_field::<i32>("sorting_order", Self::VT_SORTING_ORDER, false)?
+                    .visit_field::<SpriteSortPoint>("sort_point", Self::VT_SORT_POINT, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct SpriteRendererArgs<'a> {
+            pub sprite_asset_id: u32,
+            pub materials: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, u32>>>,
+            pub color: Option<&'a Color>,
+            pub flip_x: bool,
+            pub flip_y: bool,
+            pub draw_mode: SpriteDrawMode,
+            pub size: Option<&'a Vec2>,
+            pub tile_mode: u8,
+            pub adaptive_mode_threshold: f32,
+            pub mask_interaction: MaskInteraction,
+            pub sorting_layer_id: i32,
+            pub sorting_layer_index: i32,
+            pub sorting_order: i32,
+            pub sort_point: SpriteSortPoint,
+        }
+        impl<'a> Default for SpriteRendererArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                SpriteRendererArgs {
+                    sprite_asset_id: 0,
+                    materials: None, // required field
+                    color: None,
+                    flip_x: false,
+                    flip_y: false,
+                    draw_mode: SpriteDrawMode::Simple,
+                    size: None,
+                    tile_mode: 0,
+                    adaptive_mode_threshold: 0.5,
+                    mask_interaction: MaskInteraction::None,
+                    sorting_layer_id: 0,
+                    sorting_layer_index: 0,
+                    sorting_order: 0,
+                    sort_point: SpriteSortPoint::Center,
+                }
+            }
+        }
+
+        impl Serialize for SpriteRenderer<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("SpriteRenderer", 14)?;
+                s.serialize_field("sprite_asset_id", &self.sprite_asset_id())?;
+                s.serialize_field("materials", &self.materials())?;
+                if let Some(f) = self.color() {
+                    s.serialize_field("color", &f)?;
+                } else {
+                    s.skip_field("color")?;
+                }
+                s.serialize_field("flip_x", &self.flip_x())?;
+                s.serialize_field("flip_y", &self.flip_y())?;
+                s.serialize_field("draw_mode", &self.draw_mode())?;
+                if let Some(f) = self.size() {
+                    s.serialize_field("size", &f)?;
+                } else {
+                    s.skip_field("size")?;
+                }
+                s.serialize_field("tile_mode", &self.tile_mode())?;
+                s.serialize_field("adaptive_mode_threshold", &self.adaptive_mode_threshold())?;
+                s.serialize_field("mask_interaction", &self.mask_interaction())?;
+                s.serialize_field("sorting_layer_id", &self.sorting_layer_id())?;
+                s.serialize_field("sorting_layer_index", &self.sorting_layer_index())?;
+                s.serialize_field("sorting_order", &self.sorting_order())?;
+                s.serialize_field("sort_point", &self.sort_point())?;
+                s.end()
+            }
+        }
+
+        pub struct SpriteRendererBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> SpriteRendererBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_sprite_asset_id(&mut self, sprite_asset_id: u32) {
+                self.fbb_
+                    .push_slot::<u32>(SpriteRenderer::VT_SPRITE_ASSET_ID, sprite_asset_id, 0);
+            }
+            #[inline]
+            pub fn add_materials(
+                &mut self,
+                materials: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b, u32>>,
+            ) {
+                self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(
+                    SpriteRenderer::VT_MATERIALS,
+                    materials,
+                );
+            }
+            #[inline]
+            pub fn add_color(&mut self, color: &Color) {
+                self.fbb_
+                    .push_slot_always::<&Color>(SpriteRenderer::VT_COLOR, color);
+            }
+            #[inline]
+            pub fn add_flip_x(&mut self, flip_x: bool) {
+                self.fbb_
+                    .push_slot::<bool>(SpriteRenderer::VT_FLIP_X, flip_x, false);
+            }
+            #[inline]
+            pub fn add_flip_y(&mut self, flip_y: bool) {
+                self.fbb_
+                    .push_slot::<bool>(SpriteRenderer::VT_FLIP_Y, flip_y, false);
+            }
+            #[inline]
+            pub fn add_draw_mode(&mut self, draw_mode: SpriteDrawMode) {
+                self.fbb_.push_slot::<SpriteDrawMode>(
+                    SpriteRenderer::VT_DRAW_MODE,
+                    draw_mode,
+                    SpriteDrawMode::Simple,
+                );
+            }
+            #[inline]
+            pub fn add_size(&mut self, size: &Vec2) {
+                self.fbb_
+                    .push_slot_always::<&Vec2>(SpriteRenderer::VT_SIZE, size);
+            }
+            #[inline]
+            pub fn add_tile_mode(&mut self, tile_mode: u8) {
+                self.fbb_
+                    .push_slot::<u8>(SpriteRenderer::VT_TILE_MODE, tile_mode, 0);
+            }
+            #[inline]
+            pub fn add_adaptive_mode_threshold(&mut self, adaptive_mode_threshold: f32) {
+                self.fbb_.push_slot::<f32>(
+                    SpriteRenderer::VT_ADAPTIVE_MODE_THRESHOLD,
+                    adaptive_mode_threshold,
+                    0.5,
+                );
+            }
+            #[inline]
+            pub fn add_mask_interaction(&mut self, mask_interaction: MaskInteraction) {
+                self.fbb_.push_slot::<MaskInteraction>(
+                    SpriteRenderer::VT_MASK_INTERACTION,
+                    mask_interaction,
+                    MaskInteraction::None,
+                );
+            }
+            #[inline]
+            pub fn add_sorting_layer_id(&mut self, sorting_layer_id: i32) {
+                self.fbb_.push_slot::<i32>(
+                    SpriteRenderer::VT_SORTING_LAYER_ID,
+                    sorting_layer_id,
+                    0,
+                );
+            }
+            #[inline]
+            pub fn add_sorting_layer_index(&mut self, sorting_layer_index: i32) {
+                self.fbb_.push_slot::<i32>(
+                    SpriteRenderer::VT_SORTING_LAYER_INDEX,
+                    sorting_layer_index,
+                    0,
+                );
+            }
+            #[inline]
+            pub fn add_sorting_order(&mut self, sorting_order: i32) {
+                self.fbb_
+                    .push_slot::<i32>(SpriteRenderer::VT_SORTING_ORDER, sorting_order, 0);
+            }
+            #[inline]
+            pub fn add_sort_point(&mut self, sort_point: SpriteSortPoint) {
+                self.fbb_.push_slot::<SpriteSortPoint>(
+                    SpriteRenderer::VT_SORT_POINT,
+                    sort_point,
+                    SpriteSortPoint::Center,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> SpriteRendererBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                SpriteRendererBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<SpriteRenderer<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                self.fbb_
+                    .required(o, SpriteRenderer::VT_MATERIALS, "materials");
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for SpriteRenderer<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("SpriteRenderer");
+                ds.field("sprite_asset_id", &self.sprite_asset_id());
+                ds.field("materials", &self.materials());
+                ds.field("color", &self.color());
+                ds.field("flip_x", &self.flip_x());
+                ds.field("flip_y", &self.flip_y());
+                ds.field("draw_mode", &self.draw_mode());
+                ds.field("size", &self.size());
+                ds.field("tile_mode", &self.tile_mode());
+                ds.field("adaptive_mode_threshold", &self.adaptive_mode_threshold());
+                ds.field("mask_interaction", &self.mask_interaction());
+                ds.field("sorting_layer_id", &self.sorting_layer_id());
+                ds.field("sorting_layer_index", &self.sorting_layer_index());
+                ds.field("sorting_order", &self.sorting_order());
+                ds.field("sort_point", &self.sort_point());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct SpriteRendererT {
+            pub sprite_asset_id: u32,
+            pub materials: alloc::vec::Vec<u32>,
+            pub color: Option<ColorT>,
+            pub flip_x: bool,
+            pub flip_y: bool,
+            pub draw_mode: SpriteDrawMode,
+            pub size: Option<Vec2T>,
+            pub tile_mode: u8,
+            pub adaptive_mode_threshold: f32,
+            pub mask_interaction: MaskInteraction,
+            pub sorting_layer_id: i32,
+            pub sorting_layer_index: i32,
+            pub sorting_order: i32,
+            pub sort_point: SpriteSortPoint,
+        }
+        impl Default for SpriteRendererT {
+            fn default() -> Self {
+                Self {
+                    sprite_asset_id: 0,
+                    materials: Default::default(),
+                    color: None,
+                    flip_x: false,
+                    flip_y: false,
+                    draw_mode: SpriteDrawMode::Simple,
+                    size: None,
+                    tile_mode: 0,
+                    adaptive_mode_threshold: 0.5,
+                    mask_interaction: MaskInteraction::None,
+                    sorting_layer_id: 0,
+                    sorting_layer_index: 0,
+                    sorting_order: 0,
+                    sort_point: SpriteSortPoint::Center,
+                }
+            }
+        }
+        impl SpriteRendererT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<SpriteRenderer<'b>> {
+                let sprite_asset_id = self.sprite_asset_id;
+                let materials = Some({
+                    let x = &self.materials;
+                    _fbb.create_vector(x)
+                });
+                let color_tmp = self.color.as_ref().map(|x| x.pack());
+                let color = color_tmp.as_ref();
+                let flip_x = self.flip_x;
+                let flip_y = self.flip_y;
+                let draw_mode = self.draw_mode;
+                let size_tmp = self.size.as_ref().map(|x| x.pack());
+                let size = size_tmp.as_ref();
+                let tile_mode = self.tile_mode;
+                let adaptive_mode_threshold = self.adaptive_mode_threshold;
+                let mask_interaction = self.mask_interaction;
+                let sorting_layer_id = self.sorting_layer_id;
+                let sorting_layer_index = self.sorting_layer_index;
+                let sorting_order = self.sorting_order;
+                let sort_point = self.sort_point;
+                SpriteRenderer::create(
+                    _fbb,
+                    &SpriteRendererArgs {
+                        sprite_asset_id,
+                        materials,
+                        color,
+                        flip_x,
+                        flip_y,
+                        draw_mode,
+                        size,
+                        tile_mode,
+                        adaptive_mode_threshold,
+                        mask_interaction,
+                        sorting_layer_id,
+                        sorting_layer_index,
+                        sorting_order,
+                        sort_point,
+                    },
+                )
+            }
+        }
+        pub enum SpriteMaskOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct SpriteMask<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for SpriteMask<'a> {
+            type Inner = SpriteMask<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> SpriteMask<'a> {
+            pub const VT_SPRITE_ASSET_ID: ::flatbuffers::VOffsetT = 4;
+            pub const VT_ALPHA_CUTOFF: ::flatbuffers::VOffsetT = 6;
+            pub const VT_CUSTOM_RANGE: ::flatbuffers::VOffsetT = 8;
+            pub const VT_FRONT_LAYER_ID: ::flatbuffers::VOffsetT = 10;
+            pub const VT_FRONT_LAYER_INDEX: ::flatbuffers::VOffsetT = 12;
+            pub const VT_FRONT_ORDER: ::flatbuffers::VOffsetT = 14;
+            pub const VT_BACK_LAYER_ID: ::flatbuffers::VOffsetT = 16;
+            pub const VT_BACK_LAYER_INDEX: ::flatbuffers::VOffsetT = 18;
+            pub const VT_BACK_ORDER: ::flatbuffers::VOffsetT = 20;
+            pub const VT_SORT_POINT: ::flatbuffers::VOffsetT = 22;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                SpriteMask { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args SpriteMaskArgs,
+            ) -> ::flatbuffers::WIPOffset<SpriteMask<'bldr>> {
+                let mut builder = SpriteMaskBuilder::new(_fbb);
+                builder.add_back_order(args.back_order);
+                builder.add_back_layer_index(args.back_layer_index);
+                builder.add_back_layer_id(args.back_layer_id);
+                builder.add_front_order(args.front_order);
+                builder.add_front_layer_index(args.front_layer_index);
+                builder.add_front_layer_id(args.front_layer_id);
+                builder.add_alpha_cutoff(args.alpha_cutoff);
+                builder.add_sprite_asset_id(args.sprite_asset_id);
+                builder.add_sort_point(args.sort_point);
+                builder.add_custom_range(args.custom_range);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> SpriteMaskT {
+                let sprite_asset_id = self.sprite_asset_id();
+                let alpha_cutoff = self.alpha_cutoff();
+                let custom_range = self.custom_range();
+                let front_layer_id = self.front_layer_id();
+                let front_layer_index = self.front_layer_index();
+                let front_order = self.front_order();
+                let back_layer_id = self.back_layer_id();
+                let back_layer_index = self.back_layer_index();
+                let back_order = self.back_order();
+                let sort_point = self.sort_point();
+                SpriteMaskT {
+                    sprite_asset_id,
+                    alpha_cutoff,
+                    custom_range,
+                    front_layer_id,
+                    front_layer_index,
+                    front_order,
+                    back_layer_id,
+                    back_layer_index,
+                    back_order,
+                    sort_point,
+                }
+            }
+
+            #[inline]
+            pub fn sprite_asset_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(SpriteMask::VT_SPRITE_ASSET_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn alpha_cutoff(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(SpriteMask::VT_ALPHA_CUTOFF, Some(0.5))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn custom_range(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(SpriteMask::VT_CUSTOM_RANGE, Some(false))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn front_layer_id(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(SpriteMask::VT_FRONT_LAYER_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn front_layer_index(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(SpriteMask::VT_FRONT_LAYER_INDEX, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn front_order(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(SpriteMask::VT_FRONT_ORDER, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn back_layer_id(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(SpriteMask::VT_BACK_LAYER_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn back_layer_index(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(SpriteMask::VT_BACK_LAYER_INDEX, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn back_order(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(SpriteMask::VT_BACK_ORDER, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn sort_point(&self) -> SpriteSortPoint {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<SpriteSortPoint>(
+                            SpriteMask::VT_SORT_POINT,
+                            Some(SpriteSortPoint::Center),
+                        )
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for SpriteMask<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<u32>("sprite_asset_id", Self::VT_SPRITE_ASSET_ID, false)?
+                    .visit_field::<f32>("alpha_cutoff", Self::VT_ALPHA_CUTOFF, false)?
+                    .visit_field::<bool>("custom_range", Self::VT_CUSTOM_RANGE, false)?
+                    .visit_field::<i32>("front_layer_id", Self::VT_FRONT_LAYER_ID, false)?
+                    .visit_field::<i32>("front_layer_index", Self::VT_FRONT_LAYER_INDEX, false)?
+                    .visit_field::<i32>("front_order", Self::VT_FRONT_ORDER, false)?
+                    .visit_field::<i32>("back_layer_id", Self::VT_BACK_LAYER_ID, false)?
+                    .visit_field::<i32>("back_layer_index", Self::VT_BACK_LAYER_INDEX, false)?
+                    .visit_field::<i32>("back_order", Self::VT_BACK_ORDER, false)?
+                    .visit_field::<SpriteSortPoint>("sort_point", Self::VT_SORT_POINT, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct SpriteMaskArgs {
+            pub sprite_asset_id: u32,
+            pub alpha_cutoff: f32,
+            pub custom_range: bool,
+            pub front_layer_id: i32,
+            pub front_layer_index: i32,
+            pub front_order: i32,
+            pub back_layer_id: i32,
+            pub back_layer_index: i32,
+            pub back_order: i32,
+            pub sort_point: SpriteSortPoint,
+        }
+        impl<'a> Default for SpriteMaskArgs {
+            #[inline]
+            fn default() -> Self {
+                SpriteMaskArgs {
+                    sprite_asset_id: 0,
+                    alpha_cutoff: 0.5,
+                    custom_range: false,
+                    front_layer_id: 0,
+                    front_layer_index: 0,
+                    front_order: 0,
+                    back_layer_id: 0,
+                    back_layer_index: 0,
+                    back_order: 0,
+                    sort_point: SpriteSortPoint::Center,
+                }
+            }
+        }
+
+        impl Serialize for SpriteMask<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("SpriteMask", 10)?;
+                s.serialize_field("sprite_asset_id", &self.sprite_asset_id())?;
+                s.serialize_field("alpha_cutoff", &self.alpha_cutoff())?;
+                s.serialize_field("custom_range", &self.custom_range())?;
+                s.serialize_field("front_layer_id", &self.front_layer_id())?;
+                s.serialize_field("front_layer_index", &self.front_layer_index())?;
+                s.serialize_field("front_order", &self.front_order())?;
+                s.serialize_field("back_layer_id", &self.back_layer_id())?;
+                s.serialize_field("back_layer_index", &self.back_layer_index())?;
+                s.serialize_field("back_order", &self.back_order())?;
+                s.serialize_field("sort_point", &self.sort_point())?;
+                s.end()
+            }
+        }
+
+        pub struct SpriteMaskBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> SpriteMaskBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_sprite_asset_id(&mut self, sprite_asset_id: u32) {
+                self.fbb_
+                    .push_slot::<u32>(SpriteMask::VT_SPRITE_ASSET_ID, sprite_asset_id, 0);
+            }
+            #[inline]
+            pub fn add_alpha_cutoff(&mut self, alpha_cutoff: f32) {
+                self.fbb_
+                    .push_slot::<f32>(SpriteMask::VT_ALPHA_CUTOFF, alpha_cutoff, 0.5);
+            }
+            #[inline]
+            pub fn add_custom_range(&mut self, custom_range: bool) {
+                self.fbb_
+                    .push_slot::<bool>(SpriteMask::VT_CUSTOM_RANGE, custom_range, false);
+            }
+            #[inline]
+            pub fn add_front_layer_id(&mut self, front_layer_id: i32) {
+                self.fbb_
+                    .push_slot::<i32>(SpriteMask::VT_FRONT_LAYER_ID, front_layer_id, 0);
+            }
+            #[inline]
+            pub fn add_front_layer_index(&mut self, front_layer_index: i32) {
+                self.fbb_
+                    .push_slot::<i32>(SpriteMask::VT_FRONT_LAYER_INDEX, front_layer_index, 0);
+            }
+            #[inline]
+            pub fn add_front_order(&mut self, front_order: i32) {
+                self.fbb_
+                    .push_slot::<i32>(SpriteMask::VT_FRONT_ORDER, front_order, 0);
+            }
+            #[inline]
+            pub fn add_back_layer_id(&mut self, back_layer_id: i32) {
+                self.fbb_
+                    .push_slot::<i32>(SpriteMask::VT_BACK_LAYER_ID, back_layer_id, 0);
+            }
+            #[inline]
+            pub fn add_back_layer_index(&mut self, back_layer_index: i32) {
+                self.fbb_
+                    .push_slot::<i32>(SpriteMask::VT_BACK_LAYER_INDEX, back_layer_index, 0);
+            }
+            #[inline]
+            pub fn add_back_order(&mut self, back_order: i32) {
+                self.fbb_
+                    .push_slot::<i32>(SpriteMask::VT_BACK_ORDER, back_order, 0);
+            }
+            #[inline]
+            pub fn add_sort_point(&mut self, sort_point: SpriteSortPoint) {
+                self.fbb_.push_slot::<SpriteSortPoint>(
+                    SpriteMask::VT_SORT_POINT,
+                    sort_point,
+                    SpriteSortPoint::Center,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> SpriteMaskBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                SpriteMaskBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<SpriteMask<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for SpriteMask<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("SpriteMask");
+                ds.field("sprite_asset_id", &self.sprite_asset_id());
+                ds.field("alpha_cutoff", &self.alpha_cutoff());
+                ds.field("custom_range", &self.custom_range());
+                ds.field("front_layer_id", &self.front_layer_id());
+                ds.field("front_layer_index", &self.front_layer_index());
+                ds.field("front_order", &self.front_order());
+                ds.field("back_layer_id", &self.back_layer_id());
+                ds.field("back_layer_index", &self.back_layer_index());
+                ds.field("back_order", &self.back_order());
+                ds.field("sort_point", &self.sort_point());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct SpriteMaskT {
+            pub sprite_asset_id: u32,
+            pub alpha_cutoff: f32,
+            pub custom_range: bool,
+            pub front_layer_id: i32,
+            pub front_layer_index: i32,
+            pub front_order: i32,
+            pub back_layer_id: i32,
+            pub back_layer_index: i32,
+            pub back_order: i32,
+            pub sort_point: SpriteSortPoint,
+        }
+        impl Default for SpriteMaskT {
+            fn default() -> Self {
+                Self {
+                    sprite_asset_id: 0,
+                    alpha_cutoff: 0.5,
+                    custom_range: false,
+                    front_layer_id: 0,
+                    front_layer_index: 0,
+                    front_order: 0,
+                    back_layer_id: 0,
+                    back_layer_index: 0,
+                    back_order: 0,
+                    sort_point: SpriteSortPoint::Center,
+                }
+            }
+        }
+        impl SpriteMaskT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<SpriteMask<'b>> {
+                let sprite_asset_id = self.sprite_asset_id;
+                let alpha_cutoff = self.alpha_cutoff;
+                let custom_range = self.custom_range;
+                let front_layer_id = self.front_layer_id;
+                let front_layer_index = self.front_layer_index;
+                let front_order = self.front_order;
+                let back_layer_id = self.back_layer_id;
+                let back_layer_index = self.back_layer_index;
+                let back_order = self.back_order;
+                let sort_point = self.sort_point;
+                SpriteMask::create(
+                    _fbb,
+                    &SpriteMaskArgs {
+                        sprite_asset_id,
+                        alpha_cutoff,
+                        custom_range,
+                        front_layer_id,
+                        front_layer_index,
+                        front_order,
+                        back_layer_id,
+                        back_layer_index,
+                        back_order,
+                        sort_point,
+                    },
+                )
+            }
+        }
+        pub enum CanvasOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct Canvas<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for Canvas<'a> {
+            type Inner = Canvas<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> Canvas<'a> {
+            pub const VT_MODE: ::flatbuffers::VOffsetT = 4;
+            pub const VT_CAMERA_COMPONENT_ID: ::flatbuffers::VOffsetT = 6;
+            pub const VT_HOST_CAMERA_SLOT: ::flatbuffers::VOffsetT = 8;
+            pub const VT_PLANE_DISTANCE: ::flatbuffers::VOffsetT = 10;
+            pub const VT_PIXEL_PERFECT: ::flatbuffers::VOffsetT = 12;
+            pub const VT_OVERRIDE_PIXEL_PERFECT: ::flatbuffers::VOffsetT = 14;
+            pub const VT_OVERRIDE_SORTING: ::flatbuffers::VOffsetT = 16;
+            pub const VT_SORTING_LAYER_ID: ::flatbuffers::VOffsetT = 18;
+            pub const VT_SORTING_ORDER: ::flatbuffers::VOffsetT = 20;
+            pub const VT_ADDITIONAL_SHADER_CHANNELS: ::flatbuffers::VOffsetT = 22;
+            pub const VT_TARGET_DISPLAY: ::flatbuffers::VOffsetT = 24;
+            pub const VT_VERTEX_COLOR_GAMMA: ::flatbuffers::VOffsetT = 26;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                Canvas { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args CanvasArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<Canvas<'bldr>> {
+                let mut builder = CanvasBuilder::new(_fbb);
+                builder.add_target_display(args.target_display);
+                builder.add_additional_shader_channels(args.additional_shader_channels);
+                builder.add_sorting_order(args.sorting_order);
+                builder.add_sorting_layer_id(args.sorting_layer_id);
+                builder.add_plane_distance(args.plane_distance);
+                if let Some(x) = args.host_camera_slot {
+                    builder.add_host_camera_slot(x);
+                }
+                builder.add_camera_component_id(args.camera_component_id);
+                builder.add_vertex_color_gamma(args.vertex_color_gamma);
+                builder.add_override_sorting(args.override_sorting);
+                builder.add_override_pixel_perfect(args.override_pixel_perfect);
+                builder.add_pixel_perfect(args.pixel_perfect);
+                builder.add_mode(args.mode);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> CanvasT {
+                let mode = self.mode();
+                let camera_component_id = self.camera_component_id();
+                let host_camera_slot = self
+                    .host_camera_slot()
+                    .map(|x| alloc::string::ToString::to_string(x));
+                let plane_distance = self.plane_distance();
+                let pixel_perfect = self.pixel_perfect();
+                let override_pixel_perfect = self.override_pixel_perfect();
+                let override_sorting = self.override_sorting();
+                let sorting_layer_id = self.sorting_layer_id();
+                let sorting_order = self.sorting_order();
+                let additional_shader_channels = self.additional_shader_channels();
+                let target_display = self.target_display();
+                let vertex_color_gamma = self.vertex_color_gamma();
+                CanvasT {
+                    mode,
+                    camera_component_id,
+                    host_camera_slot,
+                    plane_distance,
+                    pixel_perfect,
+                    override_pixel_perfect,
+                    override_sorting,
+                    sorting_layer_id,
+                    sorting_order,
+                    additional_shader_channels,
+                    target_display,
+                    vertex_color_gamma,
+                }
+            }
+
+            #[inline]
+            pub fn mode(&self) -> CanvasMode {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<CanvasMode>(Canvas::VT_MODE, Some(CanvasMode::ScreenOverlay))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn camera_component_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(Canvas::VT_CAMERA_COMPONENT_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn host_camera_slot(&self) -> Option<&'a str> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab.get::<::flatbuffers::ForwardsUOffset<&str>>(
+                        Canvas::VT_HOST_CAMERA_SLOT,
+                        None,
+                    )
+                }
+            }
+            #[inline]
+            pub fn plane_distance(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(Canvas::VT_PLANE_DISTANCE, Some(0.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn pixel_perfect(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(Canvas::VT_PIXEL_PERFECT, Some(false))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn override_pixel_perfect(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(Canvas::VT_OVERRIDE_PIXEL_PERFECT, Some(false))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn override_sorting(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(Canvas::VT_OVERRIDE_SORTING, Some(false))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn sorting_layer_id(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(Canvas::VT_SORTING_LAYER_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn sorting_order(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(Canvas::VT_SORTING_ORDER, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn additional_shader_channels(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(Canvas::VT_ADDITIONAL_SHADER_CHANNELS, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn target_display(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(Canvas::VT_TARGET_DISPLAY, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn vertex_color_gamma(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(Canvas::VT_VERTEX_COLOR_GAMMA, Some(false))
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for Canvas<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<CanvasMode>("mode", Self::VT_MODE, false)?
+                    .visit_field::<u32>("camera_component_id", Self::VT_CAMERA_COMPONENT_ID, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<&str>>(
+                        "host_camera_slot",
+                        Self::VT_HOST_CAMERA_SLOT,
+                        false,
+                    )?
+                    .visit_field::<f32>("plane_distance", Self::VT_PLANE_DISTANCE, false)?
+                    .visit_field::<bool>("pixel_perfect", Self::VT_PIXEL_PERFECT, false)?
+                    .visit_field::<bool>(
+                        "override_pixel_perfect",
+                        Self::VT_OVERRIDE_PIXEL_PERFECT,
+                        false,
+                    )?
+                    .visit_field::<bool>("override_sorting", Self::VT_OVERRIDE_SORTING, false)?
+                    .visit_field::<i32>("sorting_layer_id", Self::VT_SORTING_LAYER_ID, false)?
+                    .visit_field::<i32>("sorting_order", Self::VT_SORTING_ORDER, false)?
+                    .visit_field::<u32>(
+                        "additional_shader_channels",
+                        Self::VT_ADDITIONAL_SHADER_CHANNELS,
+                        false,
+                    )?
+                    .visit_field::<u32>("target_display", Self::VT_TARGET_DISPLAY, false)?
+                    .visit_field::<bool>("vertex_color_gamma", Self::VT_VERTEX_COLOR_GAMMA, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct CanvasArgs<'a> {
+            pub mode: CanvasMode,
+            pub camera_component_id: u32,
+            pub host_camera_slot: Option<::flatbuffers::WIPOffset<&'a str>>,
+            pub plane_distance: f32,
+            pub pixel_perfect: bool,
+            pub override_pixel_perfect: bool,
+            pub override_sorting: bool,
+            pub sorting_layer_id: i32,
+            pub sorting_order: i32,
+            pub additional_shader_channels: u32,
+            pub target_display: u32,
+            pub vertex_color_gamma: bool,
+        }
+        impl<'a> Default for CanvasArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                CanvasArgs {
+                    mode: CanvasMode::ScreenOverlay,
+                    camera_component_id: 0,
+                    host_camera_slot: None,
+                    plane_distance: 0.0,
+                    pixel_perfect: false,
+                    override_pixel_perfect: false,
+                    override_sorting: false,
+                    sorting_layer_id: 0,
+                    sorting_order: 0,
+                    additional_shader_channels: 0,
+                    target_display: 0,
+                    vertex_color_gamma: false,
+                }
+            }
+        }
+
+        impl Serialize for Canvas<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("Canvas", 12)?;
+                s.serialize_field("mode", &self.mode())?;
+                s.serialize_field("camera_component_id", &self.camera_component_id())?;
+                if let Some(f) = self.host_camera_slot() {
+                    s.serialize_field("host_camera_slot", &f)?;
+                } else {
+                    s.skip_field("host_camera_slot")?;
+                }
+                s.serialize_field("plane_distance", &self.plane_distance())?;
+                s.serialize_field("pixel_perfect", &self.pixel_perfect())?;
+                s.serialize_field("override_pixel_perfect", &self.override_pixel_perfect())?;
+                s.serialize_field("override_sorting", &self.override_sorting())?;
+                s.serialize_field("sorting_layer_id", &self.sorting_layer_id())?;
+                s.serialize_field("sorting_order", &self.sorting_order())?;
+                s.serialize_field(
+                    "additional_shader_channels",
+                    &self.additional_shader_channels(),
+                )?;
+                s.serialize_field("target_display", &self.target_display())?;
+                s.serialize_field("vertex_color_gamma", &self.vertex_color_gamma())?;
+                s.end()
+            }
+        }
+
+        pub struct CanvasBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> CanvasBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_mode(&mut self, mode: CanvasMode) {
+                self.fbb_
+                    .push_slot::<CanvasMode>(Canvas::VT_MODE, mode, CanvasMode::ScreenOverlay);
+            }
+            #[inline]
+            pub fn add_camera_component_id(&mut self, camera_component_id: u32) {
+                self.fbb_
+                    .push_slot::<u32>(Canvas::VT_CAMERA_COMPONENT_ID, camera_component_id, 0);
+            }
+            #[inline]
+            pub fn add_host_camera_slot(
+                &mut self,
+                host_camera_slot: ::flatbuffers::WIPOffset<&'b str>,
+            ) {
+                self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(
+                    Canvas::VT_HOST_CAMERA_SLOT,
+                    host_camera_slot,
+                );
+            }
+            #[inline]
+            pub fn add_plane_distance(&mut self, plane_distance: f32) {
+                self.fbb_
+                    .push_slot::<f32>(Canvas::VT_PLANE_DISTANCE, plane_distance, 0.0);
+            }
+            #[inline]
+            pub fn add_pixel_perfect(&mut self, pixel_perfect: bool) {
+                self.fbb_
+                    .push_slot::<bool>(Canvas::VT_PIXEL_PERFECT, pixel_perfect, false);
+            }
+            #[inline]
+            pub fn add_override_pixel_perfect(&mut self, override_pixel_perfect: bool) {
+                self.fbb_.push_slot::<bool>(
+                    Canvas::VT_OVERRIDE_PIXEL_PERFECT,
+                    override_pixel_perfect,
+                    false,
+                );
+            }
+            #[inline]
+            pub fn add_override_sorting(&mut self, override_sorting: bool) {
+                self.fbb_
+                    .push_slot::<bool>(Canvas::VT_OVERRIDE_SORTING, override_sorting, false);
+            }
+            #[inline]
+            pub fn add_sorting_layer_id(&mut self, sorting_layer_id: i32) {
+                self.fbb_
+                    .push_slot::<i32>(Canvas::VT_SORTING_LAYER_ID, sorting_layer_id, 0);
+            }
+            #[inline]
+            pub fn add_sorting_order(&mut self, sorting_order: i32) {
+                self.fbb_
+                    .push_slot::<i32>(Canvas::VT_SORTING_ORDER, sorting_order, 0);
+            }
+            #[inline]
+            pub fn add_additional_shader_channels(&mut self, additional_shader_channels: u32) {
+                self.fbb_.push_slot::<u32>(
+                    Canvas::VT_ADDITIONAL_SHADER_CHANNELS,
+                    additional_shader_channels,
+                    0,
+                );
+            }
+            #[inline]
+            pub fn add_target_display(&mut self, target_display: u32) {
+                self.fbb_
+                    .push_slot::<u32>(Canvas::VT_TARGET_DISPLAY, target_display, 0);
+            }
+            #[inline]
+            pub fn add_vertex_color_gamma(&mut self, vertex_color_gamma: bool) {
+                self.fbb_.push_slot::<bool>(
+                    Canvas::VT_VERTEX_COLOR_GAMMA,
+                    vertex_color_gamma,
+                    false,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> CanvasBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                CanvasBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<Canvas<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for Canvas<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("Canvas");
+                ds.field("mode", &self.mode());
+                ds.field("camera_component_id", &self.camera_component_id());
+                ds.field("host_camera_slot", &self.host_camera_slot());
+                ds.field("plane_distance", &self.plane_distance());
+                ds.field("pixel_perfect", &self.pixel_perfect());
+                ds.field("override_pixel_perfect", &self.override_pixel_perfect());
+                ds.field("override_sorting", &self.override_sorting());
+                ds.field("sorting_layer_id", &self.sorting_layer_id());
+                ds.field("sorting_order", &self.sorting_order());
+                ds.field(
+                    "additional_shader_channels",
+                    &self.additional_shader_channels(),
+                );
+                ds.field("target_display", &self.target_display());
+                ds.field("vertex_color_gamma", &self.vertex_color_gamma());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct CanvasT {
+            pub mode: CanvasMode,
+            pub camera_component_id: u32,
+            pub host_camera_slot: Option<alloc::string::String>,
+            pub plane_distance: f32,
+            pub pixel_perfect: bool,
+            pub override_pixel_perfect: bool,
+            pub override_sorting: bool,
+            pub sorting_layer_id: i32,
+            pub sorting_order: i32,
+            pub additional_shader_channels: u32,
+            pub target_display: u32,
+            pub vertex_color_gamma: bool,
+        }
+        impl Default for CanvasT {
+            fn default() -> Self {
+                Self {
+                    mode: CanvasMode::ScreenOverlay,
+                    camera_component_id: 0,
+                    host_camera_slot: None,
+                    plane_distance: 0.0,
+                    pixel_perfect: false,
+                    override_pixel_perfect: false,
+                    override_sorting: false,
+                    sorting_layer_id: 0,
+                    sorting_order: 0,
+                    additional_shader_channels: 0,
+                    target_display: 0,
+                    vertex_color_gamma: false,
+                }
+            }
+        }
+        impl CanvasT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<Canvas<'b>> {
+                let mode = self.mode;
+                let camera_component_id = self.camera_component_id;
+                let host_camera_slot = self
+                    .host_camera_slot
+                    .as_ref()
+                    .map(|x| _fbb.create_string(x));
+                let plane_distance = self.plane_distance;
+                let pixel_perfect = self.pixel_perfect;
+                let override_pixel_perfect = self.override_pixel_perfect;
+                let override_sorting = self.override_sorting;
+                let sorting_layer_id = self.sorting_layer_id;
+                let sorting_order = self.sorting_order;
+                let additional_shader_channels = self.additional_shader_channels;
+                let target_display = self.target_display;
+                let vertex_color_gamma = self.vertex_color_gamma;
+                Canvas::create(
+                    _fbb,
+                    &CanvasArgs {
+                        mode,
+                        camera_component_id,
+                        host_camera_slot,
+                        plane_distance,
+                        pixel_perfect,
+                        override_pixel_perfect,
+                        override_sorting,
+                        sorting_layer_id,
+                        sorting_order,
+                        additional_shader_channels,
+                        target_display,
+                        vertex_color_gamma,
+                    },
+                )
+            }
+        }
+        pub enum CanvasRendererOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct CanvasRenderer<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for CanvasRenderer<'a> {
+            type Inner = CanvasRenderer<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> CanvasRenderer<'a> {
+            pub const VT_CULL_TRANSPARENT_MESH: ::flatbuffers::VOffsetT = 4;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                CanvasRenderer { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args CanvasRendererArgs,
+            ) -> ::flatbuffers::WIPOffset<CanvasRenderer<'bldr>> {
+                let mut builder = CanvasRendererBuilder::new(_fbb);
+                builder.add_cull_transparent_mesh(args.cull_transparent_mesh);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> CanvasRendererT {
+                let cull_transparent_mesh = self.cull_transparent_mesh();
+                CanvasRendererT {
+                    cull_transparent_mesh,
+                }
+            }
+
+            #[inline]
+            pub fn cull_transparent_mesh(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(CanvasRenderer::VT_CULL_TRANSPARENT_MESH, Some(false))
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for CanvasRenderer<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<bool>(
+                        "cull_transparent_mesh",
+                        Self::VT_CULL_TRANSPARENT_MESH,
+                        false,
+                    )?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct CanvasRendererArgs {
+            pub cull_transparent_mesh: bool,
+        }
+        impl<'a> Default for CanvasRendererArgs {
+            #[inline]
+            fn default() -> Self {
+                CanvasRendererArgs {
+                    cull_transparent_mesh: false,
+                }
+            }
+        }
+
+        impl Serialize for CanvasRenderer<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("CanvasRenderer", 1)?;
+                s.serialize_field("cull_transparent_mesh", &self.cull_transparent_mesh())?;
+                s.end()
+            }
+        }
+
+        pub struct CanvasRendererBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> CanvasRendererBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_cull_transparent_mesh(&mut self, cull_transparent_mesh: bool) {
+                self.fbb_.push_slot::<bool>(
+                    CanvasRenderer::VT_CULL_TRANSPARENT_MESH,
+                    cull_transparent_mesh,
+                    false,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> CanvasRendererBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                CanvasRendererBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<CanvasRenderer<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for CanvasRenderer<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("CanvasRenderer");
+                ds.field("cull_transparent_mesh", &self.cull_transparent_mesh());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct CanvasRendererT {
+            pub cull_transparent_mesh: bool,
+        }
+        impl Default for CanvasRendererT {
+            fn default() -> Self {
+                Self {
+                    cull_transparent_mesh: false,
+                }
+            }
+        }
+        impl CanvasRendererT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<CanvasRenderer<'b>> {
+                let cull_transparent_mesh = self.cull_transparent_mesh;
+                CanvasRenderer::create(
+                    _fbb,
+                    &CanvasRendererArgs {
+                        cull_transparent_mesh,
+                    },
+                )
+            }
+        }
+        pub enum UIImageOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct UIImage<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for UIImage<'a> {
+            type Inner = UIImage<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> UIImage<'a> {
+            pub const VT_SPRITE_ASSET_ID: ::flatbuffers::VOffsetT = 4;
+            pub const VT_OVERRIDE_SPRITE_ASSET_ID: ::flatbuffers::VOffsetT = 6;
+            pub const VT_MATERIAL_ID: ::flatbuffers::VOffsetT = 8;
+            pub const VT_COLOR: ::flatbuffers::VOffsetT = 10;
+            pub const VT_TYPE_: ::flatbuffers::VOffsetT = 12;
+            pub const VT_PRESERVE_ASPECT: ::flatbuffers::VOffsetT = 14;
+            pub const VT_FILL_CENTER: ::flatbuffers::VOffsetT = 16;
+            pub const VT_FILL_METHOD: ::flatbuffers::VOffsetT = 18;
+            pub const VT_FILL_AMOUNT: ::flatbuffers::VOffsetT = 20;
+            pub const VT_FILL_CLOCKWISE: ::flatbuffers::VOffsetT = 22;
+            pub const VT_FILL_ORIGIN: ::flatbuffers::VOffsetT = 24;
+            pub const VT_USE_SPRITE_MESH: ::flatbuffers::VOffsetT = 26;
+            pub const VT_PIXELS_PER_UNIT_MULTIPLIER: ::flatbuffers::VOffsetT = 28;
+            pub const VT_MASKABLE: ::flatbuffers::VOffsetT = 30;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                UIImage { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args UIImageArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<UIImage<'bldr>> {
+                let mut builder = UIImageBuilder::new(_fbb);
+                builder.add_pixels_per_unit_multiplier(args.pixels_per_unit_multiplier);
+                builder.add_fill_amount(args.fill_amount);
+                if let Some(x) = args.color {
+                    builder.add_color(x);
+                }
+                builder.add_material_id(args.material_id);
+                builder.add_override_sprite_asset_id(args.override_sprite_asset_id);
+                builder.add_sprite_asset_id(args.sprite_asset_id);
+                builder.add_maskable(args.maskable);
+                builder.add_use_sprite_mesh(args.use_sprite_mesh);
+                builder.add_fill_origin(args.fill_origin);
+                builder.add_fill_clockwise(args.fill_clockwise);
+                builder.add_fill_method(args.fill_method);
+                builder.add_fill_center(args.fill_center);
+                builder.add_preserve_aspect(args.preserve_aspect);
+                builder.add_type_(args.type_);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> UIImageT {
+                let sprite_asset_id = self.sprite_asset_id();
+                let override_sprite_asset_id = self.override_sprite_asset_id();
+                let material_id = self.material_id();
+                let color = self.color().map(|x| x.unpack());
+                let type_ = self.type_();
+                let preserve_aspect = self.preserve_aspect();
+                let fill_center = self.fill_center();
+                let fill_method = self.fill_method();
+                let fill_amount = self.fill_amount();
+                let fill_clockwise = self.fill_clockwise();
+                let fill_origin = self.fill_origin();
+                let use_sprite_mesh = self.use_sprite_mesh();
+                let pixels_per_unit_multiplier = self.pixels_per_unit_multiplier();
+                let maskable = self.maskable();
+                UIImageT {
+                    sprite_asset_id,
+                    override_sprite_asset_id,
+                    material_id,
+                    color,
+                    type_,
+                    preserve_aspect,
+                    fill_center,
+                    fill_method,
+                    fill_amount,
+                    fill_clockwise,
+                    fill_origin,
+                    use_sprite_mesh,
+                    pixels_per_unit_multiplier,
+                    maskable,
+                }
+            }
+
+            #[inline]
+            pub fn sprite_asset_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(UIImage::VT_SPRITE_ASSET_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn override_sprite_asset_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(UIImage::VT_OVERRIDE_SPRITE_ASSET_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn material_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(UIImage::VT_MATERIAL_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn color(&self) -> Option<&'a Color> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe { self._tab.get::<Color>(UIImage::VT_COLOR, None) }
+            }
+            #[inline]
+            pub fn type_(&self) -> ImageType {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<ImageType>(UIImage::VT_TYPE_, Some(ImageType::Simple))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn preserve_aspect(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(UIImage::VT_PRESERVE_ASPECT, Some(false))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn fill_center(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(UIImage::VT_FILL_CENTER, Some(true))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn fill_method(&self) -> u8 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u8>(UIImage::VT_FILL_METHOD, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn fill_amount(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(UIImage::VT_FILL_AMOUNT, Some(1.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn fill_clockwise(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(UIImage::VT_FILL_CLOCKWISE, Some(true))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn fill_origin(&self) -> u8 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u8>(UIImage::VT_FILL_ORIGIN, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn use_sprite_mesh(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(UIImage::VT_USE_SPRITE_MESH, Some(false))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn pixels_per_unit_multiplier(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(UIImage::VT_PIXELS_PER_UNIT_MULTIPLIER, Some(1.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn maskable(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(UIImage::VT_MASKABLE, Some(true))
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for UIImage<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<u32>("sprite_asset_id", Self::VT_SPRITE_ASSET_ID, false)?
+                    .visit_field::<u32>(
+                        "override_sprite_asset_id",
+                        Self::VT_OVERRIDE_SPRITE_ASSET_ID,
+                        false,
+                    )?
+                    .visit_field::<u32>("material_id", Self::VT_MATERIAL_ID, false)?
+                    .visit_field::<Color>("color", Self::VT_COLOR, false)?
+                    .visit_field::<ImageType>("type_", Self::VT_TYPE_, false)?
+                    .visit_field::<bool>("preserve_aspect", Self::VT_PRESERVE_ASPECT, false)?
+                    .visit_field::<bool>("fill_center", Self::VT_FILL_CENTER, false)?
+                    .visit_field::<u8>("fill_method", Self::VT_FILL_METHOD, false)?
+                    .visit_field::<f32>("fill_amount", Self::VT_FILL_AMOUNT, false)?
+                    .visit_field::<bool>("fill_clockwise", Self::VT_FILL_CLOCKWISE, false)?
+                    .visit_field::<u8>("fill_origin", Self::VT_FILL_ORIGIN, false)?
+                    .visit_field::<bool>("use_sprite_mesh", Self::VT_USE_SPRITE_MESH, false)?
+                    .visit_field::<f32>(
+                        "pixels_per_unit_multiplier",
+                        Self::VT_PIXELS_PER_UNIT_MULTIPLIER,
+                        false,
+                    )?
+                    .visit_field::<bool>("maskable", Self::VT_MASKABLE, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct UIImageArgs<'a> {
+            pub sprite_asset_id: u32,
+            pub override_sprite_asset_id: u32,
+            pub material_id: u32,
+            pub color: Option<&'a Color>,
+            pub type_: ImageType,
+            pub preserve_aspect: bool,
+            pub fill_center: bool,
+            pub fill_method: u8,
+            pub fill_amount: f32,
+            pub fill_clockwise: bool,
+            pub fill_origin: u8,
+            pub use_sprite_mesh: bool,
+            pub pixels_per_unit_multiplier: f32,
+            pub maskable: bool,
+        }
+        impl<'a> Default for UIImageArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                UIImageArgs {
+                    sprite_asset_id: 0,
+                    override_sprite_asset_id: 0,
+                    material_id: 0,
+                    color: None,
+                    type_: ImageType::Simple,
+                    preserve_aspect: false,
+                    fill_center: true,
+                    fill_method: 0,
+                    fill_amount: 1.0,
+                    fill_clockwise: true,
+                    fill_origin: 0,
+                    use_sprite_mesh: false,
+                    pixels_per_unit_multiplier: 1.0,
+                    maskable: true,
+                }
+            }
+        }
+
+        impl Serialize for UIImage<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("UIImage", 14)?;
+                s.serialize_field("sprite_asset_id", &self.sprite_asset_id())?;
+                s.serialize_field("override_sprite_asset_id", &self.override_sprite_asset_id())?;
+                s.serialize_field("material_id", &self.material_id())?;
+                if let Some(f) = self.color() {
+                    s.serialize_field("color", &f)?;
+                } else {
+                    s.skip_field("color")?;
+                }
+                s.serialize_field("type_", &self.type_())?;
+                s.serialize_field("preserve_aspect", &self.preserve_aspect())?;
+                s.serialize_field("fill_center", &self.fill_center())?;
+                s.serialize_field("fill_method", &self.fill_method())?;
+                s.serialize_field("fill_amount", &self.fill_amount())?;
+                s.serialize_field("fill_clockwise", &self.fill_clockwise())?;
+                s.serialize_field("fill_origin", &self.fill_origin())?;
+                s.serialize_field("use_sprite_mesh", &self.use_sprite_mesh())?;
+                s.serialize_field(
+                    "pixels_per_unit_multiplier",
+                    &self.pixels_per_unit_multiplier(),
+                )?;
+                s.serialize_field("maskable", &self.maskable())?;
+                s.end()
+            }
+        }
+
+        pub struct UIImageBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> UIImageBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_sprite_asset_id(&mut self, sprite_asset_id: u32) {
+                self.fbb_
+                    .push_slot::<u32>(UIImage::VT_SPRITE_ASSET_ID, sprite_asset_id, 0);
+            }
+            #[inline]
+            pub fn add_override_sprite_asset_id(&mut self, override_sprite_asset_id: u32) {
+                self.fbb_.push_slot::<u32>(
+                    UIImage::VT_OVERRIDE_SPRITE_ASSET_ID,
+                    override_sprite_asset_id,
+                    0,
+                );
+            }
+            #[inline]
+            pub fn add_material_id(&mut self, material_id: u32) {
+                self.fbb_
+                    .push_slot::<u32>(UIImage::VT_MATERIAL_ID, material_id, 0);
+            }
+            #[inline]
+            pub fn add_color(&mut self, color: &Color) {
+                self.fbb_
+                    .push_slot_always::<&Color>(UIImage::VT_COLOR, color);
+            }
+            #[inline]
+            pub fn add_type_(&mut self, type_: ImageType) {
+                self.fbb_
+                    .push_slot::<ImageType>(UIImage::VT_TYPE_, type_, ImageType::Simple);
+            }
+            #[inline]
+            pub fn add_preserve_aspect(&mut self, preserve_aspect: bool) {
+                self.fbb_
+                    .push_slot::<bool>(UIImage::VT_PRESERVE_ASPECT, preserve_aspect, false);
+            }
+            #[inline]
+            pub fn add_fill_center(&mut self, fill_center: bool) {
+                self.fbb_
+                    .push_slot::<bool>(UIImage::VT_FILL_CENTER, fill_center, true);
+            }
+            #[inline]
+            pub fn add_fill_method(&mut self, fill_method: u8) {
+                self.fbb_
+                    .push_slot::<u8>(UIImage::VT_FILL_METHOD, fill_method, 0);
+            }
+            #[inline]
+            pub fn add_fill_amount(&mut self, fill_amount: f32) {
+                self.fbb_
+                    .push_slot::<f32>(UIImage::VT_FILL_AMOUNT, fill_amount, 1.0);
+            }
+            #[inline]
+            pub fn add_fill_clockwise(&mut self, fill_clockwise: bool) {
+                self.fbb_
+                    .push_slot::<bool>(UIImage::VT_FILL_CLOCKWISE, fill_clockwise, true);
+            }
+            #[inline]
+            pub fn add_fill_origin(&mut self, fill_origin: u8) {
+                self.fbb_
+                    .push_slot::<u8>(UIImage::VT_FILL_ORIGIN, fill_origin, 0);
+            }
+            #[inline]
+            pub fn add_use_sprite_mesh(&mut self, use_sprite_mesh: bool) {
+                self.fbb_
+                    .push_slot::<bool>(UIImage::VT_USE_SPRITE_MESH, use_sprite_mesh, false);
+            }
+            #[inline]
+            pub fn add_pixels_per_unit_multiplier(&mut self, pixels_per_unit_multiplier: f32) {
+                self.fbb_.push_slot::<f32>(
+                    UIImage::VT_PIXELS_PER_UNIT_MULTIPLIER,
+                    pixels_per_unit_multiplier,
+                    1.0,
+                );
+            }
+            #[inline]
+            pub fn add_maskable(&mut self, maskable: bool) {
+                self.fbb_
+                    .push_slot::<bool>(UIImage::VT_MASKABLE, maskable, true);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> UIImageBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                UIImageBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<UIImage<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for UIImage<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("UIImage");
+                ds.field("sprite_asset_id", &self.sprite_asset_id());
+                ds.field("override_sprite_asset_id", &self.override_sprite_asset_id());
+                ds.field("material_id", &self.material_id());
+                ds.field("color", &self.color());
+                ds.field("type_", &self.type_());
+                ds.field("preserve_aspect", &self.preserve_aspect());
+                ds.field("fill_center", &self.fill_center());
+                ds.field("fill_method", &self.fill_method());
+                ds.field("fill_amount", &self.fill_amount());
+                ds.field("fill_clockwise", &self.fill_clockwise());
+                ds.field("fill_origin", &self.fill_origin());
+                ds.field("use_sprite_mesh", &self.use_sprite_mesh());
+                ds.field(
+                    "pixels_per_unit_multiplier",
+                    &self.pixels_per_unit_multiplier(),
+                );
+                ds.field("maskable", &self.maskable());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct UIImageT {
+            pub sprite_asset_id: u32,
+            pub override_sprite_asset_id: u32,
+            pub material_id: u32,
+            pub color: Option<ColorT>,
+            pub type_: ImageType,
+            pub preserve_aspect: bool,
+            pub fill_center: bool,
+            pub fill_method: u8,
+            pub fill_amount: f32,
+            pub fill_clockwise: bool,
+            pub fill_origin: u8,
+            pub use_sprite_mesh: bool,
+            pub pixels_per_unit_multiplier: f32,
+            pub maskable: bool,
+        }
+        impl Default for UIImageT {
+            fn default() -> Self {
+                Self {
+                    sprite_asset_id: 0,
+                    override_sprite_asset_id: 0,
+                    material_id: 0,
+                    color: None,
+                    type_: ImageType::Simple,
+                    preserve_aspect: false,
+                    fill_center: true,
+                    fill_method: 0,
+                    fill_amount: 1.0,
+                    fill_clockwise: true,
+                    fill_origin: 0,
+                    use_sprite_mesh: false,
+                    pixels_per_unit_multiplier: 1.0,
+                    maskable: true,
+                }
+            }
+        }
+        impl UIImageT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<UIImage<'b>> {
+                let sprite_asset_id = self.sprite_asset_id;
+                let override_sprite_asset_id = self.override_sprite_asset_id;
+                let material_id = self.material_id;
+                let color_tmp = self.color.as_ref().map(|x| x.pack());
+                let color = color_tmp.as_ref();
+                let type_ = self.type_;
+                let preserve_aspect = self.preserve_aspect;
+                let fill_center = self.fill_center;
+                let fill_method = self.fill_method;
+                let fill_amount = self.fill_amount;
+                let fill_clockwise = self.fill_clockwise;
+                let fill_origin = self.fill_origin;
+                let use_sprite_mesh = self.use_sprite_mesh;
+                let pixels_per_unit_multiplier = self.pixels_per_unit_multiplier;
+                let maskable = self.maskable;
+                UIImage::create(
+                    _fbb,
+                    &UIImageArgs {
+                        sprite_asset_id,
+                        override_sprite_asset_id,
+                        material_id,
+                        color,
+                        type_,
+                        preserve_aspect,
+                        fill_center,
+                        fill_method,
+                        fill_amount,
+                        fill_clockwise,
+                        fill_origin,
+                        use_sprite_mesh,
+                        pixels_per_unit_multiplier,
+                        maskable,
+                    },
+                )
+            }
+        }
+        pub enum UIMaskOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct UIMask<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for UIMask<'a> {
+            type Inner = UIMask<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> UIMask<'a> {
+            pub const VT_GRAPHIC_COMPONENT_ID: ::flatbuffers::VOffsetT = 4;
+            pub const VT_SHOW_GRAPHIC: ::flatbuffers::VOffsetT = 6;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                UIMask { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args UIMaskArgs,
+            ) -> ::flatbuffers::WIPOffset<UIMask<'bldr>> {
+                let mut builder = UIMaskBuilder::new(_fbb);
+                builder.add_graphic_component_id(args.graphic_component_id);
+                builder.add_show_graphic(args.show_graphic);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> UIMaskT {
+                let graphic_component_id = self.graphic_component_id();
+                let show_graphic = self.show_graphic();
+                UIMaskT {
+                    graphic_component_id,
+                    show_graphic,
+                }
+            }
+
+            #[inline]
+            pub fn graphic_component_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(UIMask::VT_GRAPHIC_COMPONENT_ID, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn show_graphic(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(UIMask::VT_SHOW_GRAPHIC, Some(true))
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for UIMask<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<u32>(
+                        "graphic_component_id",
+                        Self::VT_GRAPHIC_COMPONENT_ID,
+                        false,
+                    )?
+                    .visit_field::<bool>("show_graphic", Self::VT_SHOW_GRAPHIC, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct UIMaskArgs {
+            pub graphic_component_id: u32,
+            pub show_graphic: bool,
+        }
+        impl<'a> Default for UIMaskArgs {
+            #[inline]
+            fn default() -> Self {
+                UIMaskArgs {
+                    graphic_component_id: 0,
+                    show_graphic: true,
+                }
+            }
+        }
+
+        impl Serialize for UIMask<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("UIMask", 2)?;
+                s.serialize_field("graphic_component_id", &self.graphic_component_id())?;
+                s.serialize_field("show_graphic", &self.show_graphic())?;
+                s.end()
+            }
+        }
+
+        pub struct UIMaskBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> UIMaskBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_graphic_component_id(&mut self, graphic_component_id: u32) {
+                self.fbb_.push_slot::<u32>(
+                    UIMask::VT_GRAPHIC_COMPONENT_ID,
+                    graphic_component_id,
+                    0,
+                );
+            }
+            #[inline]
+            pub fn add_show_graphic(&mut self, show_graphic: bool) {
+                self.fbb_
+                    .push_slot::<bool>(UIMask::VT_SHOW_GRAPHIC, show_graphic, true);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> UIMaskBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                UIMaskBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<UIMask<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for UIMask<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("UIMask");
+                ds.field("graphic_component_id", &self.graphic_component_id());
+                ds.field("show_graphic", &self.show_graphic());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct UIMaskT {
+            pub graphic_component_id: u32,
+            pub show_graphic: bool,
+        }
+        impl Default for UIMaskT {
+            fn default() -> Self {
+                Self {
+                    graphic_component_id: 0,
+                    show_graphic: true,
+                }
+            }
+        }
+        impl UIMaskT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<UIMask<'b>> {
+                let graphic_component_id = self.graphic_component_id;
+                let show_graphic = self.show_graphic;
+                UIMask::create(
+                    _fbb,
+                    &UIMaskArgs {
+                        graphic_component_id,
+                        show_graphic,
+                    },
+                )
+            }
+        }
+        pub enum RectMask2DOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct RectMask2D<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for RectMask2D<'a> {
+            type Inner = RectMask2D<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> RectMask2D<'a> {
+            pub const VT_PADDING: ::flatbuffers::VOffsetT = 4;
+            pub const VT_SOFTNESS: ::flatbuffers::VOffsetT = 6;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                RectMask2D { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args RectMask2DArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<RectMask2D<'bldr>> {
+                let mut builder = RectMask2DBuilder::new(_fbb);
+                if let Some(x) = args.softness {
+                    builder.add_softness(x);
+                }
+                if let Some(x) = args.padding {
+                    builder.add_padding(x);
+                }
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> RectMask2DT {
+                let padding = self.padding().map(|x| x.unpack());
+                let softness = self.softness().map(|x| x.unpack());
+                RectMask2DT { padding, softness }
+            }
+
+            #[inline]
+            pub fn padding(&self) -> Option<&'a Vec4> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe { self._tab.get::<Vec4>(RectMask2D::VT_PADDING, None) }
+            }
+            #[inline]
+            pub fn softness(&self) -> Option<&'a Vec2> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe { self._tab.get::<Vec2>(RectMask2D::VT_SOFTNESS, None) }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for RectMask2D<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<Vec4>("padding", Self::VT_PADDING, false)?
+                    .visit_field::<Vec2>("softness", Self::VT_SOFTNESS, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct RectMask2DArgs<'a> {
+            pub padding: Option<&'a Vec4>,
+            pub softness: Option<&'a Vec2>,
+        }
+        impl<'a> Default for RectMask2DArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                RectMask2DArgs {
+                    padding: None,
+                    softness: None,
+                }
+            }
+        }
+
+        impl Serialize for RectMask2D<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("RectMask2D", 2)?;
+                if let Some(f) = self.padding() {
+                    s.serialize_field("padding", &f)?;
+                } else {
+                    s.skip_field("padding")?;
+                }
+                if let Some(f) = self.softness() {
+                    s.serialize_field("softness", &f)?;
+                } else {
+                    s.skip_field("softness")?;
+                }
+                s.end()
+            }
+        }
+
+        pub struct RectMask2DBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> RectMask2DBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_padding(&mut self, padding: &Vec4) {
+                self.fbb_
+                    .push_slot_always::<&Vec4>(RectMask2D::VT_PADDING, padding);
+            }
+            #[inline]
+            pub fn add_softness(&mut self, softness: &Vec2) {
+                self.fbb_
+                    .push_slot_always::<&Vec2>(RectMask2D::VT_SOFTNESS, softness);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> RectMask2DBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                RectMask2DBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<RectMask2D<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for RectMask2D<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("RectMask2D");
+                ds.field("padding", &self.padding());
+                ds.field("softness", &self.softness());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct RectMask2DT {
+            pub padding: Option<Vec4T>,
+            pub softness: Option<Vec2T>,
+        }
+        impl Default for RectMask2DT {
+            fn default() -> Self {
+                Self {
+                    padding: None,
+                    softness: None,
+                }
+            }
+        }
+        impl RectMask2DT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<RectMask2D<'b>> {
+                let padding_tmp = self.padding.as_ref().map(|x| x.pack());
+                let padding = padding_tmp.as_ref();
+                let softness_tmp = self.softness.as_ref().map(|x| x.pack());
+                let softness = softness_tmp.as_ref();
+                RectMask2D::create(_fbb, &RectMask2DArgs { padding, softness })
+            }
+        }
+        pub enum CanvasGroupOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct CanvasGroup<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for CanvasGroup<'a> {
+            type Inner = CanvasGroup<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> CanvasGroup<'a> {
+            pub const VT_ALPHA: ::flatbuffers::VOffsetT = 4;
+            pub const VT_IGNORE_PARENT_GROUPS: ::flatbuffers::VOffsetT = 6;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                CanvasGroup { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args CanvasGroupArgs,
+            ) -> ::flatbuffers::WIPOffset<CanvasGroup<'bldr>> {
+                let mut builder = CanvasGroupBuilder::new(_fbb);
+                builder.add_alpha(args.alpha);
+                builder.add_ignore_parent_groups(args.ignore_parent_groups);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> CanvasGroupT {
+                let alpha = self.alpha();
+                let ignore_parent_groups = self.ignore_parent_groups();
+                CanvasGroupT {
+                    alpha,
+                    ignore_parent_groups,
+                }
+            }
+
+            #[inline]
+            pub fn alpha(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(CanvasGroup::VT_ALPHA, Some(1.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn ignore_parent_groups(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(CanvasGroup::VT_IGNORE_PARENT_GROUPS, Some(false))
+                        .unwrap()
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for CanvasGroup<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<f32>("alpha", Self::VT_ALPHA, false)?
+                    .visit_field::<bool>(
+                        "ignore_parent_groups",
+                        Self::VT_IGNORE_PARENT_GROUPS,
+                        false,
+                    )?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct CanvasGroupArgs {
+            pub alpha: f32,
+            pub ignore_parent_groups: bool,
+        }
+        impl<'a> Default for CanvasGroupArgs {
+            #[inline]
+            fn default() -> Self {
+                CanvasGroupArgs {
+                    alpha: 1.0,
+                    ignore_parent_groups: false,
+                }
+            }
+        }
+
+        impl Serialize for CanvasGroup<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("CanvasGroup", 2)?;
+                s.serialize_field("alpha", &self.alpha())?;
+                s.serialize_field("ignore_parent_groups", &self.ignore_parent_groups())?;
+                s.end()
+            }
+        }
+
+        pub struct CanvasGroupBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> CanvasGroupBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_alpha(&mut self, alpha: f32) {
+                self.fbb_
+                    .push_slot::<f32>(CanvasGroup::VT_ALPHA, alpha, 1.0);
+            }
+            #[inline]
+            pub fn add_ignore_parent_groups(&mut self, ignore_parent_groups: bool) {
+                self.fbb_.push_slot::<bool>(
+                    CanvasGroup::VT_IGNORE_PARENT_GROUPS,
+                    ignore_parent_groups,
+                    false,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> CanvasGroupBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                CanvasGroupBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<CanvasGroup<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for CanvasGroup<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("CanvasGroup");
+                ds.field("alpha", &self.alpha());
+                ds.field("ignore_parent_groups", &self.ignore_parent_groups());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct CanvasGroupT {
+            pub alpha: f32,
+            pub ignore_parent_groups: bool,
+        }
+        impl Default for CanvasGroupT {
+            fn default() -> Self {
+                Self {
+                    alpha: 1.0,
+                    ignore_parent_groups: false,
+                }
+            }
+        }
+        impl CanvasGroupT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<CanvasGroup<'b>> {
+                let alpha = self.alpha;
+                let ignore_parent_groups = self.ignore_parent_groups;
+                CanvasGroup::create(
+                    _fbb,
+                    &CanvasGroupArgs {
+                        alpha,
+                        ignore_parent_groups,
+                    },
+                )
+            }
+        }
         pub enum ComponentOffset {}
         #[derive(Copy, Clone, PartialEq)]
 
@@ -29117,6 +36509,56 @@ pub mod noa {
       ComponentData::Animator => ComponentDataT::Animator(alloc::boxed::Box::new(
         self.data_as_animator()
             .expect("Invalid union table, expected `ComponentData::Animator`.")
+            .unpack()
+      )),
+      ComponentData::MeshRenderer => ComponentDataT::MeshRenderer(alloc::boxed::Box::new(
+        self.data_as_mesh_renderer()
+            .expect("Invalid union table, expected `ComponentData::MeshRenderer`.")
+            .unpack()
+      )),
+      ComponentData::SpriteRenderer => ComponentDataT::SpriteRenderer(alloc::boxed::Box::new(
+        self.data_as_sprite_renderer()
+            .expect("Invalid union table, expected `ComponentData::SpriteRenderer`.")
+            .unpack()
+      )),
+      ComponentData::SpriteMask => ComponentDataT::SpriteMask(alloc::boxed::Box::new(
+        self.data_as_sprite_mask()
+            .expect("Invalid union table, expected `ComponentData::SpriteMask`.")
+            .unpack()
+      )),
+      ComponentData::Canvas => ComponentDataT::Canvas(alloc::boxed::Box::new(
+        self.data_as_canvas()
+            .expect("Invalid union table, expected `ComponentData::Canvas`.")
+            .unpack()
+      )),
+      ComponentData::CanvasRenderer => ComponentDataT::CanvasRenderer(alloc::boxed::Box::new(
+        self.data_as_canvas_renderer()
+            .expect("Invalid union table, expected `ComponentData::CanvasRenderer`.")
+            .unpack()
+      )),
+      ComponentData::MeshFilter => ComponentDataT::MeshFilter(alloc::boxed::Box::new(
+        self.data_as_mesh_filter()
+            .expect("Invalid union table, expected `ComponentData::MeshFilter`.")
+            .unpack()
+      )),
+      ComponentData::UIImage => ComponentDataT::UIImage(alloc::boxed::Box::new(
+        self.data_as_uiimage()
+            .expect("Invalid union table, expected `ComponentData::UIImage`.")
+            .unpack()
+      )),
+      ComponentData::UIMask => ComponentDataT::UIMask(alloc::boxed::Box::new(
+        self.data_as_uimask()
+            .expect("Invalid union table, expected `ComponentData::UIMask`.")
+            .unpack()
+      )),
+      ComponentData::RectMask2D => ComponentDataT::RectMask2D(alloc::boxed::Box::new(
+        self.data_as_rect_mask_2_d()
+            .expect("Invalid union table, expected `ComponentData::RectMask2D`.")
+            .unpack()
+      )),
+      ComponentData::CanvasGroup => ComponentDataT::CanvasGroup(alloc::boxed::Box::new(
+        self.data_as_canvas_group()
+            .expect("Invalid union table, expected `ComponentData::CanvasGroup`.")
             .unpack()
       )),
       _ => ComponentDataT::NONE,
@@ -29271,6 +36713,156 @@ pub mod noa {
                     None
                 }
             }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_mesh_renderer(&self) -> Option<MeshRenderer<'a>> {
+                if self.data_type() == ComponentData::MeshRenderer {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { MeshRenderer::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_sprite_renderer(&self) -> Option<SpriteRenderer<'a>> {
+                if self.data_type() == ComponentData::SpriteRenderer {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { SpriteRenderer::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_sprite_mask(&self) -> Option<SpriteMask<'a>> {
+                if self.data_type() == ComponentData::SpriteMask {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { SpriteMask::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_canvas(&self) -> Option<Canvas<'a>> {
+                if self.data_type() == ComponentData::Canvas {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { Canvas::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_canvas_renderer(&self) -> Option<CanvasRenderer<'a>> {
+                if self.data_type() == ComponentData::CanvasRenderer {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { CanvasRenderer::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_mesh_filter(&self) -> Option<MeshFilter<'a>> {
+                if self.data_type() == ComponentData::MeshFilter {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { MeshFilter::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_uiimage(&self) -> Option<UIImage<'a>> {
+                if self.data_type() == ComponentData::UIImage {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { UIImage::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_uimask(&self) -> Option<UIMask<'a>> {
+                if self.data_type() == ComponentData::UIMask {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { UIMask::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_rect_mask_2_d(&self) -> Option<RectMask2D<'a>> {
+                if self.data_type() == ComponentData::RectMask2D {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { RectMask2D::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_canvas_group(&self) -> Option<CanvasGroup<'a>> {
+                if self.data_type() == ComponentData::CanvasGroup {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { CanvasGroup::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
         }
 
         impl ::flatbuffers::Verifiable for Component<'_> {
@@ -29291,6 +36883,16 @@ pub mod noa {
           ComponentData::ParticleRenderer => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<ParticleRenderer>>("ComponentData::ParticleRenderer", pos),
           ComponentData::CustomComponent => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<CustomComponent>>("ComponentData::CustomComponent", pos),
           ComponentData::Animator => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<Animator>>("ComponentData::Animator", pos),
+          ComponentData::MeshRenderer => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<MeshRenderer>>("ComponentData::MeshRenderer", pos),
+          ComponentData::SpriteRenderer => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<SpriteRenderer>>("ComponentData::SpriteRenderer", pos),
+          ComponentData::SpriteMask => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<SpriteMask>>("ComponentData::SpriteMask", pos),
+          ComponentData::Canvas => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<Canvas>>("ComponentData::Canvas", pos),
+          ComponentData::CanvasRenderer => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<CanvasRenderer>>("ComponentData::CanvasRenderer", pos),
+          ComponentData::MeshFilter => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<MeshFilter>>("ComponentData::MeshFilter", pos),
+          ComponentData::UIImage => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<UIImage>>("ComponentData::UIImage", pos),
+          ComponentData::UIMask => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<UIMask>>("ComponentData::UIMask", pos),
+          ComponentData::RectMask2D => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<RectMask2D>>("ComponentData::RectMask2D", pos),
+          ComponentData::CanvasGroup => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<CanvasGroup>>("ComponentData::CanvasGroup", pos),
           _ => Ok(()),
         }
      })?
@@ -29364,6 +36966,66 @@ pub mod noa {
                         let f = self
                             .data_as_animator()
                             .expect("Invalid union table, expected `ComponentData::Animator`.");
+                        s.serialize_field("data", &f)?;
+                    }
+                    ComponentData::MeshRenderer => {
+                        let f = self
+                            .data_as_mesh_renderer()
+                            .expect("Invalid union table, expected `ComponentData::MeshRenderer`.");
+                        s.serialize_field("data", &f)?;
+                    }
+                    ComponentData::SpriteRenderer => {
+                        let f = self.data_as_sprite_renderer().expect(
+                            "Invalid union table, expected `ComponentData::SpriteRenderer`.",
+                        );
+                        s.serialize_field("data", &f)?;
+                    }
+                    ComponentData::SpriteMask => {
+                        let f = self
+                            .data_as_sprite_mask()
+                            .expect("Invalid union table, expected `ComponentData::SpriteMask`.");
+                        s.serialize_field("data", &f)?;
+                    }
+                    ComponentData::Canvas => {
+                        let f = self
+                            .data_as_canvas()
+                            .expect("Invalid union table, expected `ComponentData::Canvas`.");
+                        s.serialize_field("data", &f)?;
+                    }
+                    ComponentData::CanvasRenderer => {
+                        let f = self.data_as_canvas_renderer().expect(
+                            "Invalid union table, expected `ComponentData::CanvasRenderer`.",
+                        );
+                        s.serialize_field("data", &f)?;
+                    }
+                    ComponentData::MeshFilter => {
+                        let f = self
+                            .data_as_mesh_filter()
+                            .expect("Invalid union table, expected `ComponentData::MeshFilter`.");
+                        s.serialize_field("data", &f)?;
+                    }
+                    ComponentData::UIImage => {
+                        let f = self
+                            .data_as_uiimage()
+                            .expect("Invalid union table, expected `ComponentData::UIImage`.");
+                        s.serialize_field("data", &f)?;
+                    }
+                    ComponentData::UIMask => {
+                        let f = self
+                            .data_as_uimask()
+                            .expect("Invalid union table, expected `ComponentData::UIMask`.");
+                        s.serialize_field("data", &f)?;
+                    }
+                    ComponentData::RectMask2D => {
+                        let f = self
+                            .data_as_rect_mask_2_d()
+                            .expect("Invalid union table, expected `ComponentData::RectMask2D`.");
+                        s.serialize_field("data", &f)?;
+                    }
+                    ComponentData::CanvasGroup => {
+                        let f = self
+                            .data_as_canvas_group()
+                            .expect("Invalid union table, expected `ComponentData::CanvasGroup`.");
                         s.serialize_field("data", &f)?;
                     }
                     _ => unimplemented!(),
@@ -29484,6 +37146,106 @@ pub mod noa {
                     }
                     ComponentData::Animator => {
                         if let Some(x) = self.data_as_animator() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ComponentData::MeshRenderer => {
+                        if let Some(x) = self.data_as_mesh_renderer() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ComponentData::SpriteRenderer => {
+                        if let Some(x) = self.data_as_sprite_renderer() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ComponentData::SpriteMask => {
+                        if let Some(x) = self.data_as_sprite_mask() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ComponentData::Canvas => {
+                        if let Some(x) = self.data_as_canvas() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ComponentData::CanvasRenderer => {
+                        if let Some(x) = self.data_as_canvas_renderer() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ComponentData::MeshFilter => {
+                        if let Some(x) = self.data_as_mesh_filter() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ComponentData::UIImage => {
+                        if let Some(x) = self.data_as_uiimage() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ComponentData::UIMask => {
+                        if let Some(x) = self.data_as_uimask() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ComponentData::RectMask2D => {
+                        if let Some(x) = self.data_as_rect_mask_2_d() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ComponentData::CanvasGroup => {
+                        if let Some(x) = self.data_as_canvas_group() {
                             ds.field("data", &x)
                         } else {
                             ds.field(
@@ -34028,7 +41790,7 @@ pub mod noa {
                 // which contains a valid value in this slot
                 unsafe {
                     self._tab
-                        .get::<u16>(Document::VT_FORMAT_MAJOR, Some(1))
+                        .get::<u16>(Document::VT_FORMAT_MAJOR, Some(0))
                         .unwrap()
                 }
             }
@@ -34322,7 +42084,7 @@ pub mod noa {
             #[inline]
             fn default() -> Self {
                 DocumentArgs {
-                    format_major: 1,
+                    format_major: 0,
                     format_minor: 0,
                     semantics_revision: 1,
                     features: None,
@@ -34404,7 +42166,7 @@ pub mod noa {
             #[inline]
             pub fn add_format_major(&mut self, format_major: u16) {
                 self.fbb_
-                    .push_slot::<u16>(Document::VT_FORMAT_MAJOR, format_major, 1);
+                    .push_slot::<u16>(Document::VT_FORMAT_MAJOR, format_major, 0);
             }
             #[inline]
             pub fn add_format_minor(&mut self, format_minor: u16) {
@@ -34595,7 +42357,7 @@ pub mod noa {
         impl Default for DocumentT {
             fn default() -> Self {
                 Self {
-                    format_major: 1,
+                    format_major: 0,
                     format_minor: 0,
                     semantics_revision: 1,
                     features: None,

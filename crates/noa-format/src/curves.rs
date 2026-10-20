@@ -112,6 +112,16 @@ fn particles(p: &w::ParticleSystemT, visitor: &mut impl FnMut(&w::ScalarCurveT))
                         scalar(p, visitor);
                     }
                 }
+                w::ShapeGeometryT::DonutShape(d) => {
+                    if let Some(p) = &d.arc_speed {
+                        scalar(p, visitor);
+                    }
+                }
+                w::ShapeGeometryT::SpriteShape(s) => {
+                    if let Some(p) = &s.spawn_speed {
+                        scalar(p, visitor);
+                    }
+                }
                 w::ShapeGeometryT::BoxShape(_) | w::ShapeGeometryT::NONE => {}
             },
             w::ParticleModuleDataT::SizeModule(s) => vector(&s.size, visitor),

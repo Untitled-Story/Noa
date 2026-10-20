@@ -5,10 +5,7 @@ use noa_compiler::{
     prepare_ir,
     unity::{Guid, UnityFile},
 };
-use noa_format::{
-    ir::{Vec2, Vec3},
-    mesh::MeshData,
-};
+use noa_format::{ir::Vec3, mesh::MeshData};
 use std::{fs, path::Path};
 
 fn quad() -> MeshData {
@@ -30,14 +27,8 @@ fn default_quad_preserves_dimensions_front_face_and_uvs_and_roundtrips() {
             y: 0.0,
             z: -1.0
         }));
-    for (p, uv) in mesh.positions.iter().zip(&mesh.uv0) {
-        assert_eq!(
-            *uv,
-            Vec2 {
-                x: p.x + 0.5,
-                y: p.y + 0.5
-            }
-        );
+    for (p, uv) in mesh.positions.iter().zip(&mesh.texcoords[0].values) {
+        assert_eq!(*uv, [p.x + 0.5, p.y + 0.5, 0., 0.]);
     }
     // Each triangle faces -Z and the two triangles cover unit area.
     let mut area = 0.0;
@@ -60,7 +51,7 @@ fn geometry_validation_rejects_bad_indices_attributes_and_submesh_ranges() {
     bad.indices[0] = 4;
     assert!(bad.encode().unwrap_err().to_string().contains("index"));
     let mut bad = quad();
-    bad.uv0.pop();
+    bad.texcoords[0].values.pop();
     assert!(
         bad.encode()
             .unwrap_err()

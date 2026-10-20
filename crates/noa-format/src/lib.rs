@@ -24,3 +24,5 @@ mod curves;
 mod finite;
 
 mod animation;
+
+mod rendering;

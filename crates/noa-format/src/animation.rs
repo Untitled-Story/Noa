@@ -35,8 +35,14 @@ pub(crate) fn validate(d: &w::DocumentT, ids: &BTreeMap<u32, &str>) -> Result<()
                 .copied()
                 .ok_or("missing animation target")?;
             let component = d.components.iter().flatten().find(|c| c.id == b.target_id);
-            let is_renderer =
-                component.is_some_and(|c| matches!(c.data, w::ComponentDataT::ParticleRenderer(_)));
+            let is_renderer = component.is_some_and(|c| {
+                matches!(
+                    c.data,
+                    w::ComponentDataT::ParticleRenderer(_)
+                        | w::ComponentDataT::SpriteRenderer(_)
+                        | w::ComponentDataT::MeshRenderer(_)
+                )
+            });
             let is_particle =
                 component.is_some_and(|c| matches!(c.data, w::ComponentDataT::ParticleSystem(_)));
             let is_layout =
@@ -80,6 +86,12 @@ pub(crate) fn validate(d: &w::DocumentT, ids: &BTreeMap<u32, &str>) -> Result<()
                         })
                         && (b.property != w::AnimationProperty::RendererEnabled || is_renderer)
                         && matches!(t.data, w::TrackDataT::BoolTrack(_))
+                }
+                w::AnimationProperty::SpriteColor => {
+                    required(d, "animation.sprite")?;
+                    component
+                        .is_some_and(|c| matches!(c.data, w::ComponentDataT::SpriteRenderer(_)))
+                        && has_color
                 }
                 w::AnimationProperty::ParticleLoop => {
                     required(d, "animation.particle")?;
@@ -180,12 +192,13 @@ pub(crate) fn validate(d: &w::DocumentT, ids: &BTreeMap<u32, &str>) -> Result<()
                     if !is_renderer {
                         return Err("material animation needs particle renderer".into());
                     }
-                    let Some(w::ComponentDataT::ParticleRenderer(r)) = component.map(|c| &c.data)
-                    else {
-                        unreachable!()
+                    let materials = match &component.unwrap().data {
+                        w::ComponentDataT::ParticleRenderer(r) => &r.materials,
+                        w::ComponentDataT::SpriteRenderer(r) => &r.materials,
+                        w::ComponentDataT::MeshRenderer(r) => &r.materials,
+                        _ => unreachable!(),
                     };
-                    let id = *r
-                        .materials
+                    let id = *materials
                         .get(b.slot_index as usize)
                         .ok_or("missing animated material slot")?;
                     let m = d
@@ -199,12 +212,18 @@ pub(crate) fn validate(d: &w::DocumentT, ids: &BTreeMap<u32, &str>) -> Result<()
                             // _Color is not used by our particle-add-alpha or legacy shaders.
                             // Saved unused properties must not become a tint operation.
                             has_color
-                                && b.property_name.as_deref() == Some("_TintColor")
-                                && matches!(
-                                    m.model,
-                                    w::MaterialModel::LegacyParticleAdditive
-                                        | w::MaterialModel::LegacyParticleAlphaBlend
-                                )
+                                && ((b.property_name.as_deref() == Some("_Color")
+                                    && matches!(
+                                        m.model,
+                                        w::MaterialModel::SpriteDefault
+                                            | w::MaterialModel::UIDefault
+                                    ))
+                                    || (b.property_name.as_deref() == Some("_TintColor")
+                                        && matches!(
+                                            m.model,
+                                            w::MaterialModel::LegacyParticleAdditive
+                                                | w::MaterialModel::LegacyParticleAlphaBlend
+                                        )))
                         }
                         w::AnimationProperty::RendererMaterialFloat => {
                             matches!(t.data, w::TrackDataT::FloatTrack(_))

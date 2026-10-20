@@ -4,7 +4,7 @@ use crate::{
     unity::{Guid, ReferenceKind, UnityFile},
 };
 use noa_format::{
-    ir::{EntityId, SourceReference, Vec2, Vec3},
+    ir::{EntityId, SourceReference, Vec3},
     mesh::{MeshData, Submesh},
 };
 use serde::Serialize;
@@ -175,12 +175,18 @@ fn quad() -> MeshData {
             };
             4
         ],
-        uv0: vec![
-            Vec2 { x: 0.0, y: 0.0 },
-            Vec2 { x: 1.0, y: 0.0 },
-            Vec2 { x: 0.0, y: 1.0 },
-            Vec2 { x: 1.0, y: 1.0 },
-        ],
+        texcoords: vec![noa_format::mesh::TexCoord {
+            channel: 0,
+            dimension: 2,
+            values: vec![
+                [0.0, 0.0, 0., 0.],
+                [1.0, 0.0, 0., 0.],
+                [0.0, 1.0, 0., 0.],
+                [1.0, 1.0, 0., 0.],
+            ],
+        }],
+        tangents: vec![],
+        colors: vec![],
         indices: vec![0, 2, 1, 2, 3, 1],
         submeshes: vec![Submesh {
             first_index: 0,

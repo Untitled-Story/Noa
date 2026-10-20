@@ -2,3 +2,5 @@
 
 mod builtin;
 pub use builtin::{BuiltinMeshPlan, MeshAsset, MeshBinding, builtin_mesh, plan_builtin_meshes};
+
+pub(crate) mod geometry;

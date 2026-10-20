@@ -7,6 +7,12 @@
     },
     {
       "$ref": "#/$defs/unity-legacy-particle"
+    },
+    {
+      "$ref": "#/$defs/texture-vertex-color"
+    },
+    {
+      "$ref": "#/$defs/unity-sprite-ui"
     }
   ],
   "$defs": {
@@ -283,6 +289,177 @@
             }
           }
         }
+      ]
+    },
+    "texture-vertex-color": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "version",
+        "model",
+        "revision",
+        "program_sha256",
+        "color_formula",
+        "output_policy",
+        "outputs",
+        "source_outputs",
+        "alpha_mode",
+        "rgb_premultiply",
+        "source_passes",
+        "source_program_encoding",
+        "source_program_hex",
+        "global_mip_bias",
+        "global_mip_bias_slot"
+      ],
+      "properties": {
+        "format": {
+          "const": "noa-shader-data"
+        },
+        "version": {
+          "const": 1
+        },
+        "model": {
+          "const": "texture-vertex-color"
+        },
+        "revision": {
+          "const": 1
+        },
+        "program_sha256": {
+          "enum": [
+            "f07136c5ab507bfcb309c1920a6afce6f1d5653f80c1c2f97e8ec0066ba58ac2",
+            "09bc049fd22991be3a180c1550dd85a5f3cbdc1a7b764383cca275b3afbcf236"
+          ]
+        },
+        "color_formula": {
+          "type": "string"
+        },
+        "output_policy": {
+          "const": "primary-color"
+        },
+        "outputs": {
+          "const": [
+            0
+          ]
+        },
+        "source_outputs": {
+          "const": [
+            0,
+            1,
+            2
+          ]
+        },
+        "rgb_premultiply": {
+          "const": false
+        },
+        "alpha_mode": {
+          "type": "null"
+        },
+        "source_passes": {
+          "type": "array"
+        },
+        "source_program_encoding": {
+          "const": "unity-metal-lz4"
+        },
+        "source_program_hex": {
+          "type": "string",
+          "pattern": "^([0-9a-f]{2})+$"
+        },
+        "global_mip_bias": {
+          "type": "boolean"
+        },
+        "global_mip_bias_slot": {
+          "enum": [
+            "source-global-mip-bias",
+            null
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "global_mip_bias": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "global_mip_bias_slot": {
+                "const": "source-global-mip-bias"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "global_mip_bias_slot": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "unity-sprite-ui": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "noa-shader-data"
+        },
+        "version": {
+          "const": 1
+        },
+        "revision": {
+          "const": 1
+        },
+        "model": {
+          "enum": [
+            "unity-ui-default",
+            "unity-sprites-default"
+          ]
+        },
+        "source_revision": {
+          "const": "unity-2022.3.21f1"
+        },
+        "texture_source": {
+          "const": "renderer-sprite-or-white"
+        },
+        "formula": {
+          "type": "string"
+        },
+        "canvas_depth_test": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "premultiplied_output": {
+          "const": true
+        },
+        "lighting": {
+          "const": "unlit"
+        },
+        "stencil": {
+          "enum": [
+            "mask-stack",
+            "sprite-mask"
+          ]
+        }
+      },
+      "required": [
+        "format",
+        "version",
+        "revision",
+        "model",
+        "source_revision",
+        "texture_source",
+        "formula",
+        "canvas_depth_test",
+        "premultiplied_output",
+        "lighting",
+        "stencil"
       ]
     }
   }

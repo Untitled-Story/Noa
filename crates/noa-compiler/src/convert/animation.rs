@@ -212,7 +212,7 @@ pub(super) fn parse_clip(
         let c = required(entry, "curve")?;
         if (class == 1 && attr == "m_IsActive")
             || (class == 198 && attr == "looping")
-            || (matches!(class, 95 | 199) && attr == "m_Enabled")
+            || (matches!(class, 95 | 199 | 23 | 212) && attr == "m_Enabled")
         {
             let target = if class == 1 {
                 node
@@ -276,6 +276,7 @@ pub(super) fn parse_clip(
                 })))
             }
             w::AnimationProperty::RendererMaterialTint
+            | w::AnimationProperty::SpriteColor
             | w::AnimationProperty::ParticleColor
             | w::AnimationProperty::ParticleCustomColor => {
                 w::TrackDataT::ColorTrack(Box::new(n!(ColorTrackT {
@@ -373,9 +374,11 @@ pub(super) fn parse_clip(
             let (asset, o) = sources.resolve(clip_source, source)?;
             let kind = match o.class_id {
                 1 | 4 => w::ReferenceKind::Node,
-                95 | 114 | 198 | 199 | 224 => w::ReferenceKind::Component,
+                95 | 114 | 198 | 199 | 224 | 33 | 23 | 212 | 331 | 222 | 223 | 225 => {
+                    w::ReferenceKind::Component
+                }
                 21 => w::ReferenceKind::Material,
-                28 => w::ReferenceKind::Asset,
+                28 | 43 | 213 => w::ReferenceKind::Asset,
                 _ => return Err(unsupported("event object reference type is not converted")),
             };
             if matches!(kind, w::ReferenceKind::Node | w::ReferenceKind::Component)
@@ -506,8 +509,23 @@ fn binding(
         };
         return Ok((target, n!(BindingT { property }), axis, rotation, scale));
     }
-    if class == 199 && attr.starts_with("material.") {
-        let target = component(node, 199, owner, sources)?;
+    if class == 212
+        && attr.starts_with("m_Color.")
+        && attr.len() == 9
+        && "rgba".contains(&attr[8..])
+    {
+        return Ok((
+            component(node, 212, owner, sources)?,
+            n!(BindingT {
+                property: w::AnimationProperty::SpriteColor
+            }),
+            attr.chars().last().unwrap(),
+            None,
+            1.,
+        ));
+    }
+    if matches!(class, 199 | 212 | 23) && attr.starts_with("material.") {
+        let target = component(node, class, owner, sources)?;
         let name = attr.strip_prefix("material.").unwrap();
         if let Some(axis) = name
             .strip_prefix("_Color.")

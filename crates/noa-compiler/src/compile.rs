@@ -78,13 +78,63 @@ fn compile_indexed(
                 &draft.mesh_bindings,
                 &mut resources,
             )?),
-            _ => {}
+            _ => {
+                if let Some(c) = convert::scene_renderers::convert(
+                    &entry,
+                    o,
+                    file,
+                    &ids,
+                    &mut resources,
+                    scripts,
+                )? {
+                    components.push(c);
+                }
+            }
+        }
+    }
+    // Shape resources are resolved after semantic particle conversion.
+    for c in &mut components {
+        if let w::ComponentDataT::ParticleSystem(p) = &mut c.data {
+            let source = file
+                .objects
+                .values()
+                .find(|o| ids.get(&entry, o.file_id).is_ok_and(|id| id.get() == c.id))
+                .unwrap();
+            for module in p.modules.iter_mut().flatten() {
+                if let w::ParticleModuleDataT::ShapeModule(s) = &mut module.data
+                    && let w::ShapeGeometryT::SpriteShape(sprite) = &mut s.geometry
+                {
+                    sprite.sprite_asset_id = resources
+                        .sprite(&entry, get(get(&source.data, "ShapeModule")?, "m_Sprite")?)?;
+                }
+                if let w::ParticleModuleDataT::TextureSheetModule(t) = &mut module.data
+                    && t.mode == w::SheetMode::Sprites
+                {
+                    let sprites = get(get(&source.data, "UVModule")?, "sprites")?
+                        .as_sequence()
+                        .ok_or_else(|| err("UVModule", "sprites must be a list"))?;
+                    t.sprite_asset_ids = Some(
+                        sprites
+                            .iter()
+                            .map(|s| resources.sprite(&entry, get(s, "sprite")?))
+                            .collect::<Result<Vec<_>, Error>>()?,
+                    );
+                }
+            }
         }
     }
     for p in &draft.pending_components {
         if !matches!(
             p.type_name.as_str(),
-            "ParticleSystem" | "ParticleSystemRenderer"
+            "ParticleSystem"
+                | "ParticleSystemRenderer"
+                | "MeshFilter"
+                | "MeshRenderer"
+                | "SpriteRenderer"
+                | "SpriteMask"
+                | "Canvas"
+                | "CanvasRenderer"
+                | "CanvasGroup"
         ) {
             return Err(err("component", format!("unsupported {}", p.type_name)));
         }
@@ -157,6 +207,12 @@ fn compile_indexed(
                             28 => {
                                 resources.image(source, &reference)?;
                             }
+                            43 => {
+                                resources.mesh(source, &reference)?;
+                            }
+                            213 => {
+                                resources.sprite(source, &reference)?;
+                            }
                             _ => return Err(err("event object", "unsupported resource type")),
                         }
                         found = true;
@@ -193,10 +249,12 @@ fn compile_indexed(
                 kind: ReferenceKind::Node,
                 id: ids.get(&entry, int(get(&o.data, "m_GameObject")?, "fileID")?)?,
             }),
-            224 | 95 | 114 | 198 | 199 => Some(TypedReference {
-                kind: ReferenceKind::Component,
-                id: ids.get(&entry, o.file_id)?,
-            }),
+            224 | 95 | 114 | 198 | 199 | 33 | 23 | 212 | 331 | 223 | 222 | 225 => {
+                Some(TypedReference {
+                    kind: ReferenceKind::Component,
+                    id: ids.get(&entry, o.file_id)?,
+                })
+            }
             _ => None,
         };
         if let Some(t) = target {
@@ -245,6 +303,26 @@ fn compile_indexed(
             .map(convert::document::custom),
     );
     components.sort_by_key(|c| c.id);
+    if draft.color_context.is_none()
+        && components.iter().any(|c| {
+            matches!(
+                c.data,
+                w::ComponentDataT::MeshRenderer(_)
+                    | w::ComponentDataT::SpriteRenderer(_)
+                    | w::ComponentDataT::UIImage(_)
+            )
+        })
+    {
+        draft.color_context = Some(crate::resolver::resolve_color_context(index)?);
+        if draft
+            .color_context
+            .as_ref()
+            .is_some_and(|c| c.host_project_color_space_slot.is_some())
+        {
+            diagnostics.push(Diagnostic { severity: Severity::Warning, code:"HOST_PROJECT_COLOR_SPACE_REQUIRED", asset:entry.clone(), file_id:None,
+                property:Some("ColorContext.project_color_space".into()), message:"source project color space is unavailable; Natsume must receive source-project-color-space from the host".into() });
+        }
+    }
     let nodes: Vec<_> = draft
         .nodes
         .into_iter()
@@ -269,6 +347,9 @@ fn compile_indexed(
     });
     let mut features = BTreeMap::<String, u32>::new();
     features.insert("scene.trs".into(), 1);
+    if draft.color_context.is_some() {
+        features.insert("color.authored".into(), 1);
+    }
     for a in &draft.animations {
         if !a.events.is_empty() {
             features.insert("animation.events-typed".into(), 1);
@@ -291,6 +372,7 @@ fn compile_indexed(
                 w::AnimationProperty::RendererEnabled | w::AnimationProperty::ComponentEnabled => {
                     "animation.component-enabled"
                 }
+                w::AnimationProperty::SpriteColor => "animation.sprite",
                 _ => "animation.renderer-material",
             };
             features.insert(capability.into(), 1);
@@ -302,6 +384,26 @@ fn compile_indexed(
     }
     for c in &components {
         match &c.data {
+            w::ComponentDataT::MeshFilter(_) | w::ComponentDataT::MeshRenderer(_) => {
+                features.insert("scene.mesh-renderer".into(), 1);
+            }
+            w::ComponentDataT::SpriteRenderer(r) => {
+                features.insert("scene.sprite-renderer".into(), 1);
+                if r.mask_interaction != w::MaskInteraction::None {
+                    features.insert("render.sprite-mask".into(), 1);
+                }
+            }
+            w::ComponentDataT::SpriteMask(_) => {
+                features.insert("render.sprite-mask".into(), 1);
+            }
+            w::ComponentDataT::Canvas(_)
+            | w::ComponentDataT::CanvasRenderer(_)
+            | w::ComponentDataT::UIImage(_)
+            | w::ComponentDataT::UIMask(_)
+            | w::ComponentDataT::RectMask2D(_)
+            | w::ComponentDataT::CanvasGroup(_) => {
+                features.insert("ui.canvas".into(), 1);
+            }
             w::ComponentDataT::CustomComponent(_) => {
                 features.insert("script.bridge".into(), 1);
             }
@@ -310,6 +412,12 @@ fn compile_indexed(
             }
             w::ComponentDataT::ParticleRenderer(r) => {
                 features.insert("particle.renderer".into(), 1);
+                if r.mode == w::RenderMode::None {
+                    features.insert("particle.renderer-none".into(), 1);
+                }
+                if r.mask_interaction != w::MaskInteraction::None {
+                    features.insert("render.sprite-mask".into(), 1);
+                }
                 if r.mode == w::RenderMode::Mesh
                     && r.mesh_distribution == w::MeshDistribution::NonUniformRandom
                 {
@@ -336,7 +444,12 @@ fn compile_indexed(
                         w::ParticleModuleDataT::VelocityModule(_) => "velocity",
                         w::ParticleModuleDataT::LimitVelocityModule(_) => "limit-velocity",
                         w::ParticleModuleDataT::NoiseModule(_) => "noise.unity",
-                        w::ParticleModuleDataT::TextureSheetModule(_) => "texture-sheet",
+                        w::ParticleModuleDataT::TextureSheetModule(t) => {
+                            if t.mode == w::SheetMode::Sprites {
+                                features.insert("particle.texture-sheet-sprites".into(), 1);
+                            }
+                            "texture-sheet"
+                        }
                         w::ParticleModuleDataT::CustomDataModule(_) => "custom-data",
                         _ => return Err(err("module", "unknown union")),
                     };
@@ -345,6 +458,25 @@ fn compile_indexed(
             }
             _ => {}
         }
+    }
+    if components.iter().any(|c| {
+        let e = match &c.data {
+            w::ComponentDataT::MeshRenderer(r) => r.environment.as_deref(),
+            w::ComponentDataT::ParticleRenderer(r) => r.environment.as_deref(),
+            _ => None,
+        };
+        e.is_some_and(|e| {
+            e.cast_shadows != 0
+                || e.receive_shadows
+                || e.light_probes != 0
+                || e.reflection_probes != 0
+        })
+    }) {
+        features.insert("render.environment".into(), 1);
+        diagnostics.push(Diagnostic {
+            severity: Severity::Warning, code: "HOST_RENDER_ENVIRONMENT_REQUIRED", asset: entry.clone(), file_id: None,
+            property: Some("Renderer.environment".into()), message: "source requests shadows or probes; Natsume/host must provide a render environment; flags do not contain baked light/probe data".into()
+        });
     }
     for m in resources.materials.values() {
         features.insert(
@@ -356,6 +488,9 @@ fn compile_indexed(
                 w::MaterialModel::LegacyParticleAlphaBlend => {
                     "material.unity-legacy-particle-alpha-blend"
                 }
+                w::MaterialModel::SpriteDefault => "material.unity-sprite-default",
+                w::MaterialModel::UIDefault => "material.unity-ui-default",
+                w::MaterialModel::TextureVertexColor => "material.texture-vertex-color",
                 _ => "material.particle-unlit",
             }
             .into(),
@@ -365,9 +500,16 @@ fn compile_indexed(
     if resources
         .assets
         .values()
+        .any(|a| a.kind == w::AssetKind::Sprite)
+    {
+        features.insert("asset.sprite".into(), 1);
+    }
+    if resources
+        .assets
+        .values()
         .any(|a| a.kind == w::AssetKind::Mesh)
     {
-        features.insert("mesh.nomesh".into(), 1);
+        features.insert("mesh.nomesh".into(), 2);
     }
     if resources.materials.values().any(|m| {
         matches!(
@@ -390,6 +532,18 @@ fn compile_indexed(
             .into(),
         });
     }
+    if resources
+        .files
+        .iter()
+        .filter(|(p, _)| p.ends_with(".shader.json"))
+        .any(|(_, bytes)| {
+            serde_json::from_slice::<serde_json::Value>(bytes)
+                .is_ok_and(|r| r["global_mip_bias"].as_bool() == Some(true))
+        })
+    {
+        diagnostics.push(Diagnostic { severity: Severity::Warning, code:"HOST_SHADER_MIP_BIAS_REQUIRED", asset:entry.clone(), file_id:None,
+            property:Some("Material.shader_environment".into()), message:"verified shader reads source-global-mip-bias; Natsume must obtain the source scene value from the host".into() });
+    }
     let mut records = Vec::new();
     for o in file.objects.values() {
         if targets
@@ -404,6 +558,7 @@ fn compile_indexed(
         }
     }
     let mut document = n!(DocumentT {
+        format_major: 2,
         nodes,
         components: Some(components),
         assets: Some(resources.assets.into_values().collect()),

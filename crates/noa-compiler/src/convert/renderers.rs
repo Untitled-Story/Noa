@@ -10,7 +10,7 @@ pub(crate) fn renderer(
     o: &Object,
     file: &UnityFile,
     ids: &EntityIds,
-    meshes: &[MeshBinding],
+    _meshes: &[MeshBinding],
     resources: &mut Resources<'_>,
 ) -> Result<w::ComponentT, Error> {
     let v = &o.data;
@@ -23,17 +23,6 @@ pub(crate) fn renderer(
     if systems.len() != 1 {
         return Err(err("Renderer", "expected one ParticleSystem on same node"));
     }
-    for k in [
-        "m_CastShadows",
-        "m_ReceiveShadows",
-        "m_LightProbeUsage",
-        "m_ReflectionProbeUsage",
-        "m_MaskInteraction",
-    ] {
-        if int(v, k)? != 0 {
-            return Err(err(k, "feature unsupported"));
-        }
-    }
     let mode = enum_value(
         int(v, "m_RenderMode")?,
         &[
@@ -42,6 +31,7 @@ pub(crate) fn renderer(
             w::RenderMode::HorizontalBillboard,
             w::RenderMode::VerticalBillboard,
             w::RenderMode::Mesh,
+            w::RenderMode::None,
         ],
         "render mode",
     )?;
@@ -52,27 +42,41 @@ pub(crate) fn renderer(
     {
         materials.push(resources.material(entry, r)?);
     }
-    if materials.iter().all(|m| *m == 0) {
-        return Err(err("Renderer", "no material"));
-    }
-    let component_id = ids.get(entry, o.file_id)?;
-    let bindings: Vec<_> = meshes
-        .iter()
-        .filter(|b| b.component_id == component_id)
-        .collect();
-    if mode == w::RenderMode::Mesh && bindings.is_empty() {
-        return Err(err("Renderer", "missing Mesh geometry"));
-    }
     let mut mesh_ids = Vec::new();
     let mut weights = Vec::new();
-    for b in bindings {
-        mesh_ids.push(b.mesh_asset_id.get());
-        let key = if b.slot == 0 {
-            "m_MeshWeighting".into()
-        } else {
-            format!("m_MeshWeighting{}", b.slot)
-        };
-        weights.push(num(v, &key)?);
+    if mode == w::RenderMode::Mesh {
+        for slot in 0..4 {
+            let field = if slot == 0 {
+                "m_Mesh".to_owned()
+            } else {
+                format!("m_Mesh{slot}")
+            };
+            let r = get(v, &field)?;
+            if int(r, "fileID")? == 0 {
+                continue;
+            }
+            let mesh_id = resources.mesh(entry, r)?;
+            let geometry = noa_format::mesh::MeshData::decode(
+                &resources.files[&format!("assets/{mesh_id}.nomesh")],
+            )
+            .map_err(|e| err("particle mesh", e))?;
+            if geometry.submeshes.len() != 1 {
+                return Err(err(
+                    "particle mesh",
+                    "Unity particles require exactly one submesh",
+                ));
+            }
+            mesh_ids.push(mesh_id);
+            let field = if slot == 0 {
+                "m_MeshWeighting".to_owned()
+            } else {
+                format!("m_MeshWeighting{slot}")
+            };
+            weights.push(num(v, &field)?);
+        }
+        if mesh_ids.is_empty() {
+            return Err(err("Renderer", "missing Mesh geometry"));
+        }
     }
     let mesh_distribution = enum_value(
         int(v, "m_MeshDistribution")?,
@@ -120,6 +124,24 @@ pub(crate) fn renderer(
         }));
     }
     let data = n!(ParticleRendererT {
+        environment: Some(Box::new(n!(RenderEnvironmentT {
+            cast_shadows: u8::try_from(uint(v, "m_CastShadows")?)
+                .map_err(|_| err("shadows", "invalid mode"))?,
+            receive_shadows: flag(v, "m_ReceiveShadows")?,
+            light_probes: u8::try_from(uint(v, "m_LightProbeUsage")?)
+                .map_err(|_| err("light probes", "invalid mode"))?,
+            reflection_probes: u8::try_from(uint(v, "m_ReflectionProbeUsage")?)
+                .map_err(|_| err("reflection probes", "invalid mode"))?
+        }))),
+        mask_interaction: enum_value(
+            int(v, "m_MaskInteraction")?,
+            &[
+                w::MaskInteraction::None,
+                w::MaskInteraction::VisibleInside,
+                w::MaskInteraction::VisibleOutside
+            ],
+            "mask"
+        )?,
         system_component_id: ids.get(entry, systems[0].file_id)?.get(),
         materials,
         mode,
@@ -170,7 +192,7 @@ pub(crate) fn renderer(
         rotate_with_stretch_direction: flag(v, "m_RotateWithStretchDirection")?
     });
     Ok(n!(ComponentT {
-        id: component_id.get(),
+        id: ids.get(entry, o.file_id)?.get(),
         node_id: ids.get(entry, node)?.get(),
         enabled: flag(v, "m_Enabled")?,
         data: w::ComponentDataT::ParticleRenderer(Box::new(data))

@@ -45,6 +45,9 @@ pub fn convert_custom_components(
                 ),
             ));
         }
+        if super::scene_renderers::standard_ui(source, object, scripts).is_some() {
+            continue;
+        }
         let at = format!("{source}, fileID {}", object.file_id);
         let owner = object
             .data

@@ -62,7 +62,11 @@ impl Compilation {
                 .iter()
                 .filter(|f| f.asset_id == Some(asset.id))
                 .count()
-                != 1
+                != if asset.kind == w::AssetKind::Sprite {
+                    0
+                } else {
+                    1
+                }
             {
                 return Err(package_error(
                     "asset",
@@ -73,7 +77,7 @@ impl Compilation {
         let manifest = Manifest {
             format: "noa-package".into(),
             version: 1,
-            noir_version: [1, 0],
+            noir_version: [2, 0],
             document: "scene.noir".into(),
             files,
         };

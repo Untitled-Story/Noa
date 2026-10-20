@@ -38,7 +38,7 @@ pub fn requires_unity_infinity(document: &wire::DocumentT) -> bool {
 }
 
 pub fn validate(d: &wire::DocumentT) -> Result<(), String> {
-    if d.format_major != 1 || d.format_minor != 0 || d.semantics_revision != 1 {
+    if d.format_major != 2 || d.format_minor != 0 || d.semantics_revision != 1 {
         return Err("unsupported NOIR version".into());
     }
     let mut ids = BTreeMap::new();
@@ -293,6 +293,7 @@ pub fn validate(d: &wire::DocumentT) -> Result<(), String> {
             }
         }
     }
+    crate::rendering::validate(d)?;
     crate::animation::validate(d, &ids)?;
     for e in &d.entries {
         if e.roots.is_empty() {
@@ -546,7 +547,7 @@ fn particles(p: &wire::ParticleSystemT) -> Result<(), String> {
                 }
             }
             wire::ParticleModuleDataT::TextureSheetModule(t) => {
-                if t.columns == 0 || t.rows == 0 {
+                if t.mode == wire::SheetMode::Grid && (t.columns == 0 || t.rows == 0) {
                     return Err("empty texture sheet".into());
                 }
                 for p in [&t.frame_over_time, &t.start_frame].into_iter().flatten() {
@@ -597,6 +598,8 @@ pub fn shape_feature(geometry: &wire::ShapeGeometryT) -> Option<&'static str> {
         }
         wire::ShapeGeometryT::ConeShape(_) => "particle.shape.cone",
         wire::ShapeGeometryT::EdgeShape(_) => "particle.shape.edge",
+        wire::ShapeGeometryT::DonutShape(_) => "particle.shape.donut",
+        wire::ShapeGeometryT::SpriteShape(_) => "particle.shape.sprite",
         wire::ShapeGeometryT::NONE => return None,
     })
 }
@@ -667,6 +670,33 @@ fn shape(s: &wire::ShapeModuleT) -> Result<(), String> {
             unit(e.spread)?;
             if let Some(p) = &e.speed {
                 scalar(p)?;
+            }
+        }
+        wire::ShapeGeometryT::DonutShape(d) => {
+            if d.radius < 0. || d.tube_radius < 0. {
+                return Err("negative donut radius".into());
+            }
+            unit(d.radius_thickness)?;
+            unit(d.arc_spread)?;
+            arc(d.arc_radians)?;
+            if let Some(p) = &d.arc_speed {
+                scalar(p)?;
+            }
+        }
+        wire::ShapeGeometryT::SpriteShape(s) => {
+            if s.placement < wire::GeometryPlacement::Vertex
+                || s.placement > wire::GeometryPlacement::Triangle
+                || s.spawn_mode < wire::ShapeSweep::Random
+                || s.spawn_mode > wire::ShapeSweep::BurstSpread
+            {
+                return Err("invalid Sprite emission placement/mode".into());
+            }
+            unit(s.spawn_spread)?;
+            if let Some(p) = &s.spawn_speed {
+                scalar(p)?;
+            }
+            if s.sprite_asset_id == 0 {
+                return Err("missing shape sprite".into());
             }
         }
         wire::ShapeGeometryT::NONE => return Err("missing shape geometry".into()),
