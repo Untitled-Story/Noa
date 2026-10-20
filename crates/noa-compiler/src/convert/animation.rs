@@ -212,7 +212,7 @@ pub(super) fn parse_clip(
         let c = required(entry, "curve")?;
         if (class == 1 && attr == "m_IsActive")
             || (class == 198 && attr == "looping")
-            || (matches!(class, 95 | 198 | 199) && attr == "m_Enabled")
+            || (matches!(class, 95 | 199) && attr == "m_Enabled")
         {
             let target = if class == 1 {
                 node
@@ -481,7 +481,8 @@ fn binding(
             "xyzw"
         } else if matches!(
             property,
-            w::AnimationProperty::RectSizeDelta
+            w::AnimationProperty::RectAnchoredPosition
+                | w::AnimationProperty::RectSizeDelta
                 | w::AnimationProperty::RectAnchorMin
                 | w::AnimationProperty::RectAnchorMax
                 | w::AnimationProperty::RectPivot

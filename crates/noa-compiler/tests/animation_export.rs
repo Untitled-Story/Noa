@@ -399,3 +399,52 @@ fn event_only_png_is_packaged_and_resolved_to_an_asset() {
     );
     assert_eq!(d.assets.as_ref().unwrap().len(), 5);
 }
+
+#[test]
+fn rejects_nonexistent_particle_enabled_and_anchored_position_z() {
+    for (class, attr) in [(198, "m_Enabled"), (224, "m_AnchoredPosition.z")] {
+        let dir = fixture();
+        let file = UnityFile::parse(
+            &std::fs::read_to_string(dir.path().join("kirakira_01.prefab")).unwrap(),
+        )
+        .unwrap();
+        let nodes = noa_compiler::unity::scene_nodes(&file).unwrap();
+        let root = file
+            .objects
+            .values()
+            .find(|o| o.class_id == 95)
+            .unwrap()
+            .data["m_GameObject"]["fileID"]
+            .as_i64()
+            .unwrap();
+        let particle = file.objects.values().find(|o| o.class_id == 198).unwrap();
+        let node_id = particle.data["m_GameObject"]["fileID"].as_i64().unwrap();
+        let mut node = nodes.iter().find(|n| n.file_id == node_id).unwrap();
+        let mut parts = Vec::new();
+        while node.file_id != root {
+            parts.push(node.name.as_str());
+            node = nodes
+                .iter()
+                .find(|n| Some(n.file_id) == node.parent_file_id)
+                .unwrap();
+        }
+        parts.reverse();
+        let path = parts.join("/");
+        edit(dir.path(), |d| {
+            let mut track = d["m_FloatCurves"][0].clone();
+            track["classID"] = class.into();
+            track["attribute"] = attr.into();
+            track["path"] = if class == 224 { "".into() } else { path.into() };
+            track["curve"] = serde_yaml_ng::from_str("m_PreInfinity: 2\nm_PostInfinity: 2\nm_RotationOrder: 4\nm_Curve: [{time: 0, value: 1}, {time: 1, value: 0}]\n").unwrap();
+            d["m_FloatCurves"].as_sequence_mut().unwrap().push(track);
+        });
+        assert!(
+            compile(
+                &dir.path().join("kirakira_01.prefab"),
+                &InspectOptions::default()
+            )
+            .is_err(),
+            "{class}:{attr}"
+        );
+    }
+}

@@ -71,6 +71,13 @@ pub(crate) fn validate(d: &w::DocumentT, ids: &BTreeMap<u32, &str>) -> Result<()
                 w::AnimationProperty::RendererEnabled | w::AnimationProperty::ComponentEnabled => {
                     required(d, "animation.component-enabled")?;
                     kind == "component"
+                        && component.is_some_and(|c| {
+                            matches!(
+                                c.data,
+                                w::ComponentDataT::Animator(_)
+                                    | w::ComponentDataT::ParticleRenderer(_)
+                            )
+                        })
                         && (b.property != w::AnimationProperty::RendererEnabled || is_renderer)
                         && matches!(t.data, w::TrackDataT::BoolTrack(_))
                 }
