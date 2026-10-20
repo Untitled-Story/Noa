@@ -3,8 +3,11 @@ use crate::{
     diagnostics::Error,
     unity::{Guid, Object, UnityFile},
 };
-use noa_format::ir::{Animation, Animator, AnimatorLayer, AnimatorState, BoolKey, NodeActiveTrack};
+use noa_format::ir::{Animation, Animator, AnimatorLayer, AnimatorState};
+use noa_format::wire as w;
 use serde_yaml_ng::Value;
+#[path = "animation.rs"]
+mod animation;
 use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Debug, Default)]
@@ -77,8 +80,13 @@ struct StatePlan {
 
 struct ClipPlan {
     name: String,
+    duration: f32,
     looped: bool,
-    tracks: Vec<(i64, bool)>,
+    tracks: Vec<(i64, w::TrackT)>,
+    events: Vec<(
+        w::AnimationEventT,
+        Option<(SourceIdentity, w::ReferenceKind)>,
+    )>,
 }
 
 impl AnimatorPlan {
@@ -111,19 +119,32 @@ impl AnimatorPlan {
                 Ok(Animation {
                     id: ids.resolve(identity)?,
                     name: clip.name.clone(),
-                    duration_seconds: 0.0,
+                    duration_seconds: clip.duration,
                     looped: clip.looped,
                     tracks: clip
                         .tracks
                         .iter()
-                        .map(|(target, value)| {
-                            Ok(NodeActiveTrack {
-                                target_id: ids.get(&self.owner_asset, *target)?,
-                                keys: vec![BoolKey {
-                                    time: 0.0,
-                                    value: *value,
-                                }],
-                            })
+                        .map(|(target, track)| {
+                            let mut track = track.clone();
+                            track.binding.target_id = ids.get(&self.owner_asset, *target)?.get();
+                            Ok(track)
+                        })
+                        .collect::<Result<_, Error>>()?,
+                    events: clip
+                        .events
+                        .iter()
+                        .map(|(event, reference)| {
+                            let mut event = event.clone();
+                            event.animator_component_id =
+                                ids.get(&self.owner_asset, self.source_id)?.get();
+                            if let Some((source, kind)) = reference {
+                                let mut target = w::TypedReferenceT::default();
+                                target.id = ids.resolve(source)?.get();
+                                target.kind = *kind;
+                                event.object_parameter.as_mut().unwrap().target =
+                                    Some(Box::new(target));
+                            }
+                            Ok(event)
                         })
                         .collect::<Result<_, Error>>()?,
                 })
@@ -254,7 +275,15 @@ pub fn plan_animators(owner: &str, sources: &UnitySources) -> Result<Vec<Animato
                 let clip_id =
                     SourceIdentity::bound_to(clip_source, clip.file_id, owner, object.file_id);
                 if !clips.contains_key(&clip_id) {
-                    let parsed = parse_clip(&clip.data, node_id, &nodes).map_err(|e| {
+                    let parsed = animation::parse_clip(
+                        &clip.data,
+                        node_id,
+                        &nodes,
+                        owner,
+                        clip_source,
+                        sources,
+                    )
+                    .map_err(|e| {
                         Error::new(
                             e.code,
                             format!("{clip_source}, fileID {}: {e}", clip.file_id),
@@ -305,110 +334,6 @@ pub fn plan_animators(owner: &str, sources: &UnitySources) -> Result<Vec<Animato
     Ok(result)
 }
 
-fn parse_clip(
-    data: &Value,
-    root: i64,
-    nodes: &[crate::unity::SceneNode],
-) -> Result<ClipPlan, Error> {
-    for field in [
-        "m_RotationCurves",
-        "m_CompressedRotationCurves",
-        "m_EulerCurves",
-        "m_PositionCurves",
-        "m_ScaleCurves",
-        "m_PPtrCurves",
-        "m_Events",
-    ] {
-        empty(data, field)?;
-    }
-    for field in [
-        "m_Legacy",
-        "m_Compressed",
-        "m_HasGenericRootTransform",
-        "m_HasMotionFloatCurves",
-    ] {
-        zero(data, field)?;
-    }
-    let settings = required(data, "m_AnimationClipSettings")?;
-    for field in [
-        "m_StartTime",
-        "m_StopTime",
-        "m_OrientationOffsetY",
-        "m_Level",
-        "m_CycleOffset",
-        "m_HasAdditiveReferencePose",
-        "m_LoopBlend",
-        "m_Mirror",
-    ] {
-        zero(settings, field)?;
-    }
-    null_ref(settings, "m_AdditiveReferencePoseClip")?;
-    let mut by_path = BTreeMap::<String, Vec<i64>>::new();
-    for node in nodes {
-        let mut current = node;
-        let mut segments = Vec::new();
-        while current.file_id != root {
-            let Some(parent) = current.parent_file_id else {
-                break;
-            };
-            segments.push(current.name.as_str());
-            current = nodes
-                .iter()
-                .find(|n| n.file_id == parent)
-                .expect("validated parent");
-        }
-        if current.file_id == root {
-            segments.reverse();
-            by_path
-                .entry(segments.join("/"))
-                .or_default()
-                .push(node.file_id);
-        }
-    }
-    let mut targets = BTreeSet::new();
-    let mut tracks = Vec::new();
-    for curve in sequence(data, "m_FloatCurves")? {
-        if string(curve, "attribute")? != "m_IsActive" || integer(curve, "classID")? != 1 {
-            return Err(unsupported(
-                "only initialization m_IsActive tracks are currently supported",
-            ));
-        }
-        null_ref(curve, "script")?;
-        zero(curve, "flags")?;
-        let path = string(curve, "path")?;
-        let candidates = by_path.get(path).ok_or_else(|| {
-            Error::new(
-                "MISSING_ANIMATION_TARGET",
-                format!("node path {path:?} is absent under Animator owner"),
-            )
-        })?;
-        if candidates.len() != 1 {
-            return Err(Error::new(
-                "AMBIGUOUS_ANIMATION_TARGET",
-                format!("multiple nodes match {path:?}"),
-            ));
-        }
-        let target = candidates[0];
-        if !targets.insert(target) {
-            return Err(unsupported("conflicting animation tracks"));
-        }
-        let keys = sequence(required(curve, "curve")?, "m_Curve")?;
-        if keys.len() != 1 || float(&keys[0], "time")? != 0.0 {
-            return Err(unsupported(
-                "only one time=0 initialization key is currently supported",
-            ));
-        }
-        let value = boolean(&keys[0], "value")?;
-        tracks.push((target, value));
-    }
-    tracks.sort_by_key(|(id, _)| *id);
-    Ok(ClipPlan {
-        name: string(data, "m_Name")?.into(),
-        looped: boolean(settings, "m_LoopTime")?,
-        tracks,
-    })
-}
-
 fn unsupported(message: &str) -> Error {
     Error::new("UNSUPPORTED_ANIMATOR", message)
 }
@@ -417,10 +342,16 @@ fn required<'a>(v: &'a Value, key: &str) -> Result<&'a Value, Error> {
         .ok_or_else(|| Error::new("INVALID_ANIMATOR", format!("missing {key}")))
 }
 fn string<'a>(v: &'a Value, key: &str) -> Result<&'a str, Error> {
-    required(v, key)?
-        .as_str()
-        .ok_or_else(|| Error::new("INVALID_ANIMATOR", format!("{key}: expected string")))
+    match required(v, key)? {
+        Value::Null => Ok(""), // Unity YAML's empty serialized string.
+        Value::String(s) => Ok(s),
+        _ => Err(Error::new(
+            "INVALID_ANIMATOR",
+            format!("{key}: expected string"),
+        )),
+    }
 }
+
 fn sequence<'a>(v: &'a Value, key: &str) -> Result<&'a [Value], Error> {
     required(v, key)?
         .as_sequence()

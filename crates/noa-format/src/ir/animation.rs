@@ -1,25 +1,14 @@
 use super::EntityId;
 use serde::Serialize;
 
-#[derive(Debug, Clone, Copy, PartialEq, Serialize)]
-pub struct BoolKey {
-    pub time: f32,
-    pub value: bool,
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize)]
-pub struct NodeActiveTrack {
-    pub target_id: EntityId,
-    pub keys: Vec<BoolKey>,
-}
-
 #[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct Animation {
     pub id: EntityId,
     pub name: String,
     pub duration_seconds: f32,
     pub looped: bool,
-    pub tracks: Vec<NodeActiveTrack>,
+    pub tracks: Vec<crate::wire::TrackT>,
+    pub events: Vec<crate::wire::AnimationEventT>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]

@@ -337,6 +337,13 @@ impl<'de> Deserialize<'de> for UnityValue {
                         Some("guid" | "m_VertexStreams" | "m_TrailVertexStreams")
                     ) {
                         Value::String(map.next_value::<String>()?)
+                    } else if key.as_str() == Some("m_Events") {
+                        Value::Sequence(
+                            map.next_value::<Vec<UnityAnimationEvent>>()?
+                                .into_iter()
+                                .map(|v| v.0)
+                                .collect(),
+                        )
                     } else {
                         map.next_value::<UnityValue>()?.0
                     };
@@ -348,5 +355,39 @@ impl<'de> Deserialize<'de> for UnityValue {
             }
         }
         deserializer.deserialize_any(Visitor)
+    }
+}
+
+// Event string parameters are typed Unity strings even when the exported YAML
+// scalar looks like a number/bool or is empty. Do not coerce script fields named
+// "data": this visitor is used only for AnimationClip's m_Events array.
+struct UnityAnimationEvent(Value);
+impl<'de> Deserialize<'de> for UnityAnimationEvent {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        struct Visitor;
+        impl<'de> serde::de::Visitor<'de> for Visitor {
+            type Value = UnityAnimationEvent;
+            fn expecting(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                f.write_str("a Unity animation event")
+            }
+            fn visit_map<A: serde::de::MapAccess<'de>>(
+                self,
+                mut map: A,
+            ) -> Result<Self::Value, A::Error> {
+                let mut out = serde_yaml_ng::Mapping::new();
+                while let Some(key) = map.next_key::<Value>()? {
+                    let value = if matches!(key.as_str(), Some("data" | "functionName")) {
+                        Value::String(map.next_value::<Option<String>>()?.unwrap_or_default())
+                    } else {
+                        map.next_value::<UnityValue>()?.0
+                    };
+                    if out.insert(key, value).is_some() {
+                        return Err(serde::de::Error::custom("duplicate event key"));
+                    }
+                }
+                Ok(UnityAnimationEvent(Value::Mapping(out)))
+            }
+        }
+        d.deserialize_map(Visitor)
     }
 }

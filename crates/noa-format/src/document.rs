@@ -293,13 +293,7 @@ pub fn validate(d: &wire::DocumentT) -> Result<(), String> {
             }
         }
     }
-    for a in d.animations.iter().flatten() {
-        for t in a.tracks.iter().flatten() {
-            if !ids.contains_key(&t.binding.target_id) {
-                return Err("missing animation target".into());
-            }
-        }
-    }
+    crate::animation::validate(d, &ids)?;
     for e in &d.entries {
         if e.roots.is_empty() {
             return Err("entry needs roots".into());

@@ -44,7 +44,10 @@ enum AnimationProperty:ushort {
   Unknown, NodeActive, NodePosition, NodeRotation, NodeScale,
   MaterialTint, MaterialFloat, ParticleParameter, CameraFov,
   CameraOrthoSize, CameraNear, CameraFar, CameraActive, RendererEnabled,
-  RendererMaterial, RendererMesh, MaterialTexture
+  RendererMaterial, RendererMesh, MaterialTexture,
+  RectAnchoredPosition, RectSizeDelta, RectAnchorMin, RectAnchorMax, RectPivot,
+  RendererMaterialTint, RendererMaterialFloat, RendererTextureST, ComponentEnabled,
+  ParticleColor, ParticleCustomColor, ParticleLoop
 }
 enum ParticleParameter:ushort {
   Unknown, StartLifetime, StartSpeed, StartSizeX, StartSizeY, StartSizeZ,
@@ -390,7 +393,8 @@ table RotationTrack { encoding:RotationEncoding; x:ScalarCurve; y:ScalarCurve; z
 table ColorTrack { r:ScalarCurve; g:ScalarCurve; b:ScalarCurve; a:ScalarCurve; }
 table BoolTrack { keys:[BoolKey] (required); }
 table ReferenceTrack { keys:[RefKey] (required); }
-union TrackData { FloatTrack, Vector3Track, RotationTrack, ColorTrack, BoolTrack, ReferenceTrack }
+table Vector4Track { x:ScalarCurve; y:ScalarCurve; z:ScalarCurve; w:ScalarCurve; }
+union TrackData { FloatTrack, Vector3Track, RotationTrack, ColorTrack, BoolTrack, ReferenceTrack, Vector4Track }
 table Binding {
   target_id:uint;
   property:AnimationProperty;
@@ -399,7 +403,15 @@ table Binding {
   slot_index:uint;
 }
 table Track { binding:Binding (required); data:TrackData; }
-table AnimationEvent { time_seconds:float; name:string (required); payload:string; }
+enum AnimationMessageOptions:ubyte { RequireReceiver, DontRequireReceiver }
+// Events carry data only; the host decides how to dispatch them.
+table AnimationEvent {
+  time_seconds:float; name:string (required); string_parameter:string;
+  float_parameter:float; int_parameter:int;
+  object_parameter:ReferenceValue;
+  message_options:AnimationMessageOptions;
+  animator_component_id:uint;
+}
 table Animation {
   id:uint; name:string;
   duration_seconds:float;

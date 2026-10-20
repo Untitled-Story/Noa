@@ -43,7 +43,7 @@ fn compile_indexed(
     index: &AssetIndex,
     scripts: &dyn ScriptResolver,
 ) -> Result<Compilation, Error> {
-    let (draft, sources, ids) = prepare_indexed(prefab, index, scripts)?;
+    let (mut draft, sources, ids) = prepare_indexed(prefab, index, scripts)?;
     if draft.source_inspection.has_errors() {
         return Err(Error::new(
             "SOURCE_INSPECTION_FAILED",
@@ -112,6 +112,75 @@ fn compile_indexed(
                 id: mesh.id,
             },
         );
+    }
+    // Event-only materials/images are real dependencies, not unresolved debug refs.
+    for a in &mut draft.animations {
+        for e in &mut a.events {
+            if let Some(reference) = &mut e.object_parameter
+                && reference.target.is_none()
+            {
+                let mut raw = serde_yaml_ng::Mapping::new();
+                raw.insert("fileID".into(), reference.source.file_id.into());
+                if let Some(guid) = &reference.source.guid {
+                    raw.insert("guid".into(), guid.clone().into());
+                }
+                let (id, _, _) = resources.image(&entry, &raw.into())?;
+                reference.target = Some(Box::new(n!(TypedReferenceT {
+                    id,
+                    kind: w::ReferenceKind::Asset
+                })));
+            }
+            if let Some(target) = e.object_parameter.as_ref().and_then(|r| r.target.as_ref())
+                && matches!(
+                    target.kind,
+                    w::ReferenceKind::Material | w::ReferenceKind::Asset
+                )
+            {
+                if target.kind == w::ReferenceKind::Asset
+                    && resources.assets.contains_key(&target.id)
+                {
+                    continue;
+                }
+                let mut found = false;
+                for (source, file) in &sources.files {
+                    for object in file.objects.values() {
+                        if ids.get(source, object.file_id)?.get() != target.id {
+                            continue;
+                        }
+                        let reference: serde_yaml_ng::Value =
+                            serde_yaml_ng::from_str(&format!("{{fileID: {}}}", object.file_id))
+                                .unwrap();
+                        match object.class_id {
+                            21 => {
+                                resources.material(source, &reference)?;
+                            }
+                            28 => {
+                                resources.image(source, &reference)?;
+                            }
+                            _ => return Err(err("event object", "unsupported resource type")),
+                        }
+                        found = true;
+                    }
+                }
+                if !found {
+                    return Err(err("event object", "missing source resource"));
+                }
+            }
+        }
+    }
+    // Gravity can become active through animation even when its initial value is zero.
+    for a in &draft.animations {
+        for t in &a.tracks {
+            if t.binding.property == w::AnimationProperty::ParticleParameter
+                && t.binding.parameter == w::ParticleParameter::GravityMultiplier
+                && let Some(w::ComponentDataT::ParticleSystem(p)) = components
+                    .iter_mut()
+                    .find(|c| c.id == t.binding.target_id)
+                    .map(|c| &mut c.data)
+            {
+                p.main.host_gravity_slot = Some("world-gravity".into());
+            }
+        }
     }
     let mut targets = resources.targets.clone();
     for o in file.objects.values() {
@@ -200,8 +269,32 @@ fn compile_indexed(
     });
     let mut features = BTreeMap::<String, u32>::new();
     features.insert("scene.trs".into(), 1);
-    if !draft.animations.is_empty() {
-        features.insert("animation.node-active".into(), 1);
+    for a in &draft.animations {
+        if !a.events.is_empty() {
+            features.insert("animation.events-typed".into(), 1);
+        }
+        for t in &a.tracks {
+            let capability = match t.binding.property {
+                w::AnimationProperty::NodeActive => "animation.node-active",
+                w::AnimationProperty::NodePosition
+                | w::AnimationProperty::NodeRotation
+                | w::AnimationProperty::NodeScale => "animation.transform",
+                w::AnimationProperty::RectAnchoredPosition
+                | w::AnimationProperty::RectSizeDelta
+                | w::AnimationProperty::RectAnchorMin
+                | w::AnimationProperty::RectAnchorMax
+                | w::AnimationProperty::RectPivot => "animation.layout",
+                w::AnimationProperty::ParticleParameter
+                | w::AnimationProperty::ParticleLoop
+                | w::AnimationProperty::ParticleColor
+                | w::AnimationProperty::ParticleCustomColor => "animation.particle",
+                w::AnimationProperty::RendererEnabled | w::AnimationProperty::ComponentEnabled => {
+                    "animation.component-enabled"
+                }
+                _ => "animation.renderer-material",
+            };
+            features.insert(capability.into(), 1);
+        }
     }
     features.insert("camera.host".into(), 1);
     if !draft.host_layout_nodes.is_empty() {

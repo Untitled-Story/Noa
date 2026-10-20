@@ -3470,13 +3470,13 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MAX_ANIMATION_PROPERTY: u16 = 16;
+        pub const ENUM_MAX_ANIMATION_PROPERTY: u16 = 28;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
         #[allow(non_camel_case_types)]
-        pub const ENUM_VALUES_ANIMATION_PROPERTY: [AnimationProperty; 17] = [
+        pub const ENUM_VALUES_ANIMATION_PROPERTY: [AnimationProperty; 29] = [
             AnimationProperty::Unknown,
             AnimationProperty::NodeActive,
             AnimationProperty::NodePosition,
@@ -3494,6 +3494,18 @@ pub mod noa {
             AnimationProperty::RendererMaterial,
             AnimationProperty::RendererMesh,
             AnimationProperty::MaterialTexture,
+            AnimationProperty::RectAnchoredPosition,
+            AnimationProperty::RectSizeDelta,
+            AnimationProperty::RectAnchorMin,
+            AnimationProperty::RectAnchorMax,
+            AnimationProperty::RectPivot,
+            AnimationProperty::RendererMaterialTint,
+            AnimationProperty::RendererMaterialFloat,
+            AnimationProperty::RendererTextureST,
+            AnimationProperty::ComponentEnabled,
+            AnimationProperty::ParticleColor,
+            AnimationProperty::ParticleCustomColor,
+            AnimationProperty::ParticleLoop,
         ];
 
         #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -3518,9 +3530,21 @@ pub mod noa {
             pub const RendererMaterial: Self = Self(14);
             pub const RendererMesh: Self = Self(15);
             pub const MaterialTexture: Self = Self(16);
+            pub const RectAnchoredPosition: Self = Self(17);
+            pub const RectSizeDelta: Self = Self(18);
+            pub const RectAnchorMin: Self = Self(19);
+            pub const RectAnchorMax: Self = Self(20);
+            pub const RectPivot: Self = Self(21);
+            pub const RendererMaterialTint: Self = Self(22);
+            pub const RendererMaterialFloat: Self = Self(23);
+            pub const RendererTextureST: Self = Self(24);
+            pub const ComponentEnabled: Self = Self(25);
+            pub const ParticleColor: Self = Self(26);
+            pub const ParticleCustomColor: Self = Self(27);
+            pub const ParticleLoop: Self = Self(28);
 
             pub const ENUM_MIN: u16 = 0;
-            pub const ENUM_MAX: u16 = 16;
+            pub const ENUM_MAX: u16 = 28;
             pub const ENUM_VALUES: &'static [Self] = &[
                 Self::Unknown,
                 Self::NodeActive,
@@ -3539,6 +3563,18 @@ pub mod noa {
                 Self::RendererMaterial,
                 Self::RendererMesh,
                 Self::MaterialTexture,
+                Self::RectAnchoredPosition,
+                Self::RectSizeDelta,
+                Self::RectAnchorMin,
+                Self::RectAnchorMax,
+                Self::RectPivot,
+                Self::RendererMaterialTint,
+                Self::RendererMaterialFloat,
+                Self::RendererTextureST,
+                Self::ComponentEnabled,
+                Self::ParticleColor,
+                Self::ParticleCustomColor,
+                Self::ParticleLoop,
             ];
             /// Returns the variant's name or "" if unknown.
             pub fn variant_name(self) -> Option<&'static str> {
@@ -3560,6 +3596,18 @@ pub mod noa {
                     Self::RendererMaterial => Some("RendererMaterial"),
                     Self::RendererMesh => Some("RendererMesh"),
                     Self::MaterialTexture => Some("MaterialTexture"),
+                    Self::RectAnchoredPosition => Some("RectAnchoredPosition"),
+                    Self::RectSizeDelta => Some("RectSizeDelta"),
+                    Self::RectAnchorMin => Some("RectAnchorMin"),
+                    Self::RectAnchorMax => Some("RectAnchorMax"),
+                    Self::RectPivot => Some("RectPivot"),
+                    Self::RendererMaterialTint => Some("RendererMaterialTint"),
+                    Self::RendererMaterialFloat => Some("RendererMaterialFloat"),
+                    Self::RendererTextureST => Some("RendererTextureST"),
+                    Self::ComponentEnabled => Some("ComponentEnabled"),
+                    Self::ParticleColor => Some("ParticleColor"),
+                    Self::ParticleCustomColor => Some("ParticleCustomColor"),
+                    Self::ParticleLoop => Some("ParticleLoop"),
                     _ => None,
                 }
             }
@@ -7189,13 +7237,13 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MAX_TRACK_DATA: u8 = 6;
+        pub const ENUM_MAX_TRACK_DATA: u8 = 7;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
         #[allow(non_camel_case_types)]
-        pub const ENUM_VALUES_TRACK_DATA: [TrackData; 7] = [
+        pub const ENUM_VALUES_TRACK_DATA: [TrackData; 8] = [
             TrackData::NONE,
             TrackData::FloatTrack,
             TrackData::Vector3Track,
@@ -7203,6 +7251,7 @@ pub mod noa {
             TrackData::ColorTrack,
             TrackData::BoolTrack,
             TrackData::ReferenceTrack,
+            TrackData::Vector4Track,
         ];
 
         #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -7217,9 +7266,10 @@ pub mod noa {
             pub const ColorTrack: Self = Self(4);
             pub const BoolTrack: Self = Self(5);
             pub const ReferenceTrack: Self = Self(6);
+            pub const Vector4Track: Self = Self(7);
 
             pub const ENUM_MIN: u8 = 0;
-            pub const ENUM_MAX: u8 = 6;
+            pub const ENUM_MAX: u8 = 7;
             pub const ENUM_VALUES: &'static [Self] = &[
                 Self::NONE,
                 Self::FloatTrack,
@@ -7228,6 +7278,7 @@ pub mod noa {
                 Self::ColorTrack,
                 Self::BoolTrack,
                 Self::ReferenceTrack,
+                Self::Vector4Track,
             ];
             /// Returns the variant's name or "" if unknown.
             pub fn variant_name(self) -> Option<&'static str> {
@@ -7239,6 +7290,7 @@ pub mod noa {
                     Self::ColorTrack => Some("ColorTrack"),
                     Self::BoolTrack => Some("BoolTrack"),
                     Self::ReferenceTrack => Some("ReferenceTrack"),
+                    Self::Vector4Track => Some("Vector4Track"),
                     _ => None,
                 }
             }
@@ -7340,6 +7392,7 @@ pub mod noa {
             ColorTrack(alloc::boxed::Box<ColorTrackT>),
             BoolTrack(alloc::boxed::Box<BoolTrackT>),
             ReferenceTrack(alloc::boxed::Box<ReferenceTrackT>),
+            Vector4Track(alloc::boxed::Box<Vector4TrackT>),
         }
         impl Default for TrackDataT {
             fn default() -> Self {
@@ -7356,6 +7409,7 @@ pub mod noa {
                     Self::ColorTrack(_) => TrackData::ColorTrack,
                     Self::BoolTrack(_) => TrackData::BoolTrack,
                     Self::ReferenceTrack(_) => TrackData::ReferenceTrack,
+                    Self::Vector4Track(_) => TrackData::Vector4Track,
                 }
             }
             pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
@@ -7370,6 +7424,7 @@ pub mod noa {
                     Self::ColorTrack(v) => Some(v.pack(fbb).as_union_value()),
                     Self::BoolTrack(v) => Some(v.pack(fbb).as_union_value()),
                     Self::ReferenceTrack(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::Vector4Track(v) => Some(v.pack(fbb).as_union_value()),
                 }
             }
             /// If the union variant matches, return the owned FloatTrackT, setting the union to NONE.
@@ -7546,7 +7601,161 @@ pub mod noa {
                     None
                 }
             }
+            /// If the union variant matches, return the owned Vector4TrackT, setting the union to NONE.
+            pub fn take_vector_4_track(&mut self) -> Option<alloc::boxed::Box<Vector4TrackT>> {
+                if let Self::Vector4Track(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::Vector4Track(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the Vector4TrackT.
+            pub fn as_vector_4_track(&self) -> Option<&Vector4TrackT> {
+                if let Self::Vector4Track(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the Vector4TrackT.
+            pub fn as_vector_4_track_mut(&mut self) -> Option<&mut Vector4TrackT> {
+                if let Self::Vector4Track(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
         }
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MIN_ANIMATION_MESSAGE_OPTIONS: u8 = 0;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        pub const ENUM_MAX_ANIMATION_MESSAGE_OPTIONS: u8 = 1;
+        #[deprecated(
+            since = "2.0.0",
+            note = "Use associated constants instead. This will no longer be generated in 2021."
+        )]
+        #[allow(non_camel_case_types)]
+        pub const ENUM_VALUES_ANIMATION_MESSAGE_OPTIONS: [AnimationMessageOptions; 2] = [
+            AnimationMessageOptions::RequireReceiver,
+            AnimationMessageOptions::DontRequireReceiver,
+        ];
+
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        #[repr(transparent)]
+        pub struct AnimationMessageOptions(pub u8);
+        #[allow(non_upper_case_globals)]
+        impl AnimationMessageOptions {
+            pub const RequireReceiver: Self = Self(0);
+            pub const DontRequireReceiver: Self = Self(1);
+
+            pub const ENUM_MIN: u8 = 0;
+            pub const ENUM_MAX: u8 = 1;
+            pub const ENUM_VALUES: &'static [Self] =
+                &[Self::RequireReceiver, Self::DontRequireReceiver];
+            /// Returns the variant's name or "" if unknown.
+            pub fn variant_name(self) -> Option<&'static str> {
+                match self {
+                    Self::RequireReceiver => Some("RequireReceiver"),
+                    Self::DontRequireReceiver => Some("DontRequireReceiver"),
+                    _ => None,
+                }
+            }
+        }
+        impl ::core::fmt::Debug for AnimationMessageOptions {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                if let Some(name) = self.variant_name() {
+                    f.write_str(name)
+                } else {
+                    f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+                }
+            }
+        }
+        impl Serialize for AnimationMessageOptions {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                serializer.serialize_unit_variant(
+                    "AnimationMessageOptions",
+                    self.0 as u32,
+                    self.variant_name()
+                        .ok_or_else(|| serde::ser::Error::custom("unknown enum value"))?,
+                )
+            }
+        }
+
+        impl<'de> serde::Deserialize<'de> for AnimationMessageOptions {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let s = String::deserialize(deserializer)?;
+                for item in AnimationMessageOptions::ENUM_VALUES {
+                    if let Some(item_name) = item.variant_name() {
+                        if item_name == s {
+                            return Ok(item.clone());
+                        }
+                    }
+                }
+                Err(serde::de::Error::custom(format!(
+                    "Unknown AnimationMessageOptions variant: {s}"
+                )))
+            }
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for AnimationMessageOptions {
+            type Inner = Self;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+                Self(b)
+            }
+        }
+
+        impl ::flatbuffers::Push for AnimationMessageOptions {
+            type Output = AnimationMessageOptions;
+            #[inline]
+            unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+                unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+            }
+        }
+
+        impl ::flatbuffers::EndianScalar for AnimationMessageOptions {
+            type Scalar = u8;
+            #[inline]
+            fn to_little_endian(self) -> u8 {
+                self.0.to_le()
+            }
+            #[inline]
+            #[allow(clippy::wrong_self_convention)]
+            fn from_little_endian(v: u8) -> Self {
+                let b = u8::from_le(v);
+                Self(b)
+            }
+        }
+
+        impl<'a> ::flatbuffers::Verifiable for AnimationMessageOptions {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                u8::run_verifier(v, pos)
+            }
+        }
+
+        impl ::flatbuffers::SimpleToVerifyInSlice for AnimationMessageOptions {}
         // struct Vec2, aligned to 4
         #[repr(transparent)]
         #[derive(Clone, Copy, PartialEq)]
@@ -30669,6 +30878,294 @@ pub mod noa {
                 ReferenceTrack::create(_fbb, &ReferenceTrackArgs { keys })
             }
         }
+        pub enum Vector4TrackOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct Vector4Track<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for Vector4Track<'a> {
+            type Inner = Vector4Track<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> Vector4Track<'a> {
+            pub const VT_X: ::flatbuffers::VOffsetT = 4;
+            pub const VT_Y: ::flatbuffers::VOffsetT = 6;
+            pub const VT_Z: ::flatbuffers::VOffsetT = 8;
+            pub const VT_W: ::flatbuffers::VOffsetT = 10;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                Vector4Track { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args Vector4TrackArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<Vector4Track<'bldr>> {
+                let mut builder = Vector4TrackBuilder::new(_fbb);
+                if let Some(x) = args.w {
+                    builder.add_w(x);
+                }
+                if let Some(x) = args.z {
+                    builder.add_z(x);
+                }
+                if let Some(x) = args.y {
+                    builder.add_y(x);
+                }
+                if let Some(x) = args.x {
+                    builder.add_x(x);
+                }
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> Vector4TrackT {
+                let x = self.x().map(|x| alloc::boxed::Box::new(x.unpack()));
+                let y = self.y().map(|x| alloc::boxed::Box::new(x.unpack()));
+                let z = self.z().map(|x| alloc::boxed::Box::new(x.unpack()));
+                let w = self.w().map(|x| alloc::boxed::Box::new(x.unpack()));
+                Vector4TrackT { x, y, z, w }
+            }
+
+            #[inline]
+            pub fn x(&self) -> Option<ScalarCurve<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<ScalarCurve>>(
+                            Vector4Track::VT_X,
+                            None,
+                        )
+                }
+            }
+            #[inline]
+            pub fn y(&self) -> Option<ScalarCurve<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<ScalarCurve>>(
+                            Vector4Track::VT_Y,
+                            None,
+                        )
+                }
+            }
+            #[inline]
+            pub fn z(&self) -> Option<ScalarCurve<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<ScalarCurve>>(
+                            Vector4Track::VT_Z,
+                            None,
+                        )
+                }
+            }
+            #[inline]
+            pub fn w(&self) -> Option<ScalarCurve<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<ScalarCurve>>(
+                            Vector4Track::VT_W,
+                            None,
+                        )
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for Vector4Track<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<ScalarCurve>>(
+                        "x",
+                        Self::VT_X,
+                        false,
+                    )?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<ScalarCurve>>(
+                        "y",
+                        Self::VT_Y,
+                        false,
+                    )?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<ScalarCurve>>(
+                        "z",
+                        Self::VT_Z,
+                        false,
+                    )?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<ScalarCurve>>(
+                        "w",
+                        Self::VT_W,
+                        false,
+                    )?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct Vector4TrackArgs<'a> {
+            pub x: Option<::flatbuffers::WIPOffset<ScalarCurve<'a>>>,
+            pub y: Option<::flatbuffers::WIPOffset<ScalarCurve<'a>>>,
+            pub z: Option<::flatbuffers::WIPOffset<ScalarCurve<'a>>>,
+            pub w: Option<::flatbuffers::WIPOffset<ScalarCurve<'a>>>,
+        }
+        impl<'a> Default for Vector4TrackArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                Vector4TrackArgs {
+                    x: None,
+                    y: None,
+                    z: None,
+                    w: None,
+                }
+            }
+        }
+
+        impl Serialize for Vector4Track<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("Vector4Track", 4)?;
+                if let Some(f) = self.x() {
+                    s.serialize_field("x", &f)?;
+                } else {
+                    s.skip_field("x")?;
+                }
+                if let Some(f) = self.y() {
+                    s.serialize_field("y", &f)?;
+                } else {
+                    s.skip_field("y")?;
+                }
+                if let Some(f) = self.z() {
+                    s.serialize_field("z", &f)?;
+                } else {
+                    s.skip_field("z")?;
+                }
+                if let Some(f) = self.w() {
+                    s.serialize_field("w", &f)?;
+                } else {
+                    s.skip_field("w")?;
+                }
+                s.end()
+            }
+        }
+
+        pub struct Vector4TrackBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> Vector4TrackBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_x(&mut self, x: ::flatbuffers::WIPOffset<ScalarCurve<'b>>) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<ScalarCurve>>(
+                        Vector4Track::VT_X,
+                        x,
+                    );
+            }
+            #[inline]
+            pub fn add_y(&mut self, y: ::flatbuffers::WIPOffset<ScalarCurve<'b>>) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<ScalarCurve>>(
+                        Vector4Track::VT_Y,
+                        y,
+                    );
+            }
+            #[inline]
+            pub fn add_z(&mut self, z: ::flatbuffers::WIPOffset<ScalarCurve<'b>>) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<ScalarCurve>>(
+                        Vector4Track::VT_Z,
+                        z,
+                    );
+            }
+            #[inline]
+            pub fn add_w(&mut self, w: ::flatbuffers::WIPOffset<ScalarCurve<'b>>) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<ScalarCurve>>(
+                        Vector4Track::VT_W,
+                        w,
+                    );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> Vector4TrackBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                Vector4TrackBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<Vector4Track<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for Vector4Track<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("Vector4Track");
+                ds.field("x", &self.x());
+                ds.field("y", &self.y());
+                ds.field("z", &self.z());
+                ds.field("w", &self.w());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct Vector4TrackT {
+            pub x: Option<alloc::boxed::Box<ScalarCurveT>>,
+            pub y: Option<alloc::boxed::Box<ScalarCurveT>>,
+            pub z: Option<alloc::boxed::Box<ScalarCurveT>>,
+            pub w: Option<alloc::boxed::Box<ScalarCurveT>>,
+        }
+        impl Default for Vector4TrackT {
+            fn default() -> Self {
+                Self {
+                    x: None,
+                    y: None,
+                    z: None,
+                    w: None,
+                }
+            }
+        }
+        impl Vector4TrackT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<Vector4Track<'b>> {
+                let x = self.x.as_ref().map(|x| x.pack(_fbb));
+                let y = self.y.as_ref().map(|x| x.pack(_fbb));
+                let z = self.z.as_ref().map(|x| x.pack(_fbb));
+                let w = self.w.as_ref().map(|x| x.pack(_fbb));
+                Vector4Track::create(_fbb, &Vector4TrackArgs { x, y, z, w })
+            }
+        }
         pub enum BindingOffset {}
         #[derive(Copy, Clone, PartialEq)]
 
@@ -31054,6 +31551,11 @@ pub mod noa {
                                 .unpack(),
                         ))
                     }
+                    TrackData::Vector4Track => TrackDataT::Vector4Track(alloc::boxed::Box::new(
+                        self.data_as_vector_4_track()
+                            .expect("Invalid union table, expected `TrackData::Vector4Track`.")
+                            .unpack(),
+                    )),
                     _ => TrackDataT::NONE,
                 };
                 TrackT { binding, data }
@@ -31183,6 +31685,21 @@ pub mod noa {
                     None
                 }
             }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_vector_4_track(&self) -> Option<Vector4Track<'a>> {
+                if self.data_type() == TrackData::Vector4Track {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { Vector4Track::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
         }
 
         impl ::flatbuffers::Verifiable for Track<'_> {
@@ -31201,6 +31718,7 @@ pub mod noa {
           TrackData::ColorTrack => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<ColorTrack>>("TrackData::ColorTrack", pos),
           TrackData::BoolTrack => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<BoolTrack>>("TrackData::BoolTrack", pos),
           TrackData::ReferenceTrack => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<ReferenceTrack>>("TrackData::ReferenceTrack", pos),
+          TrackData::Vector4Track => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<Vector4Track>>("TrackData::Vector4Track", pos),
           _ => Ok(()),
         }
      })?
@@ -31268,6 +31786,12 @@ pub mod noa {
                         let f = self
                             .data_as_reference_track()
                             .expect("Invalid union table, expected `TrackData::ReferenceTrack`.");
+                        s.serialize_field("data", &f)?;
+                    }
+                    TrackData::Vector4Track => {
+                        let f = self
+                            .data_as_vector_4_track()
+                            .expect("Invalid union table, expected `TrackData::Vector4Track`.");
                         s.serialize_field("data", &f)?;
                     }
                     _ => unimplemented!(),
@@ -31386,6 +31910,16 @@ pub mod noa {
                             )
                         }
                     }
+                    TrackData::Vector4Track => {
+                        if let Some(x) = self.data_as_vector_4_track() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
                     _ => {
                         let x: Option<()> = None;
                         ds.field("data", &x)
@@ -31449,7 +31983,12 @@ pub mod noa {
         impl<'a> AnimationEvent<'a> {
             pub const VT_TIME_SECONDS: ::flatbuffers::VOffsetT = 4;
             pub const VT_NAME: ::flatbuffers::VOffsetT = 6;
-            pub const VT_PAYLOAD: ::flatbuffers::VOffsetT = 8;
+            pub const VT_STRING_PARAMETER: ::flatbuffers::VOffsetT = 8;
+            pub const VT_FLOAT_PARAMETER: ::flatbuffers::VOffsetT = 10;
+            pub const VT_INT_PARAMETER: ::flatbuffers::VOffsetT = 12;
+            pub const VT_OBJECT_PARAMETER: ::flatbuffers::VOffsetT = 14;
+            pub const VT_MESSAGE_OPTIONS: ::flatbuffers::VOffsetT = 16;
+            pub const VT_ANIMATOR_COMPONENT_ID: ::flatbuffers::VOffsetT = 18;
 
             #[inline]
             pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -31466,13 +32005,20 @@ pub mod noa {
                 args: &'args AnimationEventArgs<'args>,
             ) -> ::flatbuffers::WIPOffset<AnimationEvent<'bldr>> {
                 let mut builder = AnimationEventBuilder::new(_fbb);
-                if let Some(x) = args.payload {
-                    builder.add_payload(x);
+                builder.add_animator_component_id(args.animator_component_id);
+                if let Some(x) = args.object_parameter {
+                    builder.add_object_parameter(x);
+                }
+                builder.add_int_parameter(args.int_parameter);
+                builder.add_float_parameter(args.float_parameter);
+                if let Some(x) = args.string_parameter {
+                    builder.add_string_parameter(x);
                 }
                 if let Some(x) = args.name {
                     builder.add_name(x);
                 }
                 builder.add_time_seconds(args.time_seconds);
+                builder.add_message_options(args.message_options);
                 builder.finish()
             }
 
@@ -31482,13 +32028,25 @@ pub mod noa {
                     let x = self.name();
                     alloc::string::ToString::to_string(x)
                 };
-                let payload = self
-                    .payload()
+                let string_parameter = self
+                    .string_parameter()
                     .map(|x| alloc::string::ToString::to_string(x));
+                let float_parameter = self.float_parameter();
+                let int_parameter = self.int_parameter();
+                let object_parameter = self
+                    .object_parameter()
+                    .map(|x| alloc::boxed::Box::new(x.unpack()));
+                let message_options = self.message_options();
+                let animator_component_id = self.animator_component_id();
                 AnimationEventT {
                     time_seconds,
                     name,
-                    payload,
+                    string_parameter,
+                    float_parameter,
+                    int_parameter,
+                    object_parameter,
+                    message_options,
+                    animator_component_id,
                 }
             }
 
@@ -31515,15 +32073,75 @@ pub mod noa {
                 }
             }
             #[inline]
-            pub fn payload(&self) -> Option<&'a str> {
+            pub fn string_parameter(&self) -> Option<&'a str> {
                 // Safety:
                 // Created from valid Table for this object
                 // which contains a valid value in this slot
                 unsafe {
                     self._tab.get::<::flatbuffers::ForwardsUOffset<&str>>(
-                        AnimationEvent::VT_PAYLOAD,
+                        AnimationEvent::VT_STRING_PARAMETER,
                         None,
                     )
+                }
+            }
+            #[inline]
+            pub fn float_parameter(&self) -> f32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<f32>(AnimationEvent::VT_FLOAT_PARAMETER, Some(0.0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn int_parameter(&self) -> i32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<i32>(AnimationEvent::VT_INT_PARAMETER, Some(0))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn object_parameter(&self) -> Option<ReferenceValue<'a>> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<ReferenceValue>>(
+                            AnimationEvent::VT_OBJECT_PARAMETER,
+                            None,
+                        )
+                }
+            }
+            #[inline]
+            pub fn message_options(&self) -> AnimationMessageOptions {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<AnimationMessageOptions>(
+                            AnimationEvent::VT_MESSAGE_OPTIONS,
+                            Some(AnimationMessageOptions::RequireReceiver),
+                        )
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn animator_component_id(&self) -> u32 {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<u32>(AnimationEvent::VT_ANIMATOR_COMPONENT_ID, Some(0))
+                        .unwrap()
                 }
             }
         }
@@ -31542,8 +32160,25 @@ pub mod noa {
                         true,
                     )?
                     .visit_field::<::flatbuffers::ForwardsUOffset<&str>>(
-                        "payload",
-                        Self::VT_PAYLOAD,
+                        "string_parameter",
+                        Self::VT_STRING_PARAMETER,
+                        false,
+                    )?
+                    .visit_field::<f32>("float_parameter", Self::VT_FLOAT_PARAMETER, false)?
+                    .visit_field::<i32>("int_parameter", Self::VT_INT_PARAMETER, false)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<ReferenceValue>>(
+                        "object_parameter",
+                        Self::VT_OBJECT_PARAMETER,
+                        false,
+                    )?
+                    .visit_field::<AnimationMessageOptions>(
+                        "message_options",
+                        Self::VT_MESSAGE_OPTIONS,
+                        false,
+                    )?
+                    .visit_field::<u32>(
+                        "animator_component_id",
+                        Self::VT_ANIMATOR_COMPONENT_ID,
                         false,
                     )?
                     .finish();
@@ -31553,7 +32188,12 @@ pub mod noa {
         pub struct AnimationEventArgs<'a> {
             pub time_seconds: f32,
             pub name: Option<::flatbuffers::WIPOffset<&'a str>>,
-            pub payload: Option<::flatbuffers::WIPOffset<&'a str>>,
+            pub string_parameter: Option<::flatbuffers::WIPOffset<&'a str>>,
+            pub float_parameter: f32,
+            pub int_parameter: i32,
+            pub object_parameter: Option<::flatbuffers::WIPOffset<ReferenceValue<'a>>>,
+            pub message_options: AnimationMessageOptions,
+            pub animator_component_id: u32,
         }
         impl<'a> Default for AnimationEventArgs<'a> {
             #[inline]
@@ -31561,7 +32201,12 @@ pub mod noa {
                 AnimationEventArgs {
                     time_seconds: 0.0,
                     name: None, // required field
-                    payload: None,
+                    string_parameter: None,
+                    float_parameter: 0.0,
+                    int_parameter: 0,
+                    object_parameter: None,
+                    message_options: AnimationMessageOptions::RequireReceiver,
+                    animator_component_id: 0,
                 }
             }
         }
@@ -31571,14 +32216,23 @@ pub mod noa {
             where
                 S: Serializer,
             {
-                let mut s = serializer.serialize_struct("AnimationEvent", 3)?;
+                let mut s = serializer.serialize_struct("AnimationEvent", 8)?;
                 s.serialize_field("time_seconds", &self.time_seconds())?;
                 s.serialize_field("name", &self.name())?;
-                if let Some(f) = self.payload() {
-                    s.serialize_field("payload", &f)?;
+                if let Some(f) = self.string_parameter() {
+                    s.serialize_field("string_parameter", &f)?;
                 } else {
-                    s.skip_field("payload")?;
+                    s.skip_field("string_parameter")?;
                 }
+                s.serialize_field("float_parameter", &self.float_parameter())?;
+                s.serialize_field("int_parameter", &self.int_parameter())?;
+                if let Some(f) = self.object_parameter() {
+                    s.serialize_field("object_parameter", &f)?;
+                } else {
+                    s.skip_field("object_parameter")?;
+                }
+                s.serialize_field("message_options", &self.message_options())?;
+                s.serialize_field("animator_component_id", &self.animator_component_id())?;
                 s.end()
             }
         }
@@ -31599,10 +32253,53 @@ pub mod noa {
                     .push_slot_always::<::flatbuffers::WIPOffset<_>>(AnimationEvent::VT_NAME, name);
             }
             #[inline]
-            pub fn add_payload(&mut self, payload: ::flatbuffers::WIPOffset<&'b str>) {
+            pub fn add_string_parameter(
+                &mut self,
+                string_parameter: ::flatbuffers::WIPOffset<&'b str>,
+            ) {
                 self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(
-                    AnimationEvent::VT_PAYLOAD,
-                    payload,
+                    AnimationEvent::VT_STRING_PARAMETER,
+                    string_parameter,
+                );
+            }
+            #[inline]
+            pub fn add_float_parameter(&mut self, float_parameter: f32) {
+                self.fbb_.push_slot::<f32>(
+                    AnimationEvent::VT_FLOAT_PARAMETER,
+                    float_parameter,
+                    0.0,
+                );
+            }
+            #[inline]
+            pub fn add_int_parameter(&mut self, int_parameter: i32) {
+                self.fbb_
+                    .push_slot::<i32>(AnimationEvent::VT_INT_PARAMETER, int_parameter, 0);
+            }
+            #[inline]
+            pub fn add_object_parameter(
+                &mut self,
+                object_parameter: ::flatbuffers::WIPOffset<ReferenceValue<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<ReferenceValue>>(
+                        AnimationEvent::VT_OBJECT_PARAMETER,
+                        object_parameter,
+                    );
+            }
+            #[inline]
+            pub fn add_message_options(&mut self, message_options: AnimationMessageOptions) {
+                self.fbb_.push_slot::<AnimationMessageOptions>(
+                    AnimationEvent::VT_MESSAGE_OPTIONS,
+                    message_options,
+                    AnimationMessageOptions::RequireReceiver,
+                );
+            }
+            #[inline]
+            pub fn add_animator_component_id(&mut self, animator_component_id: u32) {
+                self.fbb_.push_slot::<u32>(
+                    AnimationEvent::VT_ANIMATOR_COMPONENT_ID,
+                    animator_component_id,
+                    0,
                 );
             }
             #[inline]
@@ -31628,7 +32325,12 @@ pub mod noa {
                 let mut ds = f.debug_struct("AnimationEvent");
                 ds.field("time_seconds", &self.time_seconds());
                 ds.field("name", &self.name());
-                ds.field("payload", &self.payload());
+                ds.field("string_parameter", &self.string_parameter());
+                ds.field("float_parameter", &self.float_parameter());
+                ds.field("int_parameter", &self.int_parameter());
+                ds.field("object_parameter", &self.object_parameter());
+                ds.field("message_options", &self.message_options());
+                ds.field("animator_component_id", &self.animator_component_id());
                 ds.finish()
             }
         }
@@ -31637,14 +32339,24 @@ pub mod noa {
         pub struct AnimationEventT {
             pub time_seconds: f32,
             pub name: alloc::string::String,
-            pub payload: Option<alloc::string::String>,
+            pub string_parameter: Option<alloc::string::String>,
+            pub float_parameter: f32,
+            pub int_parameter: i32,
+            pub object_parameter: Option<alloc::boxed::Box<ReferenceValueT>>,
+            pub message_options: AnimationMessageOptions,
+            pub animator_component_id: u32,
         }
         impl Default for AnimationEventT {
             fn default() -> Self {
                 Self {
                     time_seconds: 0.0,
                     name: alloc::string::ToString::to_string(""),
-                    payload: None,
+                    string_parameter: None,
+                    float_parameter: 0.0,
+                    int_parameter: 0,
+                    object_parameter: None,
+                    message_options: AnimationMessageOptions::RequireReceiver,
+                    animator_component_id: 0,
                 }
             }
         }
@@ -31658,13 +32370,26 @@ pub mod noa {
                     let x = &self.name;
                     _fbb.create_string(x)
                 });
-                let payload = self.payload.as_ref().map(|x| _fbb.create_string(x));
+                let string_parameter = self
+                    .string_parameter
+                    .as_ref()
+                    .map(|x| _fbb.create_string(x));
+                let float_parameter = self.float_parameter;
+                let int_parameter = self.int_parameter;
+                let object_parameter = self.object_parameter.as_ref().map(|x| x.pack(_fbb));
+                let message_options = self.message_options;
+                let animator_component_id = self.animator_component_id;
                 AnimationEvent::create(
                     _fbb,
                     &AnimationEventArgs {
                         time_seconds,
                         name,
-                        payload,
+                        string_parameter,
+                        float_parameter,
+                        int_parameter,
+                        object_parameter,
+                        message_options,
+                        animator_component_id,
                     },
                 )
             }

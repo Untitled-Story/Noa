@@ -22,3 +22,5 @@ pub mod package;
 
 mod curves;
 mod finite;
+
+mod animation;

@@ -5,7 +5,7 @@ mod color;
 mod scene;
 mod script;
 
-pub use animation::{Animation, Animator, AnimatorLayer, AnimatorState, BoolKey, NodeActiveTrack};
+pub use animation::{Animation, Animator, AnimatorLayer, AnimatorState};
 pub use color::{
     AlphaKey, Color, ColorContext, ColorMode, ColorParameter, ColorSpace, CustomStreamColor,
     Gradient, GradientMode, ParticleColors, RendererColors, RgbKey,

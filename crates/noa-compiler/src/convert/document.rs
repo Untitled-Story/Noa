@@ -96,27 +96,8 @@ pub(crate) fn animation(a: ir::Animation) -> w::AnimationT {
         name: Some(a.name),
         duration_seconds: a.duration_seconds,
         loop_: a.looped,
-        tracks: Some(
-            a.tracks
-                .into_iter()
-                .map(|t| n!(TrackT {
-                    binding: Box::new(n!(BindingT {
-                        target_id: t.target_id.get(),
-                        property: w::AnimationProperty::NodeActive
-                    })),
-                    data: w::TrackDataT::BoolTrack(Box::new(n!(BoolTrackT {
-                        keys: t
-                            .keys
-                            .into_iter()
-                            .map(|k| n!(BoolKeyT {
-                                time: k.time,
-                                value: k.value
-                            }))
-                            .collect()
-                    })))
-                }))
-                .collect()
-        )
+        tracks: Some(a.tracks),
+        events: (!a.events.is_empty()).then_some(a.events)
     })
 }
 pub(crate) fn custom(c: ir::CustomComponent) -> w::ComponentT {

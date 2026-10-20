@@ -71,12 +71,11 @@ fn sample_animator_preserves_states_and_resolves_activation_tracks() {
         assert_eq!(animation.duration_seconds, 0.0);
         assert_eq!(animation.tracks.len(), 9);
         let expected = animation.name != "Stop";
-        assert!(
-            animation
-                .tracks
-                .iter()
-                .all(|t| t.keys.len() == 1 && t.keys[0].time == 0.0 && t.keys[0].value == expected)
-        );
+        assert!(animation.tracks.iter().all(|t| match &t.data {
+            noa_format::wire::TrackDataT::BoolTrack(t) =>
+                t.keys.len() == 1 && t.keys[0].time == 0. && t.keys[0].value == expected,
+            _ => false,
+        }));
         assert!(layer.states.iter().any(|s| s.animation_id == animation.id));
     }
 }
@@ -180,11 +179,11 @@ fn reusing_a_controller_scopes_clip_and_state_ids_to_the_animator() {
     );
     let first_targets: BTreeSet<_> = first_clips
         .iter()
-        .flat_map(|c| c.tracks.iter().map(|t| t.target_id))
+        .flat_map(|c| c.tracks.iter().map(|t| t.binding.target_id))
         .collect();
     let second_targets: BTreeSet<_> = second_clips
         .iter()
-        .flat_map(|c| c.tracks.iter().map(|t| t.target_id))
+        .flat_map(|c| c.tracks.iter().map(|t| t.binding.target_id))
         .collect();
     assert!(first_targets.is_disjoint(&second_targets));
     assert_ne!(first_clips[0].id, second_clips[0].id);

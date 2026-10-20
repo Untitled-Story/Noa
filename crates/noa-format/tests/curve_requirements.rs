@@ -166,11 +166,15 @@ fn shape_speed_and_animation_curves_cannot_bypass_curve_validation() {
     );
 
     let mut d = base();
-    let mut t = w::FloatTrackT::default();
-    t.curve = Box::new(curve(true));
+    let mut t = w::Vector3TrackT::default();
+    t.x = Some(Box::new(curve(true)));
     let mut track = w::TrackT::default();
     track.binding.target_id = 1;
-    track.data = w::TrackDataT::FloatTrack(Box::new(t));
+    track.binding.property = w::AnimationProperty::NodePosition;
+    let mut feature = w::FeatureRequirementT::default();
+    feature.name = "animation.transform".into();
+    d.features = Some(vec![feature]);
+    track.data = w::TrackDataT::Vector3Track(Box::new(t));
     let mut animation = w::AnimationT::default();
     animation.id = 4;
     animation.tracks = Some(vec![track]);
@@ -182,13 +186,16 @@ fn shape_speed_and_animation_curves_cannot_bypass_curve_validation() {
             .contains("curve.unity-infinity")
     );
     require(&mut d);
+    let mut feature = w::FeatureRequirementT::default();
+    feature.name = "animation.transform".into();
+    d.features.as_mut().unwrap().push(feature);
     document::encode(&d).unwrap();
-    let w::TrackDataT::FloatTrack(t) =
+    let w::TrackDataT::Vector3Track(t) =
         &mut d.animations.as_mut().unwrap()[0].tracks.as_mut().unwrap()[0].data
     else {
         unreachable!()
     };
-    t.curve.keys[1].time = 0.;
+    t.x.as_mut().unwrap().keys[1].time = 0.;
     assert!(
         document::encode(&d)
             .unwrap_err()

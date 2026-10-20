@@ -193,7 +193,11 @@ impl<'a> Resources<'a> {
         self.target(key, id, ReferenceKind::Material);
         Ok(id)
     }
-    fn image(&mut self, entry: &str, r: &Y) -> Result<(u32, w::ColorSpace, w::SamplerT), Error> {
+    pub(crate) fn image(
+        &mut self,
+        entry: &str,
+        r: &Y,
+    ) -> Result<(u32, w::ColorSpace, w::SamplerT), Error> {
         let key = self.reference(entry, r)?;
         if key.1 != 2800000 {
             return Err(err("Texture", "only Texture2D fileID supported"));

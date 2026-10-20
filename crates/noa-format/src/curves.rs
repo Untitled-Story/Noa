@@ -22,6 +22,11 @@ pub(crate) fn visit(document: &w::DocumentT, mut visitor: impl FnMut(&w::ScalarC
                         visitor(c);
                     }
                 }
+                w::TrackDataT::Vector4Track(t) => {
+                    for c in [&t.x, &t.y, &t.z, &t.w].into_iter().flatten() {
+                        visitor(c);
+                    }
+                }
                 w::TrackDataT::ColorTrack(t) => {
                     for c in [&t.r, &t.g, &t.b, &t.a].into_iter().flatten() {
                         visitor(c);
