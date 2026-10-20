@@ -233,6 +233,25 @@ fn sprite_asset_shape_and_mask_use_actual_geometry_and_inline_resource_dependenc
             }
         }
     }
+    let mut outside = c.document.clone();
+    let pivot = outside
+        .assets
+        .as_mut()
+        .unwrap()
+        .iter_mut()
+        .find(|v| v.id == a.id)
+        .unwrap()
+        .sprite
+        .as_mut()
+        .unwrap()
+        .pivot
+        .as_mut()
+        .unwrap();
+    pivot.y = 1.2585158; // Present in the real still_miku_shl30_01 Sprite export.
+    assert_eq!(
+        document::decode(&document::encode(&outside).unwrap()).unwrap(),
+        outside
+    );
     let mut d = c.document.clone();
     d.assets
         .as_mut()

@@ -57,14 +57,11 @@ pub(crate) fn validate(d: &w::DocumentT) -> Result<(), String> {
             {
                 return Err("invalid/incomplete Sprite metadata".into());
             }
-            let p = s.pivot.as_ref().unwrap();
+            // Unity exports can place the normalized pivot outside the rect.
+            // Preserve it; global finite validation still rejects NaN/Infinity.
             let rect = s.rect.as_ref().unwrap();
-            if !(0. ..=1.).contains(&p.x)
-                || !(0. ..=1.).contains(&p.y)
-                || rect.z <= 0.
-                || rect.w <= 0.
-            {
-                return Err("invalid Sprite rect/pivot".into());
+            if rect.z <= 0. || rect.w <= 0. {
+                return Err("invalid Sprite rect".into());
             }
         } else if a.sprite.is_some() {
             return Err("Sprite descriptor on wrong asset kind".into());
