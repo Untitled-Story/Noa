@@ -41,17 +41,9 @@ pub fn curve(v: &Y, domain: w::CurveDomain) -> Result<w::ScalarCurveT, Error> {
         if keys.last().is_some_and(|k: &w::FloatKeyT| k.time >= time) {
             return Err(err("m_Curve", "times must strictly increase"));
         }
-        let slope = |name| -> Result<f32, Error> {
-            let x = get(k, name)?
-                .as_f64()
-                .ok_or_else(|| err(name, "expected slope"))?;
-            if x.is_nan() || (x.is_finite() && !(x as f32).is_finite()) {
-                return Err(err(name, "invalid slope"));
-            }
-            Ok(x as f32)
-        };
-        let incoming = slope("inSlope")?;
-        let outgoing = slope("outSlope")?;
+        let tangent = |name| slope(get(k, name)?);
+        let incoming = tangent("inSlope")?;
+        let outgoing = tangent("outSlope")?;
         let weighted = int(k, "weightedMode")?;
         if !(0..=3).contains(&weighted) {
             return Err(err("weightedMode", weighted));
@@ -84,10 +76,7 @@ pub fn curve(v: &Y, domain: w::CurveDomain) -> Result<w::ScalarCurveT, Error> {
     // interpolation uses the left out / right in flags, not the editor tangent mode.
     for i in 0..keys.len().saturating_sub(1) {
         let source = get(v, "m_Curve")?.as_sequence().unwrap();
-        if source[i + 1]["inSlope"]
-            .as_f64()
-            .is_some_and(f64::is_infinite)
-        {
+        if slope(&source[i + 1]["inSlope"])?.is_infinite() {
             keys[i].interpolation = w::Interpolation::Step;
         } else if keys[i].interpolation != w::Interpolation::Step
             && (keys[i].weighted_out || keys[i + 1].weighted_in)
@@ -107,4 +96,38 @@ pub fn curve(v: &Y, domain: w::CurveDomain) -> Result<w::ScalarCurveT, Error> {
         source_post_infinity: post,
         keys
     }))
+}
+
+// AssetRipper emits bare Infinity/-Infinity, which YAML treats as strings.
+// Accept only the exact exported tokens; other strings and NaN are errors.
+fn slope(v: &Y) -> Result<f32, Error> {
+    let x = match v.as_str() {
+        Some("Infinity" | "+Infinity") => f64::INFINITY,
+        Some("-Infinity") => f64::NEG_INFINITY,
+        Some(_) => return Err(err("slope", "invalid slope token")),
+        None => v.as_f64().ok_or_else(|| err("slope", "expected slope"))?,
+    };
+    if x.is_nan() || (x.is_finite() && !(x as f32).is_finite()) {
+        return Err(err("slope", "invalid slope"));
+    }
+    Ok(x as f32)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn exported_infinity_tangents_become_finite_step_segments() {
+        let mut c: Y = serde_yaml_ng::from_str(
+            "m_PreInfinity: 2\nm_PostInfinity: 2\nm_Curve:\n- {time: 0, value: 1, inSlope: 0, outSlope: 0, weightedMode: 0, inWeight: 0, outWeight: 0}\n- {time: 1, value: 2, inSlope: Infinity, outSlope: -Infinity, weightedMode: 0, inWeight: 0, outWeight: 0}\n"
+        ).unwrap();
+        let parsed = curve(&c, w::CurveDomain::Seconds).unwrap();
+        assert_eq!(parsed.keys[0].interpolation, w::Interpolation::Step);
+        assert_eq!(parsed.keys[1].in_slope, 0.0);
+        assert_eq!(parsed.keys[1].out_slope, 0.0);
+        for token in ["NaN", "inf", "unknown"] {
+            c["m_Curve"][1]["inSlope"] = token.into();
+            assert!(curve(&c, w::CurveDomain::Seconds).is_err());
+        }
+    }
 }
