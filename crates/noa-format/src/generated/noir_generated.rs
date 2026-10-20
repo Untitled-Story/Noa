@@ -5180,13 +5180,13 @@ pub mod noa {
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
-        pub const ENUM_MAX_PARTICLE_MODULE_DATA: u8 = 10;
+        pub const ENUM_MAX_PARTICLE_MODULE_DATA: u8 = 12;
         #[deprecated(
             since = "2.0.0",
             note = "Use associated constants instead. This will no longer be generated in 2021."
         )]
         #[allow(non_camel_case_types)]
-        pub const ENUM_VALUES_PARTICLE_MODULE_DATA: [ParticleModuleData; 11] = [
+        pub const ENUM_VALUES_PARTICLE_MODULE_DATA: [ParticleModuleData; 13] = [
             ParticleModuleData::NONE,
             ParticleModuleData::EmissionModule,
             ParticleModuleData::ShapeModule,
@@ -5198,6 +5198,8 @@ pub mod noa {
             ParticleModuleData::NoiseModule,
             ParticleModuleData::TextureSheetModule,
             ParticleModuleData::CustomDataModule,
+            ParticleModuleData::SizeBySpeedModule,
+            ParticleModuleData::RotationBySpeedModule,
         ];
 
         #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -5216,9 +5218,11 @@ pub mod noa {
             pub const NoiseModule: Self = Self(8);
             pub const TextureSheetModule: Self = Self(9);
             pub const CustomDataModule: Self = Self(10);
+            pub const SizeBySpeedModule: Self = Self(11);
+            pub const RotationBySpeedModule: Self = Self(12);
 
             pub const ENUM_MIN: u8 = 0;
-            pub const ENUM_MAX: u8 = 10;
+            pub const ENUM_MAX: u8 = 12;
             pub const ENUM_VALUES: &'static [Self] = &[
                 Self::NONE,
                 Self::EmissionModule,
@@ -5231,6 +5235,8 @@ pub mod noa {
                 Self::NoiseModule,
                 Self::TextureSheetModule,
                 Self::CustomDataModule,
+                Self::SizeBySpeedModule,
+                Self::RotationBySpeedModule,
             ];
             /// Returns the variant's name or "" if unknown.
             pub fn variant_name(self) -> Option<&'static str> {
@@ -5246,6 +5252,8 @@ pub mod noa {
                     Self::NoiseModule => Some("NoiseModule"),
                     Self::TextureSheetModule => Some("TextureSheetModule"),
                     Self::CustomDataModule => Some("CustomDataModule"),
+                    Self::SizeBySpeedModule => Some("SizeBySpeedModule"),
+                    Self::RotationBySpeedModule => Some("RotationBySpeedModule"),
                     _ => None,
                 }
             }
@@ -5351,6 +5359,8 @@ pub mod noa {
             NoiseModule(alloc::boxed::Box<NoiseModuleT>),
             TextureSheetModule(alloc::boxed::Box<TextureSheetModuleT>),
             CustomDataModule(alloc::boxed::Box<CustomDataModuleT>),
+            SizeBySpeedModule(alloc::boxed::Box<SizeBySpeedModuleT>),
+            RotationBySpeedModule(alloc::boxed::Box<RotationBySpeedModuleT>),
         }
         impl Default for ParticleModuleDataT {
             fn default() -> Self {
@@ -5371,6 +5381,8 @@ pub mod noa {
                     Self::NoiseModule(_) => ParticleModuleData::NoiseModule,
                     Self::TextureSheetModule(_) => ParticleModuleData::TextureSheetModule,
                     Self::CustomDataModule(_) => ParticleModuleData::CustomDataModule,
+                    Self::SizeBySpeedModule(_) => ParticleModuleData::SizeBySpeedModule,
+                    Self::RotationBySpeedModule(_) => ParticleModuleData::RotationBySpeedModule,
                 }
             }
             pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
@@ -5389,6 +5401,8 @@ pub mod noa {
                     Self::NoiseModule(v) => Some(v.pack(fbb).as_union_value()),
                     Self::TextureSheetModule(v) => Some(v.pack(fbb).as_union_value()),
                     Self::CustomDataModule(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::SizeBySpeedModule(v) => Some(v.pack(fbb).as_union_value()),
+                    Self::RotationBySpeedModule(v) => Some(v.pack(fbb).as_union_value()),
                 }
             }
             /// If the union variant matches, return the owned EmissionModuleT, setting the union to NONE.
@@ -5682,6 +5696,70 @@ pub mod noa {
             /// If the union variant matches, return a mutable reference to the CustomDataModuleT.
             pub fn as_custom_data_module_mut(&mut self) -> Option<&mut CustomDataModuleT> {
                 if let Self::CustomDataModule(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned SizeBySpeedModuleT, setting the union to NONE.
+            pub fn take_size_by_speed_module(
+                &mut self,
+            ) -> Option<alloc::boxed::Box<SizeBySpeedModuleT>> {
+                if let Self::SizeBySpeedModule(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::SizeBySpeedModule(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the SizeBySpeedModuleT.
+            pub fn as_size_by_speed_module(&self) -> Option<&SizeBySpeedModuleT> {
+                if let Self::SizeBySpeedModule(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the SizeBySpeedModuleT.
+            pub fn as_size_by_speed_module_mut(&mut self) -> Option<&mut SizeBySpeedModuleT> {
+                if let Self::SizeBySpeedModule(v) = self {
+                    Some(v.as_mut())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return the owned RotationBySpeedModuleT, setting the union to NONE.
+            pub fn take_rotation_by_speed_module(
+                &mut self,
+            ) -> Option<alloc::boxed::Box<RotationBySpeedModuleT>> {
+                if let Self::RotationBySpeedModule(_) = self {
+                    let v = ::core::mem::replace(self, Self::NONE);
+                    if let Self::RotationBySpeedModule(w) = v {
+                        Some(w)
+                    } else {
+                        unreachable!()
+                    }
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a reference to the RotationBySpeedModuleT.
+            pub fn as_rotation_by_speed_module(&self) -> Option<&RotationBySpeedModuleT> {
+                if let Self::RotationBySpeedModule(v) = self {
+                    Some(v.as_ref())
+                } else {
+                    None
+                }
+            }
+            /// If the union variant matches, return a mutable reference to the RotationBySpeedModuleT.
+            pub fn as_rotation_by_speed_module_mut(
+                &mut self,
+            ) -> Option<&mut RotationBySpeedModuleT> {
+                if let Self::RotationBySpeedModule(v) = self {
                     Some(v.as_mut())
                 } else {
                     None
@@ -22224,6 +22302,493 @@ pub mod noa {
                 CustomDataModule::create(_fbb, &CustomDataModuleArgs { streams })
             }
         }
+        pub enum SizeBySpeedModuleOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct SizeBySpeedModule<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for SizeBySpeedModule<'a> {
+            type Inner = SizeBySpeedModule<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> SizeBySpeedModule<'a> {
+            pub const VT_SIZE: ::flatbuffers::VOffsetT = 4;
+            pub const VT_SEPARATE_AXES: ::flatbuffers::VOffsetT = 6;
+            pub const VT_SPEED_RANGE: ::flatbuffers::VOffsetT = 8;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                SizeBySpeedModule { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args SizeBySpeedModuleArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<SizeBySpeedModule<'bldr>> {
+                let mut builder = SizeBySpeedModuleBuilder::new(_fbb);
+                if let Some(x) = args.speed_range {
+                    builder.add_speed_range(x);
+                }
+                if let Some(x) = args.size {
+                    builder.add_size(x);
+                }
+                builder.add_separate_axes(args.separate_axes);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> SizeBySpeedModuleT {
+                let size = {
+                    let x = self.size();
+                    alloc::boxed::Box::new(x.unpack())
+                };
+                let separate_axes = self.separate_axes();
+                let speed_range = self.speed_range().map(|x| x.unpack());
+                SizeBySpeedModuleT {
+                    size,
+                    separate_axes,
+                    speed_range,
+                }
+            }
+
+            #[inline]
+            pub fn size(&self) -> VectorParameter<'a> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<VectorParameter>>(
+                            SizeBySpeedModule::VT_SIZE,
+                            None,
+                        )
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn separate_axes(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(SizeBySpeedModule::VT_SEPARATE_AXES, Some(false))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn speed_range(&self) -> Option<&'a Vec2> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<Vec2>(SizeBySpeedModule::VT_SPEED_RANGE, None)
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for SizeBySpeedModule<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<VectorParameter>>(
+                        "size",
+                        Self::VT_SIZE,
+                        true,
+                    )?
+                    .visit_field::<bool>("separate_axes", Self::VT_SEPARATE_AXES, false)?
+                    .visit_field::<Vec2>("speed_range", Self::VT_SPEED_RANGE, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct SizeBySpeedModuleArgs<'a> {
+            pub size: Option<::flatbuffers::WIPOffset<VectorParameter<'a>>>,
+            pub separate_axes: bool,
+            pub speed_range: Option<&'a Vec2>,
+        }
+        impl<'a> Default for SizeBySpeedModuleArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                SizeBySpeedModuleArgs {
+                    size: None, // required field
+                    separate_axes: false,
+                    speed_range: None,
+                }
+            }
+        }
+
+        impl Serialize for SizeBySpeedModule<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("SizeBySpeedModule", 3)?;
+                s.serialize_field("size", &self.size())?;
+                s.serialize_field("separate_axes", &self.separate_axes())?;
+                if let Some(f) = self.speed_range() {
+                    s.serialize_field("speed_range", &f)?;
+                } else {
+                    s.skip_field("speed_range")?;
+                }
+                s.end()
+            }
+        }
+
+        pub struct SizeBySpeedModuleBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> SizeBySpeedModuleBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_size(&mut self, size: ::flatbuffers::WIPOffset<VectorParameter<'b>>) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<VectorParameter>>(
+                        SizeBySpeedModule::VT_SIZE,
+                        size,
+                    );
+            }
+            #[inline]
+            pub fn add_separate_axes(&mut self, separate_axes: bool) {
+                self.fbb_.push_slot::<bool>(
+                    SizeBySpeedModule::VT_SEPARATE_AXES,
+                    separate_axes,
+                    false,
+                );
+            }
+            #[inline]
+            pub fn add_speed_range(&mut self, speed_range: &Vec2) {
+                self.fbb_
+                    .push_slot_always::<&Vec2>(SizeBySpeedModule::VT_SPEED_RANGE, speed_range);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> SizeBySpeedModuleBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                SizeBySpeedModuleBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<SizeBySpeedModule<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                self.fbb_.required(o, SizeBySpeedModule::VT_SIZE, "size");
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for SizeBySpeedModule<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("SizeBySpeedModule");
+                ds.field("size", &self.size());
+                ds.field("separate_axes", &self.separate_axes());
+                ds.field("speed_range", &self.speed_range());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct SizeBySpeedModuleT {
+            pub size: alloc::boxed::Box<VectorParameterT>,
+            pub separate_axes: bool,
+            pub speed_range: Option<Vec2T>,
+        }
+        impl Default for SizeBySpeedModuleT {
+            fn default() -> Self {
+                Self {
+                    size: Default::default(),
+                    separate_axes: false,
+                    speed_range: None,
+                }
+            }
+        }
+        impl SizeBySpeedModuleT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<SizeBySpeedModule<'b>> {
+                let size = Some({
+                    let x = &self.size;
+                    x.pack(_fbb)
+                });
+                let separate_axes = self.separate_axes;
+                let speed_range_tmp = self.speed_range.as_ref().map(|x| x.pack());
+                let speed_range = speed_range_tmp.as_ref();
+                SizeBySpeedModule::create(
+                    _fbb,
+                    &SizeBySpeedModuleArgs {
+                        size,
+                        separate_axes,
+                        speed_range,
+                    },
+                )
+            }
+        }
+        pub enum RotationBySpeedModuleOffset {}
+        #[derive(Copy, Clone, PartialEq)]
+
+        pub struct RotationBySpeedModule<'a> {
+            pub _tab: ::flatbuffers::Table<'a>,
+        }
+
+        impl<'a> ::flatbuffers::Follow<'a> for RotationBySpeedModule<'a> {
+            type Inner = RotationBySpeedModule<'a>;
+            #[inline]
+            unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: unsafe { ::flatbuffers::Table::new(buf, loc) },
+                }
+            }
+        }
+
+        impl<'a> RotationBySpeedModule<'a> {
+            pub const VT_ANGULAR_VELOCITY: ::flatbuffers::VOffsetT = 4;
+            pub const VT_SEPARATE_AXES: ::flatbuffers::VOffsetT = 6;
+            pub const VT_SPEED_RANGE: ::flatbuffers::VOffsetT = 8;
+
+            #[inline]
+            pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+                RotationBySpeedModule { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<
+                'bldr: 'args,
+                'args: 'mut_bldr,
+                'mut_bldr,
+                A: ::flatbuffers::Allocator + 'bldr,
+            >(
+                _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+                args: &'args RotationBySpeedModuleArgs<'args>,
+            ) -> ::flatbuffers::WIPOffset<RotationBySpeedModule<'bldr>> {
+                let mut builder = RotationBySpeedModuleBuilder::new(_fbb);
+                if let Some(x) = args.speed_range {
+                    builder.add_speed_range(x);
+                }
+                if let Some(x) = args.angular_velocity {
+                    builder.add_angular_velocity(x);
+                }
+                builder.add_separate_axes(args.separate_axes);
+                builder.finish()
+            }
+
+            pub fn unpack(&self) -> RotationBySpeedModuleT {
+                let angular_velocity = {
+                    let x = self.angular_velocity();
+                    alloc::boxed::Box::new(x.unpack())
+                };
+                let separate_axes = self.separate_axes();
+                let speed_range = self.speed_range().map(|x| x.unpack());
+                RotationBySpeedModuleT {
+                    angular_velocity,
+                    separate_axes,
+                    speed_range,
+                }
+            }
+
+            #[inline]
+            pub fn angular_velocity(&self) -> VectorParameter<'a> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<::flatbuffers::ForwardsUOffset<VectorParameter>>(
+                            RotationBySpeedModule::VT_ANGULAR_VELOCITY,
+                            None,
+                        )
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn separate_axes(&self) -> bool {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<bool>(RotationBySpeedModule::VT_SEPARATE_AXES, Some(false))
+                        .unwrap()
+                }
+            }
+            #[inline]
+            pub fn speed_range(&self) -> Option<&'a Vec2> {
+                // Safety:
+                // Created from valid Table for this object
+                // which contains a valid value in this slot
+                unsafe {
+                    self._tab
+                        .get::<Vec2>(RotationBySpeedModule::VT_SPEED_RANGE, None)
+                }
+            }
+        }
+
+        impl ::flatbuffers::Verifiable for RotationBySpeedModule<'_> {
+            #[inline]
+            fn run_verifier(
+                v: &mut ::flatbuffers::Verifier,
+                pos: usize,
+            ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+                v.visit_table(pos)?
+                    .visit_field::<::flatbuffers::ForwardsUOffset<VectorParameter>>(
+                        "angular_velocity",
+                        Self::VT_ANGULAR_VELOCITY,
+                        true,
+                    )?
+                    .visit_field::<bool>("separate_axes", Self::VT_SEPARATE_AXES, false)?
+                    .visit_field::<Vec2>("speed_range", Self::VT_SPEED_RANGE, false)?
+                    .finish();
+                Ok(())
+            }
+        }
+        pub struct RotationBySpeedModuleArgs<'a> {
+            pub angular_velocity: Option<::flatbuffers::WIPOffset<VectorParameter<'a>>>,
+            pub separate_axes: bool,
+            pub speed_range: Option<&'a Vec2>,
+        }
+        impl<'a> Default for RotationBySpeedModuleArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                RotationBySpeedModuleArgs {
+                    angular_velocity: None, // required field
+                    separate_axes: false,
+                    speed_range: None,
+                }
+            }
+        }
+
+        impl Serialize for RotationBySpeedModule<'_> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut s = serializer.serialize_struct("RotationBySpeedModule", 3)?;
+                s.serialize_field("angular_velocity", &self.angular_velocity())?;
+                s.serialize_field("separate_axes", &self.separate_axes())?;
+                if let Some(f) = self.speed_range() {
+                    s.serialize_field("speed_range", &f)?;
+                } else {
+                    s.skip_field("speed_range")?;
+                }
+                s.end()
+            }
+        }
+
+        pub struct RotationBySpeedModuleBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+            fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> RotationBySpeedModuleBuilder<'a, 'b, A> {
+            #[inline]
+            pub fn add_angular_velocity(
+                &mut self,
+                angular_velocity: ::flatbuffers::WIPOffset<VectorParameter<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<::flatbuffers::WIPOffset<VectorParameter>>(
+                        RotationBySpeedModule::VT_ANGULAR_VELOCITY,
+                        angular_velocity,
+                    );
+            }
+            #[inline]
+            pub fn add_separate_axes(&mut self, separate_axes: bool) {
+                self.fbb_.push_slot::<bool>(
+                    RotationBySpeedModule::VT_SEPARATE_AXES,
+                    separate_axes,
+                    false,
+                );
+            }
+            #[inline]
+            pub fn add_speed_range(&mut self, speed_range: &Vec2) {
+                self.fbb_
+                    .push_slot_always::<&Vec2>(RotationBySpeedModule::VT_SPEED_RANGE, speed_range);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+            ) -> RotationBySpeedModuleBuilder<'a, 'b, A> {
+                let start = _fbb.start_table();
+                RotationBySpeedModuleBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> ::flatbuffers::WIPOffset<RotationBySpeedModule<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                self.fbb_.required(
+                    o,
+                    RotationBySpeedModule::VT_ANGULAR_VELOCITY,
+                    "angular_velocity",
+                );
+                ::flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        impl ::core::fmt::Debug for RotationBySpeedModule<'_> {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                let mut ds = f.debug_struct("RotationBySpeedModule");
+                ds.field("angular_velocity", &self.angular_velocity());
+                ds.field("separate_axes", &self.separate_axes());
+                ds.field("speed_range", &self.speed_range());
+                ds.finish()
+            }
+        }
+        #[non_exhaustive]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize)]
+        pub struct RotationBySpeedModuleT {
+            pub angular_velocity: alloc::boxed::Box<VectorParameterT>,
+            pub separate_axes: bool,
+            pub speed_range: Option<Vec2T>,
+        }
+        impl Default for RotationBySpeedModuleT {
+            fn default() -> Self {
+                Self {
+                    angular_velocity: Default::default(),
+                    separate_axes: false,
+                    speed_range: None,
+                }
+            }
+        }
+        impl RotationBySpeedModuleT {
+            pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+                &self,
+                _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>,
+            ) -> ::flatbuffers::WIPOffset<RotationBySpeedModule<'b>> {
+                let angular_velocity = Some({
+                    let x = &self.angular_velocity;
+                    x.pack(_fbb)
+                });
+                let separate_axes = self.separate_axes;
+                let speed_range_tmp = self.speed_range.as_ref().map(|x| x.pack());
+                let speed_range = speed_range_tmp.as_ref();
+                RotationBySpeedModule::create(
+                    _fbb,
+                    &RotationBySpeedModuleArgs {
+                        angular_velocity,
+                        separate_axes,
+                        speed_range,
+                    },
+                )
+            }
+        }
         pub enum ParticleModuleOffset {}
         #[derive(Copy, Clone, PartialEq)]
 
@@ -22318,6 +22883,16 @@ pub mod noa {
       ParticleModuleData::CustomDataModule => ParticleModuleDataT::CustomDataModule(alloc::boxed::Box::new(
         self.data_as_custom_data_module()
             .expect("Invalid union table, expected `ParticleModuleData::CustomDataModule`.")
+            .unpack()
+      )),
+      ParticleModuleData::SizeBySpeedModule => ParticleModuleDataT::SizeBySpeedModule(alloc::boxed::Box::new(
+        self.data_as_size_by_speed_module()
+            .expect("Invalid union table, expected `ParticleModuleData::SizeBySpeedModule`.")
+            .unpack()
+      )),
+      ParticleModuleData::RotationBySpeedModule => ParticleModuleDataT::RotationBySpeedModule(alloc::boxed::Box::new(
+        self.data_as_rotation_by_speed_module()
+            .expect("Invalid union table, expected `ParticleModuleData::RotationBySpeedModule`.")
             .unpack()
       )),
       _ => ParticleModuleDataT::NONE,
@@ -22501,6 +23076,36 @@ pub mod noa {
                     None
                 }
             }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_size_by_speed_module(&self) -> Option<SizeBySpeedModule<'a>> {
+                if self.data_type() == ParticleModuleData::SizeBySpeedModule {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { SizeBySpeedModule::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn data_as_rotation_by_speed_module(&self) -> Option<RotationBySpeedModule<'a>> {
+                if self.data_type() == ParticleModuleData::RotationBySpeedModule {
+                    self.data().map(|t| {
+                        // Safety:
+                        // Created from a valid Table for this object
+                        // Which contains a valid union in this slot
+                        unsafe { RotationBySpeedModule::init_from_table(t) }
+                    })
+                } else {
+                    None
+                }
+            }
         }
 
         impl ::flatbuffers::Verifiable for ParticleModule<'_> {
@@ -22522,6 +23127,8 @@ pub mod noa {
           ParticleModuleData::NoiseModule => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<NoiseModule>>("ParticleModuleData::NoiseModule", pos),
           ParticleModuleData::TextureSheetModule => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<TextureSheetModule>>("ParticleModuleData::TextureSheetModule", pos),
           ParticleModuleData::CustomDataModule => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<CustomDataModule>>("ParticleModuleData::CustomDataModule", pos),
+          ParticleModuleData::SizeBySpeedModule => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<SizeBySpeedModule>>("ParticleModuleData::SizeBySpeedModule", pos),
+          ParticleModuleData::RotationBySpeedModule => v.verify_union_variant::<::flatbuffers::ForwardsUOffset<RotationBySpeedModule>>("ParticleModuleData::RotationBySpeedModule", pos),
           _ => Ok(()),
         }
      })?
@@ -22608,6 +23215,16 @@ pub mod noa {
                         let f = self.data_as_custom_data_module().expect(
                             "Invalid union table, expected `ParticleModuleData::CustomDataModule`.",
                         );
+                        s.serialize_field("data", &f)?;
+                    }
+                    ParticleModuleData::SizeBySpeedModule => {
+                        let f = self.data_as_size_by_speed_module()
+              .expect("Invalid union table, expected `ParticleModuleData::SizeBySpeedModule`.");
+                        s.serialize_field("data", &f)?;
+                    }
+                    ParticleModuleData::RotationBySpeedModule => {
+                        let f = self.data_as_rotation_by_speed_module()
+              .expect("Invalid union table, expected `ParticleModuleData::RotationBySpeedModule`.");
                         s.serialize_field("data", &f)?;
                     }
                     _ => unimplemented!(),
@@ -22751,6 +23368,26 @@ pub mod noa {
                     }
                     ParticleModuleData::CustomDataModule => {
                         if let Some(x) = self.data_as_custom_data_module() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ParticleModuleData::SizeBySpeedModule => {
+                        if let Some(x) = self.data_as_size_by_speed_module() {
+                            ds.field("data", &x)
+                        } else {
+                            ds.field(
+                                "data",
+                                &"InvalidFlatbuffer: Union discriminant does not match value.",
+                            )
+                        }
+                    }
+                    ParticleModuleData::RotationBySpeedModule => {
+                        if let Some(x) = self.data_as_rotation_by_speed_module() {
                             ds.field("data", &x)
                         } else {
                             ds.field(

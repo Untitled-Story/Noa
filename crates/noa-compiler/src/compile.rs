@@ -237,6 +237,8 @@ fn compile_indexed(
                         }
                         w::ParticleModuleDataT::ColorModule(_) => "color",
                         w::ParticleModuleDataT::SizeModule(_) => "size",
+                        w::ParticleModuleDataT::SizeBySpeedModule(_) => "size-by-speed",
+                        w::ParticleModuleDataT::RotationBySpeedModule(_) => "rotation-by-speed",
                         w::ParticleModuleDataT::RotationModule(_) => "rotation",
                         w::ParticleModuleDataT::VelocityModule(_) => "velocity",
                         w::ParticleModuleDataT::LimitVelocityModule(_) => "limit-velocity",

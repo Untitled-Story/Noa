@@ -110,6 +110,10 @@ fn particles(p: &w::ParticleSystemT, visitor: &mut impl FnMut(&w::ScalarCurveT))
                 w::ShapeGeometryT::BoxShape(_) | w::ShapeGeometryT::NONE => {}
             },
             w::ParticleModuleDataT::SizeModule(s) => vector(&s.size, visitor),
+            w::ParticleModuleDataT::SizeBySpeedModule(s) => vector(&s.size, visitor),
+            w::ParticleModuleDataT::RotationBySpeedModule(r) => {
+                vector(&r.angular_velocity, visitor)
+            }
             w::ParticleModuleDataT::RotationModule(r) => vector(&r.angular_velocity, visitor),
             w::ParticleModuleDataT::VelocityModule(v) => {
                 for v in [&v.linear, &v.orbital, &v.orbital_offset]

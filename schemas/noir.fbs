@@ -278,9 +278,19 @@ table CustomDataStream {
   vector:[ScalarParameter]; color:ColorParameter;
 }
 table CustomDataModule { streams:[CustomDataStream] (required); }
+// Curves sample normalized speed in speed_range (source units/second),
+// not emitter time or particle age. Size is a multiplier; rotation is rad/s.
+table SizeBySpeedModule {
+  size:VectorParameter (required); separate_axes:bool;
+  speed_range:Vec2;
+}
+table RotationBySpeedModule {
+  angular_velocity:VectorParameter (required); separate_axes:bool;
+  speed_range:Vec2;
+}
 union ParticleModuleData {
   EmissionModule, ShapeModule, ColorModule, SizeModule, RotationModule,
-  VelocityModule, LimitVelocityModule, NoiseModule, TextureSheetModule, CustomDataModule
+  VelocityModule, LimitVelocityModule, NoiseModule, TextureSheetModule, CustomDataModule, SizeBySpeedModule, RotationBySpeedModule
 }
 table ParticleModule { data:ParticleModuleData; }
 table ParticleSystem {

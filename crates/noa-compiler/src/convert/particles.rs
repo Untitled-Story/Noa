@@ -51,6 +51,8 @@ pub fn convert_system(
         "EmissionModule",
         "SizeModule",
         "RotationModule",
+        "SizeBySpeedModule",
+        "RotationBySpeedModule",
         "ColorModule",
         "UVModule",
         "VelocityModule",
@@ -234,6 +236,39 @@ pub fn convert_system(
                 separate_axes
             }),
         ))));
+    }
+    for name in ["SizeBySpeedModule", "RotationBySpeedModule"] {
+        if !active(v, name)? {
+            continue;
+        }
+        let m = get(v, name)?;
+        let separate_axes = flag(m, "separateAxes")?;
+        let range = vec2(get(m, "range")?)?;
+        if range.x < 0. || range.y < range.x {
+            return Err(err(name, "speed range must satisfy 0 <= min <= max"));
+        }
+        let data = if name == "SizeBySpeedModule" {
+            w::ParticleModuleDataT::SizeBySpeedModule(Box::new(n!(SizeBySpeedModuleT {
+                size: Box::new(if separate_axes {
+                    axes(m, ["curve", "y", "z"])?
+                } else {
+                    uniform(p(m, "curve")?)
+                }),
+                separate_axes,
+                speed_range: Some(range)
+            })))
+        } else {
+            w::ParticleModuleDataT::RotationBySpeedModule(Box::new(n!(RotationBySpeedModuleT {
+                angular_velocity: Box::new(if separate_axes {
+                    axes(m, ["x", "y", "curve"])?
+                } else {
+                    vector(constant(0.), constant(0.), p(m, "curve")?)
+                }),
+                separate_axes,
+                speed_range: Some(range)
+            })))
+        };
+        modules.push(module(data));
     }
     if active(v, "VelocityModule")? {
         let m = get(v, "VelocityModule")?;

@@ -145,6 +145,24 @@ pub fn validate(d: &wire::DocumentT) -> Result<(), String> {
             wire::ComponentDataT::ParticleSystem(p) => {
                 particles(p)?;
                 for module in p.modules.iter().flatten() {
+                    let feature = match &module.data {
+                        wire::ParticleModuleDataT::SizeBySpeedModule(_) => {
+                            Some("particle.size-by-speed")
+                        }
+                        wire::ParticleModuleDataT::RotationBySpeedModule(_) => {
+                            Some("particle.rotation-by-speed")
+                        }
+                        _ => None,
+                    };
+                    if let Some(name) = feature
+                        && !d
+                            .features
+                            .iter()
+                            .flatten()
+                            .any(|f| f.name == name && f.required && f.revision == 1)
+                    {
+                        return Err(format!("module needs required {name} revision 1"));
+                    }
                     if let wire::ParticleModuleDataT::ShapeModule(s) = &module.data
                         && !matches!(s.geometry, wire::ShapeGeometryT::CircleShape(_))
                     {
@@ -487,6 +505,14 @@ fn particles(p: &wire::ParticleSystemT) -> Result<(), String> {
             }
             wire::ParticleModuleDataT::ColorModule(c) => color(&c.color)?,
             wire::ParticleModuleDataT::SizeModule(s) => vector(&s.size)?,
+            wire::ParticleModuleDataT::SizeBySpeedModule(s) => {
+                vector(&s.size)?;
+                speed_range(s.speed_range.as_ref())?;
+            }
+            wire::ParticleModuleDataT::RotationBySpeedModule(r) => {
+                vector(&r.angular_velocity)?;
+                speed_range(r.speed_range.as_ref())?;
+            }
             wire::ParticleModuleDataT::RotationModule(r) => vector(&r.angular_velocity)?,
             wire::ParticleModuleDataT::VelocityModule(v) => {
                 for v in [&v.linear, &v.orbital, &v.orbital_offset]
@@ -661,6 +687,14 @@ fn shape(s: &wire::ShapeModuleT) -> Result<(), String> {
     unit(s.spherical_direction)?;
     if s.random_position < 0. {
         return Err("negative shape random position".into());
+    }
+    Ok(())
+}
+
+fn speed_range(range: Option<&wire::Vec2T>) -> Result<(), String> {
+    let r = range.ok_or("missing speed range")?;
+    if !r.x.is_finite() || !r.y.is_finite() || r.x < 0. || r.y < r.x {
+        return Err("speed range must satisfy 0 <= min <= max".into());
     }
     Ok(())
 }
