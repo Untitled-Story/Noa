@@ -37,7 +37,7 @@ pub(crate) fn validate(d: &w::DocumentT) -> Result<(), String> {
     };
     for a in d.assets.iter().flatten() {
         if a.kind == w::AssetKind::Mesh {
-            feature(d, "mesh.nomesh", 2)?;
+            feature(d, "mesh.noms", 2)?;
         }
         if a.kind == w::AssetKind::Sprite {
             feature(d, "asset.sprite", 1)?;

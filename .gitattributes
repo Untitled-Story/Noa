@@ -7,5 +7,5 @@
 *.unity3d binary
 *.noir binary
 *.noap binary
-*.nomesh binary
+*.noms binary
 data/bundles/** binary

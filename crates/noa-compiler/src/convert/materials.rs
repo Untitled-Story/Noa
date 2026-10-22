@@ -119,7 +119,7 @@ impl<'a> Resources<'a> {
         self.asset(
             id,
             w::AssetKind::Mesh,
-            "nomesh",
+            "noms",
             mesh.encode().map_err(|e| err("Mesh", e))?,
         );
         self.target(key, id, ReferenceKind::Asset);

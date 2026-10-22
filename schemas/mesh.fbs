@@ -1,4 +1,4 @@
-// NOMESH 2.0 (beta). Unity local coordinates, original triangle winding.
+// NOMS 2.0 (beta). Unity local coordinates, original triangle winding.
 namespace Noa.Mesh;
 struct Vec3 { x:float; y:float; z:float; }
 struct Vec4 { x:float; y:float; z:float; w:float; }
@@ -19,4 +19,4 @@ table Mesh {
 }
 root_type Mesh;
 file_identifier "NOMS";
-file_extension "nomesh";
+file_extension "noms";

@@ -1,4 +1,4 @@
-//! Independent NOMESH 2.0 geometry, preserving Unity coordinates and winding.
+//! Independent NOMS 2.0 geometry, preserving Unity coordinates and winding.
 use crate::{generated::mesh_generated::noa::mesh as wire, ir::Vec3};
 use serde::Serialize;
 use std::{collections::BTreeSet, fmt};

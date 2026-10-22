@@ -10,7 +10,7 @@
       "type": "object", "additionalProperties": false,
       "required": ["path", "kind", "byte_length", "sha256"],
       "properties": {
-        "path": {"type": "string", "pattern": "^(scene\\.noir|assets/[1-9][0-9]*\\.(png|nomesh|shader\\.json))$"},
+        "path": {"type": "string", "pattern": "^(scene\\.noir|assets/[1-9][0-9]*\\.(png|noms|shader\\.json))$"},
         "kind": {"enum": ["noir", "image", "mesh", "shader_data"]},
         "asset_id": {"type": "integer", "minimum": 1, "maximum": 4294967295},
         "byte_length": {"type": "integer", "minimum": 0},

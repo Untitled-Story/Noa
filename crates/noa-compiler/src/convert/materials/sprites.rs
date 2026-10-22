@@ -89,7 +89,7 @@ impl Resources<'_> {
         self.asset(
             mesh_id,
             w::AssetKind::Mesh,
-            "nomesh",
+            "noms",
             mesh.encode().map_err(|e| err("Sprite", e))?,
         );
         let id = self.ids.get(&key.0, key.1)?.get();

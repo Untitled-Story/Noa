@@ -57,7 +57,7 @@ pub(crate) fn renderer(
             }
             let mesh_id = resources.mesh(entry, r)?;
             let geometry = noa_format::mesh::MeshData::decode(
-                &resources.files[&format!("assets/{mesh_id}.nomesh")],
+                &resources.files[&format!("assets/{mesh_id}.noms")],
             )
             .map_err(|e| err("particle mesh", e))?;
             if geometry.submeshes.len() != 1 {

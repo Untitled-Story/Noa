@@ -55,7 +55,7 @@ impl Manifest {
                 }
                 let extension = match f.kind.as_str() {
                     "image" => "png",
-                    "mesh" => "nomesh",
+                    "mesh" => "noms",
                     "shader_data" => "shader.json",
                     _ => return Err("unknown asset kind".into()),
                 };

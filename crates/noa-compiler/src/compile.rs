@@ -149,7 +149,7 @@ fn compile_indexed(
             }),
         );
         resources.files.insert(
-            format!("assets/{id}.nomesh"),
+            format!("assets/{id}.noms"),
             mesh.geometry.encode().map_err(|e| err("mesh", e))?,
         );
         resources.targets.insert(
@@ -509,7 +509,7 @@ fn compile_indexed(
         .values()
         .any(|a| a.kind == w::AssetKind::Mesh)
     {
-        features.insert("mesh.nomesh".into(), 2);
+        features.insert("mesh.noms".into(), 2);
     }
     if resources.materials.values().any(|m| {
         matches!(

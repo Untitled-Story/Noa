@@ -110,7 +110,7 @@ fn real_mesh_renderer_preserves_geometry_and_validates_filter_and_capability() {
         })
         .unwrap();
     let geometry =
-        MeshData::decode(&c.files[&format!("assets/{}.nomesh", filter.mesh_asset_id)]).unwrap();
+        MeshData::decode(&c.files[&format!("assets/{}.noms", filter.mesh_asset_id)]).unwrap();
     assert_eq!((geometry.positions.len(), geometry.indices.len()), (30, 54));
     assert_eq!(
         (
@@ -128,7 +128,7 @@ fn real_mesh_renderer_preserves_geometry_and_validates_filter_and_capability() {
     d.features
         .as_mut()
         .unwrap()
-        .retain(|f| f.name != "mesh.nomesh");
+        .retain(|f| f.name != "mesh.noms");
     assert!(document::encode(&d).is_err());
     let mut d = c.document.clone();
     for c in d.components.iter_mut().flatten() {
@@ -196,7 +196,7 @@ fn sprite_asset_shape_and_mask_use_actual_geometry_and_inline_resource_dependenc
         .find(|a| a.kind == w::AssetKind::Sprite)
         .unwrap();
     let s = a.sprite.as_ref().unwrap();
-    let mesh = MeshData::decode(&c.files[&format!("assets/{}.nomesh", s.mesh_asset_id)]).unwrap();
+    let mesh = MeshData::decode(&c.files[&format!("assets/{}.noms", s.mesh_asset_id)]).unwrap();
     assert_eq!((mesh.positions.len(), mesh.indices.len()), (65, 189));
     let uv = &mesh
         .texcoords

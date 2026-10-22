@@ -115,7 +115,7 @@ table SpriteAsset {
   mesh_asset_id:uint; image_asset_id:uint;
   rect:Vec4; texture_rect:Vec4; texture_rect_offset:Vec2; atlas_rect_offset:Vec2;
   pivot:Vec2; border:Vec4; pixels_per_unit:float = 100;
-  // Source mapping and packing retained for provenance; NOMESH UVs are resolved.
+  // Source mapping and packing retained for provenance; NOMS UVs are resolved.
   uv_transform:Vec4; packing_flags:uint; downscale_multiplier:float = 1;
   sampler:Sampler; color_space:ColorSpace = SRGB;
 }

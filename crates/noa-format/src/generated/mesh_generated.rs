@@ -1513,7 +1513,7 @@ pub mod noa {
             ::flatbuffers::buffer_has_identifier(buf, MESH_IDENTIFIER, true)
         }
 
-        pub const MESH_EXTENSION: &str = "nomesh";
+        pub const MESH_EXTENSION: &str = "noms";
 
         #[inline]
         pub fn finish_mesh_buffer<'a, 'b, A: ::flatbuffers::Allocator + 'a>(
